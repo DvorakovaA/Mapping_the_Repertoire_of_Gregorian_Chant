@@ -1,4 +1,4 @@
-# -Mapping_the_Repertoire_o_-Gregorian_Chant
+# Mapping_the_Repertoire_of_Gregorian_Chant
 
 Here would be stuff related to my Bachelor thesis.
 
