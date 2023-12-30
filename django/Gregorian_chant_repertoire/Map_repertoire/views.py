@@ -3,4 +3,8 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the Map_repertoire index.")
+    return render(request, "Map_repertoire/index.html")
+
+
+def help(request):
+    return render(request, "Map_repertoire/help.html")

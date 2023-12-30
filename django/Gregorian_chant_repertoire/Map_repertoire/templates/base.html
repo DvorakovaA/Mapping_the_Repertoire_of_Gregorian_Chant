@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            .tabcontent {
+            display: none;
+            } 
+
+            .child {
+                float: left;
+                padding: 10px;
+            }
+          </style>
+
+        <title>{% block title %} Map_repertoire {% endblock %}</title>
+    </head>
+
+    <body>
+        <div id="right_top_corner" style="float:right" class="container">
+
+            <div id="help" class="child">
+                <button onclick="location.href = '/Map_repertoire/help'">Help</button>
+             </div>
+        </div>
+
+
+        {% block header %}  {% endblock %}
+
+        <div id="side_buttons" style="float: right;">
+            {% block side_buttons %}
+
+            {% endblock %}
+        </div>
+
+        <div id="history">
+            {% block history %}
+
+            {% endblock %}
+        </div>
+
+        <div id="content">
+            {% block conntent %}
+
+            {% endblock %}
+        </div>
+
+        
+
+        <div id = "map">
+            {% block map %}
+
+            {% endblock %}
+        </div>
+    </body>
+
+    <script>
+        function openView(evt, viewName) {
+          let i, tabcontent, tablinks;
+          //clear previous
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          //set new
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(viewName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+    </script>
+        
+</html>
