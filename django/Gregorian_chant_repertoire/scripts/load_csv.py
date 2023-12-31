@@ -1,4 +1,4 @@
-'''
+"""
 Python script that loads data from csv to django databases
 Data_Chant
 Sources
@@ -6,16 +6,17 @@ Geography
 Feasts
 
 Loads only chants from surces where we have more than 100 chants from that source
-'''
+"""
 
 from Map_repertoire.models import Data_Chant, Sources, Geography, Feasts
 from django.conf import settings
 import pandas as pd
 
+
 def run():
-    '''
-    Main function of script load_csv.py that loads data from csv (merged, filtered) to django database
-    '''
+    """
+    Main function of script load_csv.py that loads data from csv files (merged, filtered) to django database
+    """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
     antiphones = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])  # converters={'cantus_id' : str})
