@@ -1,1 +1,13 @@
-<h2> Help page for Map_repertoire app</h2>
+{% extends "base.html" %}
+  
+    {% block header %}
+      <h1>Help page</h1>
+    {% endblock %}
+    
+    {% block side_buttons %}
+        <button onclick="window.history.back()">Back</button>
+    {% endblock %}
+
+    {% block conntent %}
+    <h3> Here would be help page for Map_repertoire app</h3>
+    {% endblock %}
