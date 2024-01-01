@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from .forms import InputForm
 from .models import Feasts
 
+from Map_repertoire.map_construct import get_map
+from Map_repertoire.communities import get_communities
 
 def index(request):
     """
