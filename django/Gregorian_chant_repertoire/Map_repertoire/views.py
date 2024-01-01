@@ -6,6 +6,7 @@ displaying of htmls and data transfer between script components
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .forms import InputForm
+from .models import Feasts
 
 
 def index(request):
@@ -14,11 +15,14 @@ def index(request):
     """
     #context = {}
     #if request.method == "POST":
-    form = InputForm(request.POST or None)
+    form = InputForm(request.POST or None, initial={'feast' : '---'})
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
         return HttpResponseRedirect('', request)
-    context = {"form": form}
+    print(form.errors)
+    context = { "form": form }
+    context['feast'] = Feasts.objects.values_list('name', flat=True)[int(request.session.get('feast'))]
+
     return render(request, "Map_repertoire/index.html", context)
 
 
