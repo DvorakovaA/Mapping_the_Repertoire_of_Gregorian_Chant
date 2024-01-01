@@ -1,5 +1,5 @@
 """
-
+Script for form(s) (their fields) definition
 """
 
 from django import forms
