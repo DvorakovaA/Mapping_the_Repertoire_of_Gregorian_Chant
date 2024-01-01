@@ -15,29 +15,28 @@ import pandas as pd
 
 def run():
     """
-    Main function of script load_csv.py that loads data from csv files (merged, filtered) to django database
+    Main function of script load_csv.py that gets data from csv files (merged, filtered) via pandas library 
+    and loads it to django database 
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphones = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])  # converters={'cantus_id' : str})
+    antiphons = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])  # converters={'cantus_id' : str})
     responsories = pd.read_csv('all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])
-    sources = pd.read_csv('sources-of-all-ci-antiphones.csv', usecols=['title', 'siglum', 'provenance_id', 'century', 'drupal_path'])
-    geography = pd.read_csv('provenances_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
+    sources = pd.read_csv('sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'drupal_path'])
+    geography = pd.read_csv('geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('feast.csv', usecols=['id', 'name', 'feast_code'])
 
     # Merge antiphons and responsories
-    chant_data = pd.concat([antiphones, responsories])
+    chant_data = pd.concat([antiphons, responsories])
     
     # Filter sources to use only those with more than 100 chants
     freq_of_sources = chant_data['drupal_path'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
     sources_f = sources[sources['drupal_path'].isin(bigger_sources)]
 
-    # Filter feasts to use onlz those used in filtered sources
+    # Filter feasts to use only those used in filtered sources
     freq_of_feasts = chant_data['feast_id'].value_counts()
-    print("number of all feasts in bigger sources:", len(freq_of_feasts))
     bigger_feasts = freq_of_feasts.drop(freq_of_feasts[freq_of_feasts.values < 10].index).index.tolist()
-    print("number of all bigger feasts in bigger sources:", len(bigger_sources))
     feasts_f = feasts[feasts['id'].isin(bigger_feasts)]
 
     # Filter chants based on filtered sources
@@ -51,6 +50,7 @@ def run():
     Geography.objects.all().delete()
     Feasts.objects.all().delete()
 
+    
     # Fill Chant info
     row_iter = chant_data_f.iterrows()
     objs = [
@@ -90,8 +90,9 @@ def run():
     ]
     Geography.objects.bulk_create(objs)
 
+
     # Fill Feasts info
-    row_iter = geography.iterrows()
+    row_iter = feasts_f.iterrows()
     objs = [
         Feasts(
             feast_id=row['id'],

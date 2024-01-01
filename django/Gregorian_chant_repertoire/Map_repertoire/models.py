@@ -31,8 +31,8 @@ class Geography(models.Model):
     """
     provenance_id = models.CharField(("provenance_id"), max_length=20, null=True)
     provenance = models.CharField(("provenance"), max_length=500, null=True)
-    latitude = models.FloatField(("latitude"))
-    longitude = models.FloatField(("longitude"))
+    latitude = models.FloatField(("latitude"), null=True)
+    longitude = models.FloatField(("longitude"), null=True)
 
 
 class Feasts(models.Model):
