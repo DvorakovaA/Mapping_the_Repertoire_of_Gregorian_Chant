@@ -1,8 +1,9 @@
 """
 
 """
-from django import forms
 
+from django import forms
+from .models import Feasts
 
 class InputForm(forms.Form):
-    feast = forms.ChoiceField(choices=[['1', 'Anezka'], ['2', 'Vojtech']])
+    feast = forms.ModelChoiceField(queryset=Feasts.objects.values_list('name', flat=True))
