@@ -20,8 +20,8 @@ def run():
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphons = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])  # converters={'cantus_id' : str})
-    responsories = pd.read_csv('all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'drupal_path'])
+    antiphons = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id'])  # converters={'cantus_id' : str})
+    responsories = pd.read_csv('all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id'])
     sources = pd.read_csv('sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'drupal_path'])
     geography = pd.read_csv('geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('feast.csv', usecols=['id', 'name', 'feast_code'])
@@ -30,7 +30,7 @@ def run():
     chant_data = pd.concat([antiphons, responsories])
     
     # Filter sources to use only those with more than 100 chants
-    freq_of_sources = chant_data['drupal_path'].value_counts()
+    freq_of_sources = chant_data['source_id'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
     sources_f = sources[sources['drupal_path'].isin(bigger_sources)]
 
@@ -40,7 +40,7 @@ def run():
     feasts_f = feasts[feasts['id'].isin(bigger_feasts)]
 
     # Filter chants based on filtered sources
-    chant_data_f = chant_data[chant_data['drupal_path'].isin(sources_f['drupal_path'])]
+    chant_data_f = chant_data[chant_data['source_id'].isin(sources_f['drupal_path'])]
 
 
     # Database ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,7 +57,7 @@ def run():
         Data_Chant( 
             cantus_id=row['cantus_id'],
             feast_id=row['feast_id'],
-            source_id=row['drupal_path']
+            source_id=row['source_id']
         )
         for index, row in row_iter
     ]
@@ -70,6 +70,7 @@ def run():
             title=row['title'],
             provenance_id=row['provenance_id'],
             century=row['century'],
+            num_century=row['num_century'],
             siglum=row['siglum'],
             drupal_path=row['drupal_path']
         )
@@ -102,3 +103,8 @@ def run():
         for index, row in row_iter
     ]
     Feasts.objects.bulk_create(objs)
+
+    print('Feast', len(Feasts.objects.all()))
+    print('Chant', len(Data_Chant.objects.all()), len(chant_data))
+    print('Source', len(Sources.objects.all()), len(sources))
+    print('Geo', len(Geography.objects.all()))
