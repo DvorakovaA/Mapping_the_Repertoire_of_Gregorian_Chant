@@ -33,11 +33,16 @@ def get_map(communities : list [set [str]]):
             sources_dict[source] = i
             i += 1
 
+    used_sources = [Sources.objects.filter(drupal_path = source).values()[0] for source in sources_dict.keys()]
+    num_centuries = [s['num_century'] for s in used_sources]
+    provenance_ids = [s['provenance_id'] for s in used_sources]
+    centuries = [s['century'] for s in used_sources]
+    sizes = ...
+    siglums = ...
+
     # Layers
     century_layers = {}
-    centuries = [Sources.objects.filter(drupal_path = source) for source in sources_dict.keys()]
-    for century in centuries:
-        print(century)
+    for century in num_centuries:
         c_layer = folium.FeatureGroup(name=str(century) + ". century", show=False)
         century_layers[century] = c_layer
         map.add_child(c_layer)
@@ -45,6 +50,28 @@ def get_map(communities : list [set [str]]):
     community_layers = {}
 
     # Points
+    i, j = 0, 0
+    for community in communities:
+        com = folium.FeatureGroup(name="Community " + str(i+1) , show=True)
+        for source in community:
+            cen = century_layers[num_centuries[j]]
+            community_layers[source] = (com, i)
+            info = "<h4>" + str(source) + "</h4> <h5> Century: " + centuries[j] + "</h5>" #<h5> Size: " + str(sizes_of_vertices[source]) + "</h5>
+            popup1 = folium.Popup(info, max_width=300, min_width =300)
+            popup2 = folium.Popup(info, max_width=300, min_width =300)
+
+            place = Geography.objects.filter(provenance_id = provenance_ids[j]).values()[0]
+            lat = place['latitude']
+            long = place['longitude']
+                    
+            folium.CircleMarker(location=[lat , long], fill=True, color=colors[i],
+                                fill_opacity=0.4, radius=3, popup=popup1).add_to(com)  #missing individual radius
+            folium.CircleMarker(location=[lat , long], fill=True, color='gray',
+                                fill_opacity=0.6, radius=3, popup=popup2).add_to(cen)
+            j += 1
+        map.add_child(com)
+        i += 1
+
 
     # Lines
     
