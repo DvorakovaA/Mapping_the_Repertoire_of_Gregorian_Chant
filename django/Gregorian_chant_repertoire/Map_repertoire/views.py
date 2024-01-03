@@ -30,6 +30,8 @@ def index(request):
     context['feast_id'] = feast_id
     communities = get_communities(feast_id)
     context['map'] = get_map(communities)._repr_html_()
+
+    context['sources'] = [{'drupal_path' : source} for setik in communities for source in setik ]
     return render(request, "Map_repertoire/index.html", context)
 
 

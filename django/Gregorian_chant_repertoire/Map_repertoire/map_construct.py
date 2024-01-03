@@ -15,6 +15,8 @@ map_centre = [47.466667, 11.166667] # Centre of returned maps
 
 def get_map(communities : list [set [str]]):
     map = folium.Map(map_centre, zoom_start=5, height='70%', width='70%', tiles=None)
+    tile_layer = folium.TileLayer(control=False)
+    tile_layer.add_to(map)
 
     # Color scale for points amd lines connecting them 
     cmap = plt.get_cmap('plasma')
@@ -56,7 +58,7 @@ def get_map(communities : list [set [str]]):
         for source in community:
             cen = century_layers[num_centuries[j]]
             community_layers[source] = (com, i)
-            info = "<h4>" + str(source) + "</h4> <h5> Century: " + centuries[j] + "</h5>" #<h5> Size: " + str(sizes_of_vertices[source]) + "</h5>
+            info = "<h5> <a href=  \"{}\"  target=\"_blank\" rel=\"noopener noreferrer\"> {} </a>".format(source, source) + "</h5> <h5> Century: " + centuries[j] + "</h5>" #<h5> Size: " + str(sizes_of_vertices[source]) + "</h5>
             popup1 = folium.Popup(info, max_width=300, min_width =300)
             popup2 = folium.Popup(info, max_width=300, min_width =300)
 
@@ -65,9 +67,9 @@ def get_map(communities : list [set [str]]):
             long = place['longitude']
                     
             folium.CircleMarker(location=[lat , long], fill=True, color=colors[i],
-                                fill_opacity=0.4, radius=3, popup=popup1).add_to(com)  #missing individual radius
+                                fill_opacity=0.4, radius=8, popup=popup1).add_to(com)  #missing individual radius
             folium.CircleMarker(location=[lat , long], fill=True, color='gray',
-                                fill_opacity=0.6, radius=3, popup=popup2).add_to(cen)
+                                fill_opacity=0.6, radius=8, popup=popup2).add_to(cen)
             j += 1
         map.add_child(com)
         i += 1

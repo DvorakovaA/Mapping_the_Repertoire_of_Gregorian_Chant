@@ -25,9 +25,32 @@
 <br><br>
 {% endblock %}
 
+
 {% block map %}
-  <h4> Selected feast: {{ feast }} </h4> <br>
-  
-  <h3>Here would be map :-] </h3>
-  {{ map|safe }}
+  <h3> Selected feast: {{ feast }} </h3> <br>
+      <!-- Two tabs over each other -->
+      <div class="tab">
+        <button class="tablinks" onclick="openView(event, 'Table')">Table view</button>
+        <button class="tablinks" onclick="openView(event, 'Map')">Map view</button>
+      </div>
+
+      <div id="Table" class="tabcontent" style="display:block">
+        <h3>Table view</h3>
+        <table border='1'>
+          <tr>
+            <td>Source: </td>
+          </tr>
+          {% for x in sources %}
+            <tr>
+              <td> <a href='{{ x.drupal_path}}'  target="_blank" rel="noopener noreferrer">{{ x.drupal_path }}</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <div id ="Map" class = "tabcontent">
+        <!-- <h3>Here would be map :-] </h3> -->
+        {{ map|safe }}  
+        
+      </div>
 {% endblock %}
