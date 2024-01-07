@@ -20,8 +20,8 @@ def run():
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphons = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id'])  # converters={'cantus_id' : str})
-    responsories = pd.read_csv('all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id'])
+    antiphons = pd.read_csv('all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])  # converters={'cantus_id' : str})
+    responsories = pd.read_csv('all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])
     sources = pd.read_csv('sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'drupal_path'])
     geography = pd.read_csv('geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('feast.csv', usecols=['id', 'name', 'feast_code'])
@@ -57,7 +57,8 @@ def run():
         Data_Chant( 
             cantus_id=row['cantus_id'],
             feast_id=row['feast_id'],
-            source_id=row['source_id']
+            source_id=row['source_id'],
+            office_id=row['office_id']
         )
         for index, row in row_iter
     ]
@@ -104,7 +105,7 @@ def run():
     ]
     Feasts.objects.bulk_create(objs)
 
-    print('Feast', len(Feasts.objects.all()))
-    print('Chant', len(Data_Chant.objects.all()), len(chant_data))
-    print('Source', len(Sources.objects.all()), len(sources))
+    print('Feast', len(Feasts.objects.all()), len(feasts_f))
+    print('Chant', len(Data_Chant.objects.all()), len(chant_data_f))
+    print('Source', len(Sources.objects.all()), len(sources_f))
     print('Geo', len(Geography.objects.all()))

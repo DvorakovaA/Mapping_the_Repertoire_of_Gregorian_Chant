@@ -12,6 +12,7 @@ class Data_Chant(models.Model):
     cantus_id = models.CharField(("cantus_id"), max_length=20)
     feast_id = models.CharField(("feast_id"), max_length=20)
     source_id = models.CharField(("source_id"), max_length=500, null=True)
+    office_id = models.CharField(("office_id"), max_length=20, null=True)
 
 
 class Sources(models.Model):
