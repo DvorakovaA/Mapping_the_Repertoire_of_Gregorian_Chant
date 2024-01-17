@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/Map_repertoire')),
-    path("Map_repertoire/", include("Map_repertoire.urls")),
+    path('', RedirectView.as_view(url='/map_repertoire')),
+    path("map_repertoire/", include("Map_repertoire.urls")),
     path("admin/", admin.site.urls),
 ]
