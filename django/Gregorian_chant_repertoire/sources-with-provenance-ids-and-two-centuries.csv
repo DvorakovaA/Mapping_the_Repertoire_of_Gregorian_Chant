@@ -34,9 +34,9 @@
 32,http://cantus.uwaterloo.ca/source/656252,"Franciscan antiphoner, John J. Burns Library, Boston College MS.1996.097",US-CHNbcbl 097,14th century (1st half),14,provenance_058
 33,http://cantus.uwaterloo.ca/source/123671,"Chicago, Newberry Library, 24",US-Cn 24,13th century,13,provenance_071
 34,http://cantus.uwaterloo.ca/source/123661,"Città del Vaticano (Roma), Biblioteca Apostolica Vaticana, San Pietro B.79",V-CVbav B.79,12th century,12,
-35,http://pemdatabase.eu/source/48438,P-BRs (Braga) Arquivo da Sé Ms. 028,P-BRs Ms. 028,16th century (first quarter),16,
-36,http://cantus.ispan.pl/source/14458,"PL-PŁsem MsEPl 15 Antyfonarz z Płocka, pars de sanctis",MsEPl 15,15th century,15,
-37,http://cantus.ispan.pl/source/22280,PL-STAb 4 Antiphonarium,ms. 4,16th century,16,
+35,http://pemdatabase.eu/source/48438,P-BRs (Braga) Arquivo da Sé Ms. 028,P-BRs Ms. 028,16th century (first quarter),16,provenance_218
+36,http://cantus.ispan.pl/source/14458,"PL-PŁsem MsEPl 15 Antyfonarz z Płocka, pars de sanctis",MsEPl 15,15th century,15,provenance_220
+37,http://cantus.ispan.pl/source/22280,PL-STAb 4 Antiphonarium,ms. 4,16th century,16,provenance_221
 38,http://cantus.uwaterloo.ca/source/123611,"Graz, Universitätsbibliothek, 30 (olim 38/9 f.)",A-Gu 30,14th century,14,provenance_165
 39,http://cantus.uwaterloo.ca/source/123613,"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1012",A-KN 1012,12th century,12,provenance_076
 40,http://cantus.uwaterloo.ca/source/123616,"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1018",A-KN 1018,14th century,14,provenance_076
@@ -74,11 +74,11 @@
 72,http://cantus.uwaterloo.ca/source/589069,"Wroclaw, Biblioteka Uniwersytecka (University Library), I F 401",PL-WRu I F 401,13th century (1275-1300),13,provenance_088
 73,http://cantus.uwaterloo.ca/source/123756,"Wrocław, Biblioteka Uniwersytecka, Ms. R 503",PL-WRu R 503,14th century (2nd half),14,provenance_212
 74,http://pemdatabase.eu/source/46683,Antiphonarium Hymnarium P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. Ms. 025,P-AR Res. Ms. 025, c. 1200,13,
-75,http://cantusbohemiae.cz/source/2150,CZ-Bu (Brno) R 387,CZ-Bu R 387,12th century,12,
+75,http://cantusbohemiae.cz/source/2150,CZ-Bu (Brno) R 387,CZ-Bu R 387,12th century,12,provenance_219
 76,http://cantusbohemiae.cz/source/2152,CZ-Pu (Praha) VI E 13,CZ-Pu VI E 13,12th century,12,
-77,http://cantusbohemiae.cz/source/2161,CZ-R (Rajhrad) R 17,CZ-R R 17,14th century,14,
+77,http://cantusbohemiae.cz/source/2161,CZ-R (Rajhrad) R 17,CZ-R R 17,14th century,14,provenance_219
 78,http://cantusbohemiae.cz/source/9137,CZ-Pu (Praha) XIV C 20,CZ-Pu XIV C 20,14th century,14,
-79,http://cantus.sk/source/6775,SK-BRsa (Bratislava) Slovenský národný archív Antiphonary of Bratislava V,SK-BRsa SNA 17,15th century,15,
+79,http://cantus.sk/source/6775,SK-BRsa (Bratislava) Slovenský národný archív Antiphonary of Bratislava V,SK-BRsa SNA 17,15th century,15,provenance_225
 80,http://musmed.eu/source/29527,GB-Lbl : Harley 4951,GB-Lbl Harley 4951,11th century,11,
 81,http://musmed.eu/source/13022,F-Pn : Lat. 903,F-Pn Lat. 903,11th century,11,
 82,http://musmed.eu/source/13060,F-Pn : Lat. 1121,F-Pn Lat. 1121,11th century,11,
@@ -98,7 +98,7 @@
 96,http://musmed.eu/source/9343,F-CHRm : Ms 0047 (40),F-CHRm Ms 0047 (40),10th century,10,
 97,http://musmed.eu/source/13486,F-Pn : Lat. 17296,F-Pn Lat. 17296,12th century,12,
 98,http://musmed.eu/source/13026,F-Pn : Lat. 909,F-Pn Lat. 909,11th century,11,
-99,http://cantus.sk/source/6777,SK-Sk (Spišska Kapitula) Antiphonale Scepusiense,SK-Sk 2,15th century,15,
+99,http://cantus.sk/source/6777,SK-Sk (Spišska Kapitula) Antiphonale Scepusiense,SK-Sk 2,15th century,15,provenance_226
 100,http://cantus.uwaterloo.ca/source/123610,"Graz, Universitätsbibliothek, 29 (olim 38/8 f.)",A-Gu 29,14th century,14,provenance_165
 101,http://cantus.uwaterloo.ca/source/123727,"Praha (Prague), Národní knihovna České republiky (National Library), VI.E.4c",CZ-Pu VI.E.4c,12th century (2nd half),12,provenance_129
 102,http://cantus.uwaterloo.ca/source/123730,"Praha (Prague), Národní knihovna České republiky (National Library), XIV.B.13",CZ-Pu XIV B 13,14th century,14,provenance_129
@@ -113,7 +113,7 @@
 111,http://cantus.uwaterloo.ca/source/123618,"Ljubljana, Nadškofijski arhiv (Archiepiscopal Archives), 18 (olim 17)",SI-Lna 18 (olim 17),15th century (1475-1500),15,provenance_078
 112,http://cantusbohemiae.cz/source/4478,Cz-Pu (Praha) XIV A 19,CZ-Pu Pu XIV A 19,14th century,14,provenance_128
 113,http://cantus.ispan.pl/source/4557,PL-Klk 1 Antyfonarz kielecki,1,14th century,14,provenance_074
-114,http://cantus.ispan.pl/source/21018,PL-STAb 1 Antiphonarium,ms. 1,16th century,16,
+114,http://cantus.ispan.pl/source/21018,PL-STAb 1 Antiphonarium,ms. 1,16th century,16,provenance_221
 115,http://cantus.uwaterloo.ca/source/123682,"München, Bayerische Staatsbibliothek, Clm 4304",D-Mbs Clm 4304,16th century (1500-1525),16,provenance_016
 116,http://cantus.uwaterloo.ca/source/651162,"Trier, Stadtbibliothek Weberbach, 1245 / 597 (original)",D-TRs 1245 / 597 (original),09th century,9,provenance_132
 117,http://cantus.uwaterloo.ca/source/662398,"Trier, Stadtbibliothek, 1245 / 597 (revised)",D-TRs 1245/597 (rev),09th century,9,provenance_132
@@ -123,7 +123,7 @@
 121,http://cantus.uwaterloo.ca/source/123622,"Mainz, Bischöfliches Dom- und Diözesanmuseum, C",D-MZb C,15th century (1425-1450),15,provenance_090
 122,http://cantusbohemiae.cz/source/2156,CZ-Pu (Praha) XIII C 4,CZ-Pu XIII C 4,14th century,14,
 123,http://cantusbohemiae.cz/source/9136,CZ-Pu (Praha) XII C 3,CZ-Pu XII C 3,13th century,13,
-124,http://cantus.sk/source/14828,SK-Bra (Bratislava) Antiphonary of Bratislava I EC Lad.3,SK-Bra BAI ECLad.3,15th century,15,
+124,http://cantus.sk/source/14828,SK-Bra (Bratislava) Antiphonary of Bratislava I EC Lad.3,SK-Bra BAI ECLad.3,15th century,15,provenance_224
 125,http://cantus.sk/source/14018,SK-Bra (Bratislava) Antiphonary of Bratislava III EC Lad.6,SK-Bra BAIII ECLad.6,15th century,15,
 126,http://cantus.uwaterloo.ca/source/123645,"Wien, Diözesanarchiv, C-11",A-Wda C-11,15th century,15,provenance_075
 127,http://cantus.uwaterloo.ca/source/123664,"Tongeren, Onze-Lieve-Vrouw-Kerk (Our Lady's Church), 63 (olim V)",B-TO olv 63,14th century (1375-1400),14,provenance_186
@@ -134,8 +134,8 @@
 132,http://cantus.uwaterloo.ca/source/123600,"Budapest, Egyetemi Könyvtár (University Library), lat. 122",H-Bu lat. 122,14th century,14,provenance_058
 133,http://cantus.uwaterloo.ca/source/123625,"Montecassino, Monumento Nazionale di Montecassino - Biblioteca, 542",I-MC 542,12th century,12,
 134,http://cantus.uwaterloo.ca/source/123711,"Kraków, Klastor OO. Karmelitów na Piasku (Carmelite Convent), Ms.5 (rkp. Perg. 13)",PL-Kkar 5 (Rkp 13),15th century,15,provenance_077
-135,http://cantus.sk/source/2284,SK-BRsa (Bratislava) Slovenský národný archív - Antiphonary of Bratislava IV,SK-BRsa SNA 2,15th century,15,
-136,http://cantus.sk/source/3192,SK-BRsa (Bratislava) Slovenský národný archív - Antiphonary of Bratislava IIb,SK-BRsa SNA 4,15th century,15,
+135,http://cantus.sk/source/2284,SK-BRsa (Bratislava) Slovenský národný archív - Antiphonary of Bratislava IV,SK-BRsa SNA 2,15th century,15,provenance_224
+136,http://cantus.sk/source/3192,SK-BRsa (Bratislava) Slovenský národný archív - Antiphonary of Bratislava IIb,SK-BRsa SNA 4,15th century,15,provenance_224
 137,http://musmed.eu/source/23756,F-CH : Ms 0050,F-CH Ms 0050,13th century,13,
 138,http://musmed.eu/source/13535,F-Pn : NAL 01236,F-Pn NAL 01236,12th century,12,
 139,http://musmed.eu/source/13023,F-Pn : Lat. 904,F-Pn Lat. 904,13th century,13,
@@ -144,8 +144,8 @@
 142,http://cantus.uwaterloo.ca/source/123636,"Salamanca, Catedral - Archivo Musical, 5",E-SA 5,14th century,14,provenance_151
 143,http://cantus.uwaterloo.ca/source/123597,"Budapest, Egyetemi Könyvtár (University Library), lat. 118",H-Bu lat. 118,14th century,14,provenance_058
 144,http://cantus.uwaterloo.ca/source/123720,"Dubrovnik, Franjevački Samostan (Franciscan Monastery), Cod. D Nr. 5",HR-Hf Cod. D,15th century (2nd half),15,provenance_199
-145,http://pemdatabase.eu/source/47990,P-BRs (Braga) Arquivo da Sé Ms. 032,P-BRs Ms. 032,16th century (first quarter),16,
-146,http://cantus.ispan.pl/source/14457,"PL-PŁsem MsEPl 12 Antyfonarz z Płocka, pars de tempore",MsEPl 12,15th century,15,
+145,http://pemdatabase.eu/source/47990,P-BRs (Braga) Arquivo da Sé Ms. 032,P-BRs Ms. 032,16th century (first quarter),16,provenance_218
+146,http://cantus.ispan.pl/source/14457,"PL-PŁsem MsEPl 12 Antyfonarz z Płocka, pars de tempore",MsEPl 12,15th century,15,provenance_220
 147,http://cantus.uwaterloo.ca/source/123598,"Budapest, Egyetemi Könyvtár (University Library), lat. 119",H-Bu lat. 119,14th century,14,provenance_058
 148,http://cantus.uwaterloo.ca/source/123722,"Dubrovnik, Franjevački Samostan (Franciscan Monastery), Cod. F Nr. 6",HR-Hf Cod. F,15th century (2nd half),15,provenance_199
 149,http://cantus.uwaterloo.ca/source/669163,"Sydney, University of Sydney, Fisher Library, Rare Books & Special Collections, Add. Ms. 413 (olim Add. Ms. Fol.1)",AUS-Sfl Add. Ms. 413,16th century (2nd half),16,provenance_163
@@ -153,20 +153,20 @@
 151,http://cantus.uwaterloo.ca/source/123690,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [02] II",DK-Kk 3449 8o [02] II,16th century (1575-1600),16,provenance_016
 152,http://cantus.uwaterloo.ca/source/123650,"Salamanca, Catedral - Archivo Musical, 6",E-SA 6,14th century,14,provenance_151
 153,http://cantus.uwaterloo.ca/source/123719,"Dubrovnik, Franjevački Samostan (Franciscan Monastery), Cod. C Nr. 4",HR-Hf Cod. C,15th century (2nd half),15,provenance_199
-154,http://cantus.ispan.pl/source/13720,"PL-Wn  12720 V Antyfonarz opata Mścisława z Tyńca, pars de tempore", rps 12720 V,15th century,15,
+154,http://cantus.ispan.pl/source/13720,"PL-Wn  12720 V Antyfonarz opata Mścisława z Tyńca, pars de tempore", rps 12720 V,15th century,15,provenance_227
 155,http://pemdatabase.eu/source/48357,"E-SAu (Salamanca) Universidad, Archivo y Biblioteca Ms 2637",E-SAu Ms 2637,12th century (second half),12,
 156,http://cantusbohemiae.cz/source/9190,CZ-Pu (Praha) XII E 15c,CZ-Pu XII E 15c,14th century,14,
 157,http://cantus.uwaterloo.ca/source/123619,"London (Canada), University of Western Ontario - Music Library, M2150",CDN-Lu M2150,16th century,16,provenance_028
 158,http://cantus.uwaterloo.ca/source/123695,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [07] VII",DK-Kk 3449 8o [07] VII,16th century (1575-1600),16,provenance_016
 159,http://cantus.uwaterloo.ca/source/710152,"Kansas City, Miller Nichols Library, LaBudde Special Collections M2149.2 .V4 1629",US-KClbsc M2149.2 .V4 1629,17th century (1st half),17,provenance_163
-160,http://pemdatabase.eu/source/47612,P-BRs (Braga) Arquivo da Sé Ms. 034,P-BRs Ms. 034,1510-1515,15,
-161,http://cantus.sk/source/12363,SK-Bra (Bratislava) Antiphonary of Bratislava IIa EC Lad.4,SK-Bra BAIIa EC Lad.4,15th century,15,
+160,http://pemdatabase.eu/source/47612,P-BRs (Braga) Arquivo da Sé Ms. 034,P-BRs Ms. 034,1510-1515,15,provenance_218
+161,http://cantus.sk/source/12363,SK-Bra (Bratislava) Antiphonary of Bratislava IIa EC Lad.4,SK-Bra BAIIa EC Lad.4,15th century,15,provenance_224
 162,http://cantus.uwaterloo.ca/source/123705,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [17] XVII",DK-Kk 3449 8o [17] XVII,16th century (1575-1600),16,provenance_016
 163,http://cantus.uwaterloo.ca/source/123629,"Paris, Bibliothèque nationale de France - Département des Manuscrits, Latin 1240",F-Pn Lat. 1240,10th century,10,provenance_166
 164,http://musmed.eu/source/11602,F-LA : Ms 0263,F-LA Ms 0263,12th century,12,
 165,http://cantus.uwaterloo.ca/source/123698,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [10] X",DK-Kk 3449 8o [10] X,16th century (1575-1600),16,provenance_016
-166,http://musmed.eu/source/14251,F-SO : Ms 0334,F-SO Ms 0334,13th century,13,
-167,http://cantus.ispan.pl/source/21623,PL-STAb 2 Antiphonarium,ms. 2,16th century,16,
+166,http://musmed.eu/source/14251,F-SO : Ms 0334,F-SO Ms 0334,13th century,13,provenance_223
+167,http://cantus.ispan.pl/source/21623,PL-STAb 2 Antiphonarium,ms. 2,16th century,16,provenance_221
 168,http://cantus.uwaterloo.ca/source/123696,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [08] VIII",DK-Kk 3449 8o [08] VIII,16th century (1575-1600),16,provenance_016
 169,http://cantus.uwaterloo.ca/source/123703,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [15] XV",DK-Kk 3449 8o [15] XV,16th century (1575-1600),16,provenance_016
 170,http://pemdatabase.eu/source/62867,P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. Ms. 021,P-AR Res. Ms. 021,c. 1200,13,
@@ -188,7 +188,7 @@
 186,http://cantus.uwaterloo.ca/source/123657,"Den Haag, Koninklijke Bibliotheek - Nationale Bibliotheek van Nederland, 70 E 4",NL-DHk 70 E 4,12th century,12,provenance_186
 187,http://pemdatabase.eu/source/62421,P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. L 005,P-AR Res. L 005,1513,15,
 188,http://cantus.uwaterloo.ca/source/637892,"London, British Library, Additional 23935",GB-Lbl Add 23935,13th century (1250-1275),13,provenance_121
-189,http://cantusbohemiae.cz/source/33177,CZ-Pn (Praha) XII A 24,CZ-Pn XII A 24,15th century,15,
+189,http://cantusbohemiae.cz/source/33177,CZ-Pn (Praha) XII A 24,CZ-Pn XII A 24,15th century,15,provenance_222
 190,http://musmed.eu/source/13509,F-Pn : Lat. 17991,F-Pn Lat. 17991,11th century,11,
 191,http://cantus.uwaterloo.ca/source/678936,"Montréal, McGill University - Rare Books and Special Collections - Manuscript Collection, MS Medieval 0234",CDN-Mlr MS Medieval 0234,16th century (1575-1600),16,provenance_060
 192,http://musmed.eu/source/15154,D-W : Cod Guelf Helmst 1008,D-W Cod Guelf Helmst 1008,11th century,11,
