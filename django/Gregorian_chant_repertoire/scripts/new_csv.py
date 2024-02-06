@@ -8,11 +8,11 @@ Script that process desired changes in csvs:
 import pandas as pd
 
 def run():
-    geography = pd.read_csv('geography_data.csv')
-    sources_without = pd.read_csv('sources-of-all-ci-antiphons.csv')
+    geography = pd.read_csv('data/given/geography_data.csv')
+    sources_without = pd.read_csv('data/given/sources-of-all-ci-antiphons.csv')
 
-    antiphons = pd.read_csv('all-ci-antiphons.csv')
-    responsories = pd.read_csv('all-ci-responsories.csv')
+    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv')
+    responsories = pd.read_csv('data/given/all-ci-responsories.csv')
     chant_data = pd.concat([antiphons, responsories])
 
     freq_of_sources = chant_data['source_id'].value_counts()
@@ -46,23 +46,23 @@ def run():
     new_csv = pd.DataFrame.from_dict(sources_with)
 
     # Add new numeric century column to sources file
-    num_century = []
+    numerical_century = []
     old_century = new_csv['century'].to_numpy()
 
     for cent in old_century:
         if '9th century' == cent or '09th century' == cent:
-            num_century.append(9)
+            numerical_century.append(9)
         elif ' c. 1200' == cent or 'c. 1200' == cent:
-            num_century.append(13)
+            numerical_century.append(13)
         elif 'mid 14th century' == cent:
-            num_century.append(14)
+            numerical_century.append(14)
         elif cent[0:2].isnumeric():
-            num_century.append(int(cent[0:2]))
+            numerical_century.append(int(cent[0:2]))
 
 
     # Edited file with new columns
-    new_csv.insert(4, "num_century", num_century, allow_duplicates=True)
-    new_csv.to_csv('sources-with-provenance-ids-and-two-centuries.csv')
+    new_csv.insert(4, "num_century", numerical_century, allow_duplicates=True)
+    new_csv.to_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv')
 
 
     # Back to unknown provenances 
