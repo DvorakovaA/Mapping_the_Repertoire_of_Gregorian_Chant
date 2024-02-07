@@ -21,6 +21,7 @@ class Sources(models.Model):
     """
     title = models.CharField(max_length=200)
     provenance_id = models.CharField(("provenance_id"), max_length=20, null=True)
+    provenance = models.CharField(("provenance"), max_length=500, null=True)
     century = models.CharField(("century"), max_length=50, null=True)
     num_century = models.IntegerField(("num_century"), null = True)
     siglum = models.CharField(("siglum"), max_length=20, null=True)

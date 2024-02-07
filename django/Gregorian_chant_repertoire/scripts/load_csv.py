@@ -22,7 +22,7 @@ def run():
     # Get dataframes ready
     antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])  # converters={'cantus_id' : str})
     responsories = pd.read_csv('data/given/all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])
-    sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'drupal_path'])
+    sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'provenance', 'drupal_path'])
     geography = pd.read_csv('data/given/geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('data/given/feast.csv', usecols=['id', 'name', 'feast_code'])
 
@@ -73,6 +73,7 @@ def run():
             century=row['century'],
             num_century=row['num_century'],
             siglum=row['siglum'],
+            provenance=row['provenance'],
             drupal_path=row['drupal_path']
         )
         for index, row in row_iter
