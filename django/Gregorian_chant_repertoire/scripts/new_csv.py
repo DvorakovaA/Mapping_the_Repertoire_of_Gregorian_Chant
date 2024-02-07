@@ -1,14 +1,17 @@
 """
 Script that process desired changes in csvs:
-- add provenance_id into source file (-> sources-with-provenance-ids.csv)
-- add new century column into source file that can be used for century groups in map (leave only number) 
+- add provenance_id into source file
+- add new century column into source file that can be used for century groups in map (leave only number)
+- generate new csv file with these additions (sources-with-provenance-ids-and-two-centuries.csv)
 - check if there are any new uknown provenances in given data (not existing in geography_data.csv)
   and tell user via console (plus suggest new unused provenance_ids)
 """
+
 import pandas as pd
 
+
 def run():
-    geography = pd.read_csv('data/given/geography_data.csv')
+    provenance_ids = pd.read_csv('data/given/provenance_ids.csv')
     sources_without = pd.read_csv('data/given/sources-of-all-ci-antiphons.csv')
 
     antiphons = pd.read_csv('data/given/all-ci-antiphons.csv')
@@ -24,19 +27,21 @@ def run():
     unknown_provenances = []
     for index, row in sources_without_f.iterrows():
         try:
-            filt_prov = geography['provenance'] == row['provenance']
-            geo = (geography[filt_prov]['provenance_id']).to_list()
+            filt_prov = provenance_ids['provenance'] == row['provenance'].strip()
+            prov_id = (provenance_ids[filt_prov]['provenance_id']).to_list()
             sources_with.append({
                 'drupal_path' : row['drupal_path'],
                 'title' : row['title'],
+                'provenance' : row['provenance'],
                 'siglum' : row['siglum'],
                 'century' : row['century'],
-                'provenance_id' : geo[0]
+                'provenance_id' : prov_id[0]
             })
         except:
             sources_with.append({
                 'drupal_path' : row['drupal_path'],
                 'title' : row['title'],
+                'provenance' : row['provenance'],
                 'siglum' : row['siglum'],
                 'century' : row['century']
             })
@@ -68,7 +73,7 @@ def run():
     # Back to unknown provenances 
     unknown_provenances = set(unknown_provenances)
     print('Unknown provenances found:', len(unknown_provenances))
-    last_suggested_id = max(geography['provenance_id'].to_list())
+    last_suggested_id = max(provenance_ids['provenance_id'].to_list())
     #print(sorted(geography['provenance_id'].to_list()))
     for new in unknown_provenances:
         new_id = "provenance_" + str(int(last_suggested_id[-3:]) + 1)
