@@ -28,14 +28,16 @@
 
 {% block map %}
   <h3> Selected feast: {{ feast }} </h3> <br>
-      <!-- Two tabs over each other -->
+      <!-- Three tabs over each other -->
       <div class="tab">
         <button class="tablinks" onclick="openView(event, 'Table')">Table view</button>
-        <button class="tablinks" onclick="openView(event, 'Map')">Map view</button>
+        <button class="tablinks" onclick="openView(event, 'Community_map')">Cummunity map view</button>
+        <button class="tablinks" onclick="openView(event, 'Century_map')">Century map view</button>
       </div>
 
       <div id="Table" class="tabcontent" style="display:block">
-        <h3>Table view</h3>
+        <!-- <h3>Table view</h3> -->
+        <br>
         <table border='1'>
           <tr>
             <td>Source: </td>
@@ -48,9 +50,12 @@
         </table>
       </div>
 
-      <div id ="Map" class = "tabcontent">
-        <!-- <h3>Here would be map :-] </h3> -->
-        {{ map|safe }}  
-        
+      <div id = "Community_map" class = "tabcontent">
+        {{ com_map|safe }}
       </div>
+
+      <div id = "Century_map" class = "tabcontent">
+        {{ cen_map|safe }}
+      </div>
+
 {% endblock %}

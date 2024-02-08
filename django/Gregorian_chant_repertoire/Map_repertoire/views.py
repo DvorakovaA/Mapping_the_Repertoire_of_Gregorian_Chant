@@ -8,14 +8,13 @@ from django.http import HttpResponseRedirect
 from .forms import InputForm
 from .models import Feasts
 
-from Map_repertoire.map_construct import get_map
+from Map_repertoire.map_construct import get_maps
 from Map_repertoire.communities import get_communities
 
 def index(request):
     """
     Function that manages main html page of app - displays input form and shows results (table and map)
     """
-    #request.session['REQUESTED'] = False
     context = {}
     #if request.method == "POST":
     form = InputForm(request.POST or None, initial={'feast' : '---'})
@@ -31,8 +30,11 @@ def index(request):
         context['feast'] = feast_name
         feast_id = Feasts.objects.filter(name = feast_name).values()[0]['feast_id']
         context['feast_id'] = [feast_id]
+
         communities, edges = get_communities([feast_id])
-        context['map'] = get_map(communities, edges)._repr_html_()
+        com_map, cen_map = get_maps(communities, edges)
+        context['com_map'] = com_map._repr_html_()
+        context['cen_map'] = cen_map._repr_html_()
         
         context['sources'] = [{'drupal_path' : source} for com in communities for source in com]
         request.session['REQUESTED'] = False
