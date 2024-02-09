@@ -128,4 +128,9 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
 
     folium.LayerControl(collapsed=False).add_to(com_map)
     folium.LayerControl(collapsed=False).add_to(cen_map)
+
+    missing_info = "<div>" + str(len(sources_with_no_geo)) + " sources with unknown provenance </div>"
+    com_map.get_root().html.add_child(folium.Element(missing_info))
+    cen_map.get_root().html.add_child(folium.Element(missing_info))
+
     return com_map, cen_map
