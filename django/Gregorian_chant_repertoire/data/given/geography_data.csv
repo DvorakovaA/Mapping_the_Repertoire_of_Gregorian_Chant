@@ -2,8 +2,7 @@ provenance_id,provenance,latitude,longitude
 provenance_165,St-Lambrecht,47.066667,14.3
 provenance_060,Germany,51.216667,9.383333 
 provenance_081,Lambach Abbey,48.090833 ,13.877222
-provenance_042,Dominican,,
-provenance_049,English,,
+provenance_049,English,53,-1
 provenance_174,St. Gallen,47.423056 ,9.377222
 provenance_162,Southern Germany / Austria,47.766943,12.457000
 provenance_149,S. Orso,45.7393 ,7.3253
@@ -59,7 +58,7 @@ provenance_020,Barnwell,52.45027,-0.46375
 provenance_180,St. Taurin,49.023663,1.141331
 provenance_075,Kirnberg,48.070739,15.324166
 provenance_079,Kremsmünster,48.055608,14.127765
-provenance_164,St-Florian,,
+provenance_164,St-Florian,48.208889,14.379444
 provenance_199,Venice,45.4375 ,12.335833
 provenance_190,Tours,47.393611,0.689167
 provenance_197,Vallombrosa,43.731944,11.557778
@@ -69,29 +68,31 @@ provenance_078,Kranj,46.23887 ,14.35561
 provenance_135,Rasdorf,50.716667,9.9
 provenance_096,Metz,49.116111 ,6.172222
 provenance_146,Rome,41.893056,12.482778 
-provenance_129,"Prague, St. George Monastery",50.0875,14.421389 
+provenance_129,"Prague, St. George Monastery",50.091208, 14.4025
 provenance_121,Paris,48.856667 ,2.352222
-provenance_163,Spain,40.416944,-3.703333 
+provenance_163,Spain,40.416944,-3.703333
 provenance_097,Milan,45.466667 ,9.166667
-provenance_080,Köln,50.9425,6.958889 
-provenance_100,MonteCassino,41.49,13.814 
+provenance_080,Köln,50.9425,6.958889
+provenance_100,MonteCassino,41.49,13.814
 provenance_021,Bellelay Abbey,47.263784,7.168377
 provenance_166,St-Martial,45.8353,1.2625
 provenance_006,Amersfoort,52.1525,5.386944
 provenance_119,Padova,45.416667 ,11.866667
 provenance_148,Rupertsberg,49.965815,7.889203
-provenance_046,Eichstätt,48.891944,11.183889 
+provenance_046,Eichstätt,48.891944,11.183889
 provenance_061,Germany (south),48.338747,10.353202
 provenance_056,France,47.084444 ,2.396389
 provenance_057,"France,  South ",43.614991,1.177855
-provenance_128,Prague,50.0875,14.421389
+provenance_128,Prague,50.0875, 14.421389
 provenance_219,Rajhrad,49.090239,16.603886
 provenance_218,"Braga, Catedral",41.5499,-8.42736
 provenance_220,Płock,52.55,19.7
 provenance_221,Staniątki,50.010278,20.198611
 provenance_222,Pilsen,49.741389,13.3825
-provenance_223,Cluny,46.434843, 4.659474
+provenance_223,Cluny,46.434843,4.659474
 provenance_224,Bratislava,48.144722,17.112778
 provenance_225,Bohemia,50.0,15.401389
 provenance_226,Slovakia,48.735556,19.145833
-provenance_227,Tyniec,50.0108, 19.8203
+provenance_227,Tyniec,50.0108,19.8203
+provenance_228,Huesca,42.1401,-0.408897
+provenance_229,Barbastro,42.033333,0.116667
