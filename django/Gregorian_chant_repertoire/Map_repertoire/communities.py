@@ -78,11 +78,12 @@ def get_graph(feast_ids : list[str]) -> (nx.Graph, list):
     return graph, edges
 
 
-def get_communities(feast_ids : list[str]) -> (list[set [str]], list[tuple]):
+def get_communities(feast_ids : list[str]):
     """
     Function returns communities found by Louvein algorithm and info about edges
     """
     graph, edges = get_graph(feast_ids)
     communities = nx.community.louvain_communities(graph, weight='weight')
+    communities.sort(key=len, reverse=True)
     return communities, edges
 
