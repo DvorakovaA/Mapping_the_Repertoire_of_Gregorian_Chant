@@ -20,8 +20,8 @@ def run():
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])  # converters={'cantus_id' : str})
-    responsories = pd.read_csv('data/given/all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id'])
+    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])  # converters={'cantus_id' : str})
+    responsories = pd.read_csv('data/given/all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])
     sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'provenance', 'drupal_path'])
     geography = pd.read_csv('data/given/geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('data/given/feast.csv', usecols=['id', 'name', 'feast_code'])
@@ -58,7 +58,8 @@ def run():
             cantus_id=row['cantus_id'],
             feast_id=row['feast_id'],
             source_id=row['source_id'],
-            office_id=row['office_id']
+            office_id=row['office_id'],
+            incipit=row['incipit']
         )
         for index, row in row_iter
     ]
