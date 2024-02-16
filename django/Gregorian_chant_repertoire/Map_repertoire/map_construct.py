@@ -78,7 +78,7 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
                 popup2 = folium.Popup(info, max_width=300, min_width =300)
 
             else:
-                sources_with_no_geo.append(source)
+                sources_with_no_geo.append((source, "Community "+str(i+1)))
                 j += 1
                 continue
                     
@@ -129,7 +129,11 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
     folium.LayerControl(collapsed=False).add_to(com_map)
     folium.LayerControl(collapsed=False).add_to(cen_map)
 
-    missing_info = "<div>" + str(len(sources_with_no_geo)) + " sources with unknown provenance </div>"
+    sources_with_no_geo.sort(key=lambda x : x[1])
+    missing_info = "<div> <b>" + str(len(sources_with_no_geo)) + " sources with unknown provenance </b> <br>"
+    for source_tuple in sources_with_no_geo:
+        missing_info += source_tuple[1] + ": " + "<a href=  \"{}\"  target=\"_blank\" rel=\"noopener noreferrer\"> {} </a>".format(source_tuple[0], source_tuple[0]) + "<br>"
+    missing_info += "<br> </div>"
     com_map.get_root().html.add_child(folium.Element(missing_info))
     cen_map.get_root().html.add_child(folium.Element(missing_info))
 
