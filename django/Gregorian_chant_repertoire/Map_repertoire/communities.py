@@ -14,14 +14,14 @@ def intersection_size(a : list, b : list):
     '''
     Function returns size of intersection of two sets
     '''
-    return len(set(a) & set(b))
+    return len(set(a).intersection(set(b)))
 
 def Jaccard_metrics(a : list, b : list):
     '''
     Function returns value of Jaccard metrics applied on two sets
     '''
     if len(set(a) | set(b)) != 0:
-        return len(set(a) & set(b)) / len(set(a) | set(b))
+        return len(set(a).intersection(set(b))) / len(set(a).union(set(b)))
     else:
         return 0
 
@@ -54,37 +54,42 @@ def get_columns(feast_ids : list, compare_metrics):
     s2_column = len_s * used_sources
 
     shared_column = []
+    ch1_column = []
+    ch2_column = []
     for i in range(len(s1_column)):
         s1_chants = source_chants_dict[s1_column[i]]
         s2_chants = source_chants_dict[s2_column[i]]
+        ch1_column.append(len(s1_chants))
+        ch2_column.append(len(s2_chants))
         shared_column.append(compare_metrics(s1_chants, s2_chants))
 
-    return s1_column, s2_column, shared_column, used_sources
+    return s1_column, s2_column, ch1_column, ch2_column, shared_column, used_sources
 
 
-def get_graph(feast_ids : list[str]) -> (nx.Graph, list):
+def get_graph(feast_ids : list[str]):
     """
     Function constructs graph from networkx library
     where nodes are sources, that has chants for given feasts,
     and edges are shared chants among them
     """    
-    s1_column, s2_column, shared_column, used_sources = get_columns(feast_ids, Jaccard_metrics)
+    s1_column, s2_column, ch1_column, ch2_column, shared_column, used_sources = get_columns(feast_ids, Jaccard_metrics)
     nodes = used_sources
     edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
-
+    edges_info = [(s1, s2, ch1, ch2, {'weight': round(w, 2) }) for s1, s2, ch1, ch2, w in zip(s1_column, s2_column, ch1_column, ch2_column, shared_column) if s1 != s2 and w != 0 and (s1 in used_sources and s2 in used_sources)]
+    
     graph = nx.Graph()
     graph.add_nodes_from(nodes)
     graph.add_edges_from(edges)
     
-    return graph, edges
+    return graph, edges_info
 
 
 def get_communities(feast_ids : list[str]):
     """
     Function returns communities found by Louvein algorithm and info about edges
     """
-    graph, edges = get_graph(feast_ids)
+    graph, edges_info = get_graph(feast_ids)
     communities = nx.community.louvain_communities(graph, weight='weight')
     communities.sort(key=len, reverse=True)
-    return communities, edges
+    return communities, edges_info
 

@@ -99,32 +99,32 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
             coord_1 = coordinates_of_sources[line[0]]
             coord_2 = coordinates_of_sources[line[1]]
 
-            popup1 = folium.Popup('<h5> Jaccard distance: ' + str(line[2]['weight']) + '</h5>', max_width=300)
-            popup2 = folium.Popup('<h5> Jaccard distance: ' + str(line[2]['weight']) + '</h5>', max_width=300)
-            popup3 = folium.Popup('<h5> Jaccard distance: ' + str(line[2]['weight']) + '</h5>', max_width=300)
-            popup4 = folium.Popup('<h5> Jaccard distance: ' + str(line[2]['weight']) + '</h5>', max_width=300)
+            popup1 = folium.Popup('<h5>' + line[0] + ' : ' + str(line[2]) + '<br>' + line[1] + ' : ' + str(line[3]) + '<br> Jaccard distance: ' + str(line[4]['weight']) + '</h5>', max_width=300)
+            popup2 = folium.Popup('<h5>' + line[0] + ' : ' + str(line[2]) + '<br>' + line[1] + ' : ' + str(line[3]) + '<br> Jaccard distance: ' + str(line[4]['weight']) + '</h5>', max_width=300)
+            popup3 = folium.Popup('<h5>' + line[0] + ' : ' + str(line[2]) + '<br>' + line[1] + ' : ' + str(line[3]) + '<br> Jaccard distance: ' + str(line[4]['weight']) + '</h5>', max_width=300)
+            popup4 = folium.Popup('<h5>' + line[0] + ' : ' + str(line[2]) + '<br>' + line[1] + ' : ' + str(line[3]) + '<br> Jaccard distance: ' + str(line[4]['weight']) + '</h5>', max_width=300)
 
             if community_layers[line[0]][1] == community_layers[line[1]][1]:
                 color = colors[community_layers[line[0]][1]]
                 com = community_layers[line[0]][0]
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*6, popup=popup1, color=color).add_to(com)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*6, popup=popup1, color=color).add_to(com)
             else:
                 color = 'black'
                 com1 = community_layers[line[0]][0]
                 com2 = community_layers[line[1]][0]
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*6, popup=popup1, color=color).add_to(com1)
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*6, popup=popup2, color=color).add_to(com2)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*6, popup=popup1, color=color).add_to(com1)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*6, popup=popup2, color=color).add_to(com2)
             
             if sources_dict[line[0]]['num_century'] == sources_dict[line[1]]['num_century']:
                 color = colors[community_layers[line[0]][1]]
                 cen = century_layers[sources_dict[line[0]]['num_century']]
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*5, popup=popup3, color=color).add_to(cen)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*5, popup=popup3, color=color).add_to(cen)
             else:
                 color = 'black'
                 cen1 = century_layers[sources_dict[line[0]]['num_century']]
                 cen2 = century_layers[sources_dict[line[1]]['num_century']]
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*5, popup=popup3, color=color).add_to(cen1)
-                folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*5, popup=popup4, color=color).add_to(cen2)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*5, popup=popup3, color=color).add_to(cen1)
+                folium.PolyLine(locations=[coord_1, coord_2], weight=line[4]['weight']*5, popup=popup4, color=color).add_to(cen2)
 
 
     folium.LayerControl(collapsed=False).add_to(com_map)

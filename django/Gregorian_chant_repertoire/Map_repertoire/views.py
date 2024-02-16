@@ -32,9 +32,9 @@ def index(request):
         feast_id = Feasts.objects.filter(name = feast_name).values()[0]['feast_id']
         context['feast_id'] = [feast_id]
 
-        communities, edges = get_communities([feast_id])
+        communities, edges_info = get_communities([feast_id])
         
-        com_map, cen_map = get_maps(communities, edges)
+        com_map, cen_map = get_maps(communities, edges_info)
         context['com_map'] = com_map._repr_html_()
         context['cen_map'] = cen_map._repr_html_()
         
