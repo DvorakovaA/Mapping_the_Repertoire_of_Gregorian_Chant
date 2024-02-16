@@ -48,9 +48,9 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
 
     # Displaying layers and dicts that hold them
     numeric_centuries = [sources_dict[s]['num_century'] for s in sources_dict.keys()]
-    numeric_centuries.sort()
     century_layers = {}
-    for numeric_cen in numeric_centuries:
+    sorted_cen = sorted(numeric_centuries)
+    for numeric_cen in sorted_cen:
         c_layer = folium.FeatureGroup(name=str(numeric_cen) + ". century", show=True)
         century_layers[numeric_cen] = c_layer
         cen_map.add_child(c_layer)
@@ -115,7 +115,7 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
                 folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*6, popup=popup2, color=color).add_to(com2)
             
             if sources_dict[line[0]]['num_century'] == sources_dict[line[1]]['num_century']:
-                color = 'black'
+                color = colors[community_layers[line[0]][1]]
                 cen = century_layers[sources_dict[line[0]]['num_century']]
                 folium.PolyLine(locations=[coord_1, coord_2], weight=line[2]['weight']*5, popup=popup3, color=color).add_to(cen)
             else:
