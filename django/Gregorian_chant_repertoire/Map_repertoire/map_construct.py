@@ -93,8 +93,9 @@ def get_maps(communities : list[set [str]], edges : list [tuple]):
 
 
     # Lines
+    pure_sources_with_no_geo = [s[0] for s in sources_with_no_geo]
     for line in edges:
-        if line[0] not in sources_with_no_geo and line[1] not in sources_with_no_geo: # there is a way of drawing it
+        if line[0] not in pure_sources_with_no_geo and line[1] not in pure_sources_with_no_geo: # there is a way of drawing it
             coord_1 = coordinates_of_sources[line[0]]
             coord_2 = coordinates_of_sources[line[1]]
 
