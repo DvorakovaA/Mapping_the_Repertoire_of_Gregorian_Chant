@@ -36,16 +36,17 @@ def get_columns(feast_ids : list, compare_metrics):
     source_chants_dict = {}
     used_sources = []
 
+    chants_of_feasts = []
     for feast_id in feast_ids:
-        chants_of_feast = Data_Chant.objects.filter(feast_id = feast_id).values()
-        for source_id in drupals:
-            chants_of_source = [chant['cantus_id'] for chant in chants_of_feast if chant['source_id'] == source_id[0]]
-            if chants_of_source != []:
-                used_sources.append(source_id[0])
-                try:
-                    source_chants_dict[source_id[0]].append(chants_of_source)
-                except:
-                    source_chants_dict[source_id[0]] = chants_of_source
+        chants_of_feasts += Data_Chant.objects.filter(feast_id = feast_id).values()
+    for source_id in drupals:
+        chants_of_source = [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0]]
+        if chants_of_source != []:
+            used_sources.append(source_id[0])
+            try:
+                source_chants_dict[source_id[0]].append(chants_of_source)
+            except:
+                source_chants_dict[source_id[0]] = chants_of_source
     
     used_sources = list(set(used_sources))
     len_s = len(used_sources)
@@ -69,7 +70,7 @@ def get_graph(feast_ids : list[str]) -> (nx.Graph, list):
     """    
     s1_column, s2_column, shared_column, used_sources = get_columns(feast_ids, Jaccard_metrics)
     nodes = used_sources
-    edges = [(i, j, {'weight': w }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
+    edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
 
     graph = nx.Graph()
     graph.add_nodes_from(nodes)
