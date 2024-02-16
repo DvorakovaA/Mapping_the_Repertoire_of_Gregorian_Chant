@@ -8,8 +8,9 @@ from django.http import HttpResponseRedirect
 from .forms import InputForm
 from .models import Feasts
 
-from Map_repertoire.map_construct import get_maps
 from Map_repertoire.communities import get_communities
+from Map_repertoire.map_construct import get_maps
+from Map_repertoire.table_construct import get_table
 
 def index(request):
     """
@@ -32,18 +33,19 @@ def index(request):
         context['feast_id'] = [feast_id]
 
         communities, edges = get_communities([feast_id])
+        
         com_map, cen_map = get_maps(communities, edges)
         context['com_map'] = com_map._repr_html_()
         context['cen_map'] = cen_map._repr_html_()
         
-        context['sources'] = [{'drupal_path' : source} for com in communities for source in com]
+        context['tab_data'] = get_table(communities, [feast_id])
         request.session['REQUESTED'] = False
     
-    return render(request, "Map_repertoire/index.html", context)
+    return render(request, "map_repertoire/index.html", context)
 
 
 def help(request):
     """
     Function that manages displaying of help page
     """
-    return render(request, "Map_repertoire/help.html")
+    return render(request, "map_repertoire/help.html")

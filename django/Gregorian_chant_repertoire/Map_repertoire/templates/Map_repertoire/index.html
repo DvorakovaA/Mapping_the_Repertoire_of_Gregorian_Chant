@@ -39,14 +39,82 @@
         <!-- <h3>Table view</h3> -->
         <br>
         <table border='1'>
+          {% if tab_data %}
           <tr>
-            <td>Source: </td>
+            <th bgcolor="grey"></th>
+            {% for com in tab_data.head %}
+              <th bgcolor={{com.color}} style="color:white;"> {{ com.com }} <br> {{ com.sources }} </th>
+            {% endfor %}
           </tr>
-          {% for x in sources %}
+          {% endif %}
+            {% if tab_data.body.V %}
             <tr>
-              <td> <a href='{{ x.drupal_path}}'  target="_blank" rel="noopener noreferrer">{{ x.drupal_path }}</a></td>
+              <td> <b> V </b> </td>
+              {% for com_chants in tab_data.body.V %}
+                <td>
+                  {% for chant in com_chants %}
+                    {{chant.incipit}} <br>
+                    {{chant.cantus_id }} {{chant.freq}} <br>
+                  {% endfor %}
+                </td>
+              {% endfor %}
             </tr>
-          {% endfor %}
+            {% endif %}
+
+            {% if tab_data.body.M %}
+              <tr>
+                <td> <b> M </b> </td>
+                {% for com_chants in tab_data.body.M %}
+                  <td>
+                    {% for chant in com_chants %}
+                      {{chant.incipit}} <br>
+                      {{chant.cantus_id }} {{chant.freq}} <br>
+                    {% endfor %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+            
+            {% if tab_data.body.L %}
+              <tr>
+                <td> <b> L </b> </td>
+                {% for com_chants in tab_data.body.L %}
+                  <td>
+                    {% for chant in com_chants %}
+                      {{chant.incipit}} <br>
+                      {{chant.cantus_id }} {{chant.freq}} <br>
+                    {% endfor %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+            
+            {% if tab_data.body.V2 %}
+              <tr>
+                <td> <b> V2 </b> </td>
+                {% for com_chants in tab_data.body.V2 %}
+                  <td>
+                    {% for chant in com_chants %}
+                      {{chant.incipit}} <br>
+                      {{chant.cantus_id }} {{chant.freq}} <br>
+                    {% endfor %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+          
+          <tr>
+            {% if tab_data.tail %}
+            <td>Sources</td>
+              {% for com in tab_data.tail %}
+                  <td> 
+                    {% for s in com %}
+                    <a href='{{ s.source_id }}'  target="_blank" rel="noopener noreferrer">{{ s.siglum }}</a> <br>
+                    {% endfor %}
+                  </td>
+              {% endfor %}
+            {% endif %}
+          </tr>
         </table>
       </div>
 
