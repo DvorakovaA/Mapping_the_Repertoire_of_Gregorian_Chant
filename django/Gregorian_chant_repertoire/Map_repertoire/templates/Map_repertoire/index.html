@@ -53,8 +53,8 @@
               {% for com_chants in tab_data.body.V %}
                 <td>
                   {% for chant in com_chants %}
-                    {{chant.incipit}} <br>
-                    {{chant.cantus_id }} {{chant.freq}} <br>
+                    {{chant.incipit}}
+                    <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
                   {% endfor %}
                 </td>
               {% endfor %}
@@ -67,8 +67,8 @@
                 {% for com_chants in tab_data.body.M %}
                   <td>
                     {% for chant in com_chants %}
-                      {{chant.incipit}} <br>
-                      {{chant.cantus_id }} {{chant.freq}} <br>
+                      {{chant.incipit}}
+                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
                     {% endfor %}
                   </td>
                 {% endfor %}
@@ -81,8 +81,8 @@
                 {% for com_chants in tab_data.body.L %}
                   <td>
                     {% for chant in com_chants %}
-                      {{chant.incipit}} <br>
-                      {{chant.cantus_id }} {{chant.freq}} <br>
+                      {{chant.incipit}}
+                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
                     {% endfor %}
                   </td>
                 {% endfor %}
@@ -95,8 +95,8 @@
                 {% for com_chants in tab_data.body.V2 %}
                   <td>
                     {% for chant in com_chants %}
-                      {{chant.incipit}} <br>
-                      {{chant.cantus_id }} {{chant.freq}} <br>
+                      {{chant.incipit}}
+                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
                     {% endfor %}
                   </td>
                 {% endfor %}
