@@ -4,7 +4,6 @@ displaying of htmls and data transfer between script components
 """
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from .forms import InputForm
 from .models import Feasts
 
@@ -21,20 +20,31 @@ def index(request):
     form = InputForm(request.POST or None, initial={'feast' : '---'})
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
+        request.session['V'] = form.cleaned_data['V']
+        request.session['M'] = form.cleaned_data['M']
+        request.session['L'] = form.cleaned_data['L']
+        request.session['V2'] = form.cleaned_data['V2']
+
         
-    context = { "form" : form }
+    context = {"form" : form}
     feast_name = Feasts.objects.values_list('name', flat=True)[int(request.session.get('feast'))]
     context['feast'] = feast_name
     feast_id = Feasts.objects.filter(name = feast_name).values()[0]['feast_id']
     context['feast_id'] = [feast_id]
+    filtering_office = []
+    office_shortcuts = ['V', 'M', 'L', 'V2']
+    office_names = ['office_v', 'office_m', 'office_l', 'office_v2']
+    for i in range(len(office_shortcuts)):
+        if request.session.get(office_shortcuts[i]):
+            filtering_office.append(office_names[i])
 
-    communities, edges_info = get_communities([feast_id])
+    communities, edges_info = get_communities([feast_id], filtering_office)
     
     com_map, cen_map = get_maps(communities, edges_info)
     context['com_map'] = com_map._repr_html_()
     context['cen_map'] = cen_map._repr_html_()
     
-    context['tab_data'] = get_table(communities, [feast_id])
+    context['tab_data'] = get_table(communities, [feast_id], filtering_office)
     
     return render(request, "map_repertoire/index.html", context)
 

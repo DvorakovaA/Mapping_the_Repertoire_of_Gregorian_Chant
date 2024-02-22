@@ -16,7 +16,7 @@
 {% block history %}
 {% endblock %}
 
-{% block conntent %}
+{% block content %}
   <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
@@ -36,7 +36,26 @@
       </div>
 
       <div id="Table" class="tabcontent" style="display:block">
+        
         <!-- <h3>Table view</h3> -->
+        <!-- 
+          <html id="hihi" class="datapoint" data-tabdata = "{{tab_data}}"></html>
+          <script>
+          let tab_data = hihi.dataset.tabdata;
+          let doubleQuotedData = tab_data.replaceAll("\'", "\"");
+          let deserialized = JSON.parse(doubleQuotedData);
+          console.log(deserialized);
+          let table = document.createElement('table');
+          for (const [key, value] of Object.entries(deserialized.body)) {
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            cell.appendChild(document.createTextNode(value[0][0].incipit));
+            let button = document.createElement('button');
+            button.
+          }
+          document.body.appendChild(table);
+        </script>
+      -->
         <br>
         <table border='1'>
           {% if tab_data %}
@@ -46,14 +65,14 @@
               <th bgcolor={{com.color}} style="color:white;"> {{ com.com }} <br> {{ com.sources }} </th>
             {% endfor %}
           </tr>
-          {% endif %}
+          
             {% if tab_data.body.V %}
             <tr>
               <td> <b> V </b> </td>
               {% for com_chants in tab_data.body.V %}
                 <td>
                   {% for chant in com_chants %}
-                    {{chant.incipit}}
+                    {{ chant.incipit }}
                     <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
                   {% endfor %}
                 </td>
@@ -115,6 +134,10 @@
               {% endfor %}
             {% endif %}
           </tr>
+          
+          {% else %}
+            <h3> No data for given request </h3>
+          {% endif %}
         </table>
       </div>
 
