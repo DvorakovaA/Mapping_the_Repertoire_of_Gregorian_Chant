@@ -38,7 +38,8 @@ def index(request):
         if request.session.get(office_shortcuts[i]):
             filtering_office.append(office_names[i])
 
-    communities, edges_info = get_communities([feast_id], filtering_office)
+    communities, edges_info, sig_level = get_communities([feast_id], filtering_office)
+    context['sig_level'] = sig_level
     
     com_map, cen_map = get_maps(communities, edges_info)
     context['com_map'] = com_map._repr_html_()

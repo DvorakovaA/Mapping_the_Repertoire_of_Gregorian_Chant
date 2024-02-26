@@ -4,6 +4,9 @@ that finds communities on sources (by chants) for given feast
 """
 
 import networkx as nx
+import numpy as np
+from collections import Counter
+from itertools import combinations
 
 from .models import Data_Chant, Sources
 
@@ -45,7 +48,6 @@ def get_columns(feast_ids : list[str], compare_metrics, filtering_office : list[
         chants_of_feasts += Data_Chant.objects.filter(feast_id = feast_id).values()
     for source_id in drupals:
         if DO_FILTER_OFFICE:
-            print('filter')
             chants_of_source = []
             for office in filtering_office:
                 chants_of_source += [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0] and chant['office_id'] == office]
@@ -60,7 +62,6 @@ def get_columns(feast_ids : list[str], compare_metrics, filtering_office : list[
                 source_chants_dict[source_id[0]] = chants_of_source
 
     used_sources = list(set(used_sources))
-    print(used_sources)
     len_s = len(used_sources)
     s1_column = [j for i in [len_s * [s] for s in used_sources] for j in i]
     s2_column = len_s * used_sources
@@ -95,12 +96,40 @@ def get_graph(feast_ids : list[str], filtering_office : list[str]):
     return graph, edges_info
 
 
+def find_stable_com(community_versions : list[list[set[str]]]):
+    '''
+    
+    '''
+    if community_versions != []:
+        #number_of_sources = len(community_versions[0])
+        
+        # inicialize matrix of sources sharing one community
+        friends_matrix = Counter()
+        for com_ver in community_versions:
+            for com in com_ver:
+                com = sorted(list(com))
+                for pair in combinations(com, 2):
+                    friends_matrix[pair] += 1
+
+        sig_level = round(np.mean([friends_matrix[pair] for pair in friends_matrix.keys()]) / 10, 2)
+        print(sig_level)
+        return community_versions[0], sig_level
+    else:
+        return [], 0
+
+
 def get_communities(feast_ids : list[str], filtering_office : list[str]):
     """
     Function returns communities found by Louvein algorithm and info about edges
     """
     graph, edges_info = get_graph(feast_ids, filtering_office)
-    communities = nx.community.louvain_communities(graph, weight='weight')
+    
+    community_versions = []
+    for _ in range(10):
+        community_versions.append(nx.community.louvain_communities(graph, weight='weight'))
+    
+    communities, sig_level = find_stable_com(community_versions)
     communities.sort(key=len, reverse=True)
-    return communities, edges_info
+    
+    return communities, edges_info, sig_level
 
