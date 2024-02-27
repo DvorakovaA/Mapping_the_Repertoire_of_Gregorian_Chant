@@ -20,6 +20,7 @@ def index(request):
     form = InputForm(request.POST or None, initial={'feast' : '---'})
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
+        request.session['All'] = form.cleaned_data['All']
         request.session['V'] = form.cleaned_data['V']
         request.session['M'] = form.cleaned_data['M']
         request.session['L'] = form.cleaned_data['L']
@@ -32,11 +33,13 @@ def index(request):
     feast_id = Feasts.objects.filter(name = feast_name).values()[0]['feast_id']
     context['feast_id'] = [feast_id]
     filtering_office = []
-    office_shortcuts = ['V', 'M', 'L', 'V2']
-    office_names = ['office_v', 'office_m', 'office_l', 'office_v2']
-    for i in range(len(office_shortcuts)):
-        if request.session.get(office_shortcuts[i]):
-            filtering_office.append(office_names[i])
+    if not request.session.get('All'):
+        office_shortcuts = ['V', 'M', 'L', 'V2']
+        office_names = ['office_v', 'office_m', 'office_l', 'office_v2']
+        for i in range(len(office_shortcuts)):
+            if request.session.get(office_shortcuts[i]):
+                filtering_office.append(office_names[i])
+    # else filtering_office is empty list -> we select All
 
     communities, edges_info, sig_level = get_communities([feast_id], filtering_office)
     context['sig_level'] = sig_level
