@@ -27,7 +27,8 @@
 
 
 {% block map %}
-  <h3> Selected feast: {{ feast }} </h3> <br>
+  <h3> Selected feast: {{ feast }} </h3>
+  <h4> Significance level: {{ sig_level }} </h4> <br>
       <!-- Three tabs over each other -->
       <div class="tab">
         <button class="tablinks" onclick="openView(event, 'Table')">Table view</button>
@@ -36,109 +37,74 @@
       </div>
 
       <div id="Table" class="tabcontent" style="display:block">
-        
-        <!-- <h3>Table view</h3> -->
-        <!-- 
-          <html id="hihi" class="datapoint" data-tabdata = "{{tab_data}}"></html>
-          <script>
-          let tab_data = hihi.dataset.tabdata;
-          let doubleQuotedData = tab_data.replaceAll("\'", "\"");
-          let deserialized = JSON.parse(doubleQuotedData);
-          console.log(deserialized);
-          let table = document.createElement('table');
-          for (const [key, value] of Object.entries(deserialized.body)) {
-            const row = table.insertRow();
-            const cell = row.insertCell();
-            cell.appendChild(document.createTextNode(value[0][0].incipit));
-            let button = document.createElement('button');
-            button.
-          }
-          document.body.appendChild(table);
-        </script>
-      -->
         <br>
-        <table border='1'>
-          {% if tab_data %}
-          <tr>
-            <th bgcolor="grey"></th>
-            {% for com in tab_data.head %}
-              <th bgcolor={{com.color}} style="color:white;"> {{ com.com }} <br> {{ com.sources }} </th>
-            {% endfor %}
-          </tr>
-          
-            {% if tab_data.body.V %}
-            <tr>
-              <td> <b> V </b> </td>
-              {% for com_chants in tab_data.body.V %}
-                <td>
-                  {% for chant in com_chants %}
-                    {{ chant.incipit }}
-                    <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
-                  {% endfor %}
-                </td>
-              {% endfor %}
-            </tr>
-            {% endif %}
+        {% if tab_data %}
+          <button href="#/" class="toggle-table"  data-collapsible-expand-all>Show all</button>
+          <button href="#/" class="toggle-table"  data-collapsible-collapse-all>Hide all</button>
+          <br>
 
-            {% if tab_data.body.M %}
+          <table class="mainTable" border='1'>
+            <tbody>
               <tr>
-                <td> <b> M </b> </td>
-                {% for com_chants in tab_data.body.M %}
-                  <td>
-                    {% for chant in com_chants %}
-                      {{chant.incipit}}
-                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
-                    {% endfor %}
-                  </td>
+                <th bgcolor="grey"></th>
+                {% for com in tab_data.head %}
+                  <th bgcolor={{com.color}} style="color:white;"> {{ com.com }} <br> {{ com.sources }} </th>
                 {% endfor %}
               </tr>
-            {% endif %}
-            
-            {% if tab_data.body.L %}
-              <tr>
-                <td> <b> L </b> </td>
-                {% for com_chants in tab_data.body.L %}
-                  <td>
-                    {% for chant in com_chants %}
-                      {{chant.incipit}}
-                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
+
+              {% for office, office_chants in tab_data.body.items %}
+                <tr>
+                  <td> <b> {{ office }} </b> </td>
+                    <!-- iteration over cells -->
+                    {% for com_chants_dicts in office_chants %} 
+                      <td data-collapsible-container>
+                        <table>      
+                            {% for uncoll_chant in com_chants_dicts.uncollapsed %}
+                              <tr>
+                                {{ uncoll_chant.incipit }}
+                                <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ uncoll_chant.cantus_id }}</a> {{ uncoll_chant.freq }} <br>
+                              </tr>
+                            {% endfor %}
+                        </table>
+                        {% if com_chants_dicts.collapsed %}
+                          <div data-collapsible class="collapsible collapsed">
+                            <div class="collapsible-inner">
+                              <table>
+                                {% for coll_chant in com_chants_dicts.collapsed %}
+                                <tr>
+                                  {{ coll_chant.incipit }}
+                                  <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ coll_chant.cantus_id }}</a> {{ coll_chant.freq }} <br>
+                                </tr>
+                              {% endfor %}
+                              </table>
+                            </div>
+                          </div>
+                          <a href="#/" data-collapsible-trigger>Show more</a>
+                        {% endif %}
+                      </td>
                     {% endfor %}
-                  </td>
-                {% endfor %}
-              </tr>
-            {% endif %}
-            
-            {% if tab_data.body.V2 %}
-              <tr>
-                <td> <b> V2 </b> </td>
-                {% for com_chants in tab_data.body.V2 %}
-                  <td>
-                    {% for chant in com_chants %}
-                      {{chant.incipit}}
-                      <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ chant.cantus_id }}</a> {{chant.freq}} <br>
-                    {% endfor %}
-                  </td>
-                {% endfor %}
-              </tr>
-            {% endif %}
-          
-          <tr>
-            {% if tab_data.tail %}
-            <td>Sources</td>
-              {% for com in tab_data.tail %}
-                  <td> 
-                    {% for s in com %}
-                    <a href='{{ s.source_id }}'  target="_blank" rel="noopener noreferrer">{{ s.siglum }}</a> <br>
-                    {% endfor %}
-                  </td>
+                </tr>
               {% endfor %}
-            {% endif %}
-          </tr>
           
-          {% else %}
-            <h3> No data for given request </h3>
-          {% endif %}
-        </table>
+            <tr>
+              {% if tab_data.tail %}
+                <td>Sources</td>
+                  {% for com in tab_data.tail %}
+                      <td> 
+                        {% for s in com %}
+                        <a href='{{ s.source_id }}'  target="_blank" rel="noopener noreferrer">{{ s.siglum }}</a> <br>
+                        {% endfor %}
+                      </td>
+                  {% endfor %}
+              {% endif %}
+            </tr>
+          
+            </tbody>
+          </table>
+
+        {% else %}
+          <h3> No data for given request </h3>
+        {% endif %}
       </div>
 
       <div id = "Community_map" class = "tabcontent">

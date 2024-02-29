@@ -29,7 +29,31 @@
             th {
                 text-align: left;
             }
-          </style>
+
+            .mainTable {
+                border-collapse: collapse;
+            }
+
+            .collapsible {
+                display: grid;
+                grid-template-rows: 1fr;
+                opacity: 1;
+                transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out;
+            }
+
+            .collapsible.collapsed {
+                grid-template-rows: 0fr;
+                opacity: 0;
+            }
+
+            .collapsible-inner {
+                overflow: hidden;
+            }
+
+            button.toggle-table {
+                background-color: rgb(152, 223, 152);
+            }
+        </style>
 
         <title>{% block title %} Map_repertoire {% endblock %}</title>
     </head>
@@ -88,6 +112,69 @@
           document.getElementById(viewName).style.display = "block";
           evt.currentTarget.className += " active";
         }
+
+
+        // Toggle parts of table view
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var mainTable = document.getElementsByClassName('mainTable')[0];
+            
+            // Get all elements with data-collapsible-trigger attribute
+            var triggerElements = mainTable.querySelectorAll('[data-collapsible-trigger]');
+
+            // Iterate through each trigger element
+            triggerElements.forEach(function (trigger) {
+                // Add click event listener to each trigger
+                trigger.addEventListener('click', function () {
+                    // Find the closest parent with data-collapsible-container attribute
+                    var container = this.closest('[data-collapsible-container]');
+
+                    // Find the collapsible element within the container
+                    var collapsible = container.querySelector('[data-collapsible]');
+
+                    // Toggle the collapsed class on the collapsible element
+                    collapsible.classList.toggle('collapsed');
+
+                    // Toggle the text content of the trigger
+                    var triggerText = collapsible.classList.contains('collapsed') ? 'Show more' : 'Hide';
+                    this.textContent = triggerText;
+                });
+            });
+        
+            var expandAllTrigger = document.querySelectorAll('[data-collapsible-expand-all]');
+            expandAllTrigger.forEach(function (trigger) {
+                trigger.addEventListener('click', function () {
+                var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
+                collabsibleContainers.forEach(function (container) {
+                    var collapsibleElements = container.querySelectorAll('[data-collapsible]');
+                    collapsibleElements.forEach(function (collapsibleEl) {
+                    collapsibleEl.classList.remove('collapsed');
+                    });
+                    var collapsibleTriggers = container.querySelectorAll('[data-collapsible-trigger]');
+                    collapsibleTriggers.forEach(function (triggerEl) {
+                    triggerEl.textContent = 'Hide';
+                    });
+                });
+                });
+            });
+        
+            var collapseAllTrigger = document.querySelectorAll('[data-collapsible-collapse-all]');
+            collapseAllTrigger.forEach(function (trigger) {
+                trigger.addEventListener('click', function () {
+                var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
+                collabsibleContainers.forEach(function (container) {
+                    var collapsibleElements = container.querySelectorAll('[data-collapsible]');
+                    collapsibleElements.forEach(function (collapsibleEl) {
+                    collapsibleEl.classList.add('collapsed');
+                    });
+                    var collapsibleTriggers = container.querySelectorAll('[data-collapsible-trigger]');
+                    collapsibleTriggers.forEach(function (triggerEl) {
+                    triggerEl.textContent = 'Show more';
+                    });
+                });
+                });
+            });
+        });
     </script>
         
 </html>

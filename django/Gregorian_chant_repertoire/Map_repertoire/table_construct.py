@@ -59,14 +59,30 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             for i in range(len(communities)):
                 community_office_chants = [chant for chant in chants_of_community[i] if chant[0] == office]
                 if community_office_chants != []:
-                    # frequency count
+                    # Frequency count
                     frequency = Counter(community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]
-                    chant_info = [{'incipit' : chant[0][2], 'cantus_id' : chant[0][1], 'freq' : "("+str(chant[1])+" | "+str(round((chant[1]/len(communities[i]))*100, 2))+" %)"} for chant in ordered_freq]
+                    
+                    uncollapsed_chant_info = []
+                    # Take six most frequent chants
+                    j = 0
+                    while j < 6:
+                        try:
+                            uncollapsed_chant_info.append({'incipit' : ordered_freq[j][0][2], 'cantus_id' : ordered_freq[j][0][1], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
+                        except:
+                            break
+                        j+=1
+                    
+                    collapsed_chant_info = []
+                    # Take potencial rest of chants
+                    for j in range(j, len(ordered_freq)):
+                        collapsed_chant_info.append({'incipit' : ordered_freq[j][0][2], 'cantus_id' : ordered_freq[j][0][1], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
+
                     try:
-                        tab_data['body'][offices[office]].append(chant_info)
+                        tab_data['body'][offices[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
-                        tab_data['body'][offices[office]] = [chant_info]
-        
+                        tab_data['body'][offices[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
+        print(tab_data)
         return tab_data
+    
     return None
