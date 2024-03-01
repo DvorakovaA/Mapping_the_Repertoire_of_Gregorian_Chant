@@ -37,6 +37,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             colors.append(color)
 
         chants_of_community = {}
+        # Tail and head plus collecting chants
         i = 0
         for community in communities:
             chants_of_community[i] = []
@@ -44,21 +45,24 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             tab_data['tail'].append([])
             for feast_id in feast_ids:
                 chants_of_feast = Data_Chant.objects.filter(feast_id = feast_id).values()
+                used_offices = set([chant['office_id'] for chant in chants_of_feast])
                 for source_id in community:
                     chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
                     chants_of_community[i]+= chants_of_source
                     tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
             i += 1
 
-
+        # Body
         offices = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
                 'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 'office_x' : 'X'}
         if filtering_office == []:
             filtering_office = offices
         for office in filtering_office:
-            for i in range(len(communities)):
-                community_office_chants = [chant for chant in chants_of_community[i] if chant[0] == office]
-                if community_office_chants != []:
+            # Check for empty rows (empty offices)
+            if office in used_offices:
+                for i in range(len(communities)):
+                    community_office_chants = [chant for chant in chants_of_community[i] if chant[0] == office]
+
                     # Frequency count
                     frequency = Counter(community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]
@@ -82,7 +86,9 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                         tab_data['body'][offices[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
                         tab_data['body'][offices[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
-        print(tab_data)
+
+        # Filter out empty offices
+                
         return tab_data
     
     return None
