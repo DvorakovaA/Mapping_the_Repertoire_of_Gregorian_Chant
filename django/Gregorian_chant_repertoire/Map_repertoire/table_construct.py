@@ -20,14 +20,22 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
     '''
     Function that constructs data structure readable for django templating language,
     so it is possible to present results of community search for some feast(s) in table
+    Structure of tab_data:
+    {
+        'head': [{'com':'CommunityX, 'sources':'XY sources','color':'hex'}, {}, ...],
+        'body': {'OFFICE_CODE_V': [{'collapsed':[{'incipit':'Text','cantus_id':'XXXXXX','freq':X}, {}, ...],'uncollapsed':[{'incipit':,...}, ...]}],
+                 'OFFICE_CODE_C: [{...}], 'OFFICE_CODE_M':[{...}], ...}
+        'tail': [[{'source_id':'https//..', 'siglum':'XY'}, {}, ...], [{}, {}, ...], [{}]]
+    }
     '''
     if communities != []:
+        # Get ready base
         tab_data = {}
         tab_data['head'] = []
-        tab_data['tail'] = []
         tab_data['body'] = {}
-
-        # Color scale for header fields of table
+        tab_data['tail'] = []
+        
+        # Color scale for header fields of table (same as in map_construct)
         cmap = plt.get_cmap('plasma')
         offset = TwoSlopeNorm(vmin = 0, vcenter= (len(communities) / 2), vmax = len(communities))
         colors = []
@@ -36,8 +44,8 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             color=rgb2hex(cmap(scale)) # without translation to hex it is blue - green scale
             colors.append(color)
 
+        # Tail and head plus collecting chants and offices
         chants_of_community = {}
-        # Tail and head plus collecting chants
         i = 0
         for community in communities:
             chants_of_community[i] = []
@@ -52,17 +60,19 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                     tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
             i += 1
 
-        # Body
+        # Fill body
         offices = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
                 'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 'office_x' : 'X'}
+        
+        # Check for possible filter
         if filtering_office == []:
             filtering_office = offices
+        # Go over data in office point of view (= rows)    
         for office in filtering_office:
             # Check for empty rows (empty offices)
             if office in used_offices:
                 for i in range(len(communities)):
                     community_office_chants = [chant for chant in chants_of_community[i] if chant[0] == office]
-
                     # Frequency count
                     frequency = Counter(community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]
@@ -86,9 +96,8 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                         tab_data['body'][offices[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
                         tab_data['body'][offices[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
-
-        # Filter out empty offices
                 
         return tab_data
     
+    # Nothing to be displayed
     return None
