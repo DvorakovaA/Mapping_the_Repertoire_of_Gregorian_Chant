@@ -26,14 +26,20 @@
 {% endblock %}
 
 
-{% block map %}
+{% block result %}
   <h3> Selected feast: {{ feast }} </h3>
   <h4> Significance level: {{ sig_level }} </h4> <br>
       <!-- Three tabs over each other -->
       <div class="tab">
         <button class="tablinks" onclick="openView(event, 'Table')">Table view</button>
-        <button class="tablinks" onclick="openView(event, 'Community_map')">Cummunity map view</button>
-        <button class="tablinks" onclick="openView(event, 'Century_map')">Century map view</button>
+        <button class="tablinks" onclick="
+              openView(event, 'Community_map'); 
+              window.dispatchEvent(new Event('resize'));"
+            >Cummunity map view</button>
+        <button class="tablinks" onclick="
+              openView(event, 'Century_map'); 
+              window.dispatchEvent(new Event('resize'));"
+            >Century map view</button>
       </div>
 
       <div id="Table" class="tabcontent" style="display:block">
@@ -108,11 +114,36 @@
       </div>
 
       <div id = "Community_map" class = "tabcontent">
-        {{ com_map|safe }}
+        {% if map_data.no_prov_sources %}
+          <div id="missing_provenance">
+            <b> Sourses with unknown provenances: </b> <br>
+            {% for source in map_data.no_prov_sources %}
+              <a href='{{ source }}'  target="_blank" rel="noopener noreferrer">{{ source }}</a> <br>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div id="com_map"></div>
       </div>
 
       <div id = "Century_map" class = "tabcontent">
-        {{ cen_map|safe }}
-      </div>
+        {% if map_data.no_prov_sources %}
+          <div id="missing_provenance">
+            <b> Sourses with unknown provenances: </b> <br>
+            {% for source in map_data.no_prov_sources %}
+              <a href='{{ source }}'  target="_blank" rel="noopener noreferrer">{{ source }}</a> <br>
+            {% endfor %}
+          </div>
+        {% endif %}
 
+        <div id="cen_map"></div>
+      </div>
+      
+      {{ map_data|json_script:"map_data" }}
+      <script>
+        const map_data = JSON.parse(document.getElementById('map_data').textContent);
+        var com_map, cen_map = getMaps(map_data);
+      </script>
+
+      
 {% endblock %}

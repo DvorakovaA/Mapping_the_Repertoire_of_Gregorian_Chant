@@ -8,8 +8,8 @@ from .forms import InputForm
 from .models import Feasts
 
 from Map_repertoire.communities import get_communities
-from Map_repertoire.map_construct import get_maps
 from Map_repertoire.table_construct import get_table
+from Map_repertoire.map_data_construct import get_map_data
 
 def index(request):
     """
@@ -44,10 +44,7 @@ def index(request):
     communities, edges_info, sig_level = get_communities([feast_id], filtering_office)
     context['sig_level'] = sig_level
     
-    com_map, cen_map = get_maps(communities, edges_info)
-    context['com_map'] = com_map._repr_html_()
-    context['cen_map'] = cen_map._repr_html_()
-    
+    context['map_data'] = get_map_data(communities, edges_info)
     context['tab_data'] = get_table(communities, [feast_id], filtering_office)
     
     return render(request, "map_repertoire/index.html", context)

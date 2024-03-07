@@ -2,6 +2,11 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}" />
+        <script src="{% static 'leaflet/leaflet.js' %}"></script>
+        <script src="{% static 'create_map.js' %}"></script>
+
         <style>
             .tabcontent {
             display: none;
@@ -51,8 +56,19 @@
             }
 
             button.toggle-table {
-                background-color: rgb(152, 223, 152);
+                background-color: rgb(199, 202, 199);
             }
+
+            #com_map {
+                height: calc(80vh - 80px);
+                width: calc(90vw - 80px);
+            }
+
+            #cen_map {
+                height: calc(80vh - 80px);
+                width: calc(90vw - 80px);
+            }
+
         </style>
 
         <title>{% block title %} Map_repertoire {% endblock %}</title>
@@ -89,8 +105,8 @@
 
         
 
-        <div id = "map">
-            {% block map %}
+        <div id = "result">
+            {% block result %}
 
             {% endblock %}
         </div>
