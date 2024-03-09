@@ -29,7 +29,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
     }
     '''
     if communities != []:
-        # Get ready base
+        # Get ready the base of returned structure
         tab_data = {}
         tab_data['head'] = []
         tab_data['body'] = {}
@@ -55,7 +55,6 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             for feast_id in feast_ids:
                 chants_of_feast = Data_Chant.objects.filter(feast_id = feast_id).values()
                 used_offices += [chant['office_id'] for chant in chants_of_feast]
-                print(used_offices)
                 for source_id in community:
                     chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
                     chants_of_community[i]+= chants_of_source
@@ -75,17 +74,23 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             # Check for empty rows (empty offices)
             if office in used_offices:
                 for i in range(len(communities)):
-                    community_office_chants = [chant for chant in chants_of_community[i] if chant[0] == office]
+                    # Get info into better structure for computation and display
+                    community_office_chants_dict = {}
+                    community_office_chants = []
+                    for chant in chants_of_community[i]:
+                        if chant[0] == office:
+                            community_office_chants_dict[chant[1]] = chant[2]
+                            community_office_chants.append(chant[1])
+                    print(community_office_chants)
                     # Frequency count
-                    frequency = Counter(community_office_chants)
+                    frequency = Counter(chant for chant in community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]
-                    
                     uncollapsed_chant_info = []
-                    # Take six most frequent chants
+                    # Take six most frequent chants for uncollapsed
                     j = 0
                     while j < 6:
                         try:
-                            uncollapsed_chant_info.append({'incipit' : ordered_freq[j][0][2], 'cantus_id' : ordered_freq[j][0][1], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
+                            uncollapsed_chant_info.append({'incipit' : community_office_chants_dict[ordered_freq[j][0]], 'cantus_id' : ordered_freq[j][0], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
                         except:
                             break
                         j+=1
@@ -93,7 +98,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                     collapsed_chant_info = []
                     # Take potencial rest of chants
                     for j in range(j, len(ordered_freq)):
-                        collapsed_chant_info.append({'incipit' : ordered_freq[j][0][2], 'cantus_id' : ordered_freq[j][0][1], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
+                        collapsed_chant_info.append({'incipit' : community_office_chants_dict[ordered_freq[j][0]], 'cantus_id' : ordered_freq[j][0], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
 
                     try:
                         tab_data['body'][offices[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
