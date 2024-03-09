@@ -27,7 +27,13 @@
 
 
 {% block result %}
-  <h3> Selected feast: {{ feast }} </h3>
+  <h3> Selected feasts: </h3> 
+  <h4>
+    {% for feast in feasts %} 
+      <br> {{ feast }} 
+    {% endfor %}
+  </h4>
+
   <h4> Significance level: {{ sig_level }} </h4> <br>
       <!-- Three tabs over each other -->
       <div class="tab">

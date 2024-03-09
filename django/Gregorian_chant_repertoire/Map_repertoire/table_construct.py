@@ -44,23 +44,33 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             color=rgb2hex(cmap(scale)) # without translation to hex it is blue - green scale
             colors.append(color)
 
-        # Tail and head plus collecting chants and offices
+        # Head plus collecting chants and offices
         chants_of_community = {}
         used_offices = []
         i = 0
+        print(communities)
         for community in communities:
             chants_of_community[i] = []
             tab_data['head'].append({'com' : "Community "+str(i+1), 'sources' : str(len(community))+" sources", 'color' : colors[i]})
-            tab_data['tail'].append([])
+            chants_of_feast = []
             for feast_id in feast_ids:
-                chants_of_feast = Data_Chant.objects.filter(feast_id = feast_id).values()
+                chants_of_feast += [chant for chant in Data_Chant.objects.filter(feast_id = feast_id).values()]
                 used_offices += [chant['office_id'] for chant in chants_of_feast]
                 for source_id in community:
                     chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
                     chants_of_community[i]+= chants_of_source
-                    tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
             i += 1
         used_offices = set(used_offices)
+
+        # Fill tail
+        i = 0
+        for community in communities:
+            tab_data['tail'].append([])
+            for source_id in community:
+                tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
+            i += 1
+        print(tab_data['tail'])
+        
         # Fill body
         offices = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
                 'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 
@@ -81,7 +91,6 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                         if chant[0] == office:
                             community_office_chants_dict[chant[1]] = chant[2]
                             community_office_chants.append(chant[1])
-                    print(community_office_chants)
                     # Frequency count
                     frequency = Counter(chant for chant in community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]

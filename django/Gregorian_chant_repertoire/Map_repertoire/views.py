@@ -28,10 +28,15 @@ def index(request):
 
         
     context = {"form" : form}
-    feast_name = Feasts.objects.values_list('name', flat=True)[int(request.session.get('feast'))]
-    context['feast'] = feast_name
-    feast_id = Feasts.objects.filter(name = feast_name).values()[0]['feast_id']
-    context['feast_id'] = [feast_id]
+    feast_names = []
+    for id in request.session.get('feast'):
+        feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)])
+    context['feasts'] = feast_names
+    print(feast_names)
+    feast_ids = []
+    for feast_name in feast_names:
+        feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
+    context['feast_id'] = [feast_ids]
     filtering_office = []
     if not request.session.get('All'):
         office_shortcuts = ['V', 'M', 'L', 'V2']
@@ -41,11 +46,11 @@ def index(request):
                 filtering_office.append(office_names[i])
     # else filtering_office is empty list -> we select All
 
-    communities, edges_info, sig_level = get_communities([feast_id], filtering_office)
+    communities, edges_info, sig_level = get_communities(feast_ids, filtering_office)
     context['sig_level'] = sig_level
     
     context['map_data'] = get_map_data(communities, edges_info)
-    context['tab_data'] = get_table(communities, [feast_id], filtering_office)
+    context['tab_data'] = get_table(communities, feast_ids, filtering_office)
     
     return render(request, "map_repertoire/index.html", context)
 

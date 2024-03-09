@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from .models import Feasts
 
 class InputForm(forms.Form):
-    feast = forms.ChoiceField(choices=[(None, '---')]+[(f[0], f[1]) for f in zip([i for i in range(len(Feasts.objects.all()))], Feasts.objects.values_list('name', flat=True))])
+    feast = forms.MultipleChoiceField(choices=[(None, '---')]+[(f[0], f[1]) for f in zip([i for i in range(len(Feasts.objects.all()))], Feasts.objects.values_list('name', flat=True))])
     All = forms.BooleanField(label="All", required=False)
     V = forms.BooleanField(label="V", required=False)
     M = forms.BooleanField(label="M", required=False)
