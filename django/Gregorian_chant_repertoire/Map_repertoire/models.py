@@ -24,7 +24,7 @@ class Sources(models.Model):
     provenance_id = models.CharField(("provenance_id"), max_length=20, null=True) #FK
     provenance = models.CharField(("provenance"), max_length=500, null=True)
     century = models.CharField(("century"), max_length=50, null=True)
-    num_century = models.IntegerField(("num_century"), null = True)
+    num_century = models.CharField(("num_century"), max_length=7, null = True) # Not integer bc UNKNOWN century
     siglum = models.CharField(("siglum"), max_length=20, null=True)
     drupal_path = models.CharField(("drupal_path"), max_length=500, null=True) #PK
 

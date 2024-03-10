@@ -12,7 +12,7 @@ import pandas as pd
 
 def run():
     provenance_ids = pd.read_csv('data/given/provenance_ids.csv')
-    sources_without = pd.read_csv('data/given/sources-of-all-ci-antiphons.csv')
+    sources_without = pd.read_csv('data/given/sources-of-all-ci-antiphons_OPTIONAL-CENTURY.csv')
 
     antiphons = pd.read_csv('data/given/all-ci-antiphons.csv')
     responsories = pd.read_csv('data/given/all-ci-responsories.csv')
@@ -49,22 +49,27 @@ def run():
 
 
     new_csv = pd.DataFrame.from_dict(sources_with)
-
+    
+    # Change nan in century into unknown
+    new_csv['century'] = new_csv['century'].fillna('unknown')
+    
     # Add new numeric century column to sources file
     numerical_century = []
     old_century = new_csv['century'].to_numpy()
 
     for cent in old_century:
         if '9th century' == cent or '09th century' == cent:
-            numerical_century.append(9)
+            numerical_century.append('9')
         elif ' c. 1200' == cent or 'c. 1200' == cent:
-            numerical_century.append(13)
+            numerical_century.append('13')
         elif 'mid 14th century' == cent:
-            numerical_century.append(14)
+            numerical_century.append('14')
         elif cent[0:2].isnumeric():
-            numerical_century.append(int(cent[0:2]))
-
-
+            numerical_century.append(cent[0:2])
+        # Century unknown
+        else:
+            numerical_century.append('unknown')
+    
     # Edited file with new columns
     new_csv.insert(4, "num_century", numerical_century, allow_duplicates=True)
     new_csv.to_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv')
@@ -73,6 +78,7 @@ def run():
     # Back to unknown provenances 
     unknown_provenances = set(unknown_provenances)
     print('Unknown provenances found:', len(unknown_provenances))
+    print()
     last_suggested_id = max(provenance_ids['provenance_id'].to_list())
     #print(sorted(geography['provenance_id'].to_list()))
     for new in unknown_provenances:

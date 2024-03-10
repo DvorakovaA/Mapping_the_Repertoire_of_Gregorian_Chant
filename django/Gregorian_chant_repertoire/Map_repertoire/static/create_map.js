@@ -47,9 +47,15 @@ function getMaps(map_data) {
         cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
         cen_layers['shared'].addTo(cen_map);
         // Create layer for each century group and add it to layerControl
+        //var cen_name;
         for(century of map_data.used_centuries) {
-            const cen_name = century + "th century";
-            console.log(cen_name);
+            var cen_name = century + "th century";
+            if (century == "unknown") {
+                cen_name = "unknown";
+            }
+            //else {
+             //   cen_name = century + "th century"; }
+
             var l = L.layerGroup();
             cen_layers[century] = l;
             cenLayerControl.addOverlay(l, cen_name);
@@ -118,9 +124,11 @@ function getMaps(map_data) {
                                   "<br> <b>" + map_data.map_sources_dict[source].title +   
                                   "</b> <br> Provenance: " + map_data.map_sources_dict[source].provenance + 
                                   "<br> Century: " + map_data.map_sources_dict[source].century;
+            // Community map
             var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]]});
             point1.bindPopup(marker_popup);
             point1.addTo(com_layers[map_data.map_com_info[source]]);
+            // Century map
             var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]]});
             point2.bindPopup(marker_popup);
             point2.addTo(cen_layers[map_data.map_cen_info[source]]);
