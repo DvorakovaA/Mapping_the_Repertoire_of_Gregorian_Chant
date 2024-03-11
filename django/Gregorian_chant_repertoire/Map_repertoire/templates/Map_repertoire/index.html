@@ -74,7 +74,7 @@
                             {% for uncoll_chant in com_chants_dicts.uncollapsed %}
                               <tr>
                                 {{ uncoll_chant.incipit }}
-                                <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ uncoll_chant.cantus_id }}</a> {{ uncoll_chant.freq }} <br>
+                                <a href='http://www.cantusindex.org/id/{{ uncoll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ uncoll_chant.cantus_id }}</a> {{ uncoll_chant.freq }} <br>
                               </tr>
                             {% endfor %}
                         </table>
@@ -85,7 +85,7 @@
                                 {% for coll_chant in com_chants_dicts.collapsed %}
                                 <tr>
                                   {{ coll_chant.incipit }}
-                                  <a href='http://www.cantusindex.org/id/{{ chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ coll_chant.cantus_id }}</a> {{ coll_chant.freq }} <br>
+                                  <a href='http://www.cantusindex.org/id/{{ coll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ coll_chant.cantus_id }}</a> {{ coll_chant.freq }} <br>
                                 </tr>
                               {% endfor %}
                               </table>
