@@ -21,12 +21,24 @@ function getMaps(map_data) {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(cen_map);
     
+    // Pane to preserve good order on z axis (points on top)
+    com_map.createPane("point");
+    com_map.createPane("line");
+    com_map.getPane("point").style.zIndex = 650;
+    cen_map.createPane("point");
+    cen_map.createPane("line");
+    cen_map.getPane("point").style.zIndex = 650;
+
     
     // We have data to show
     if (map_data.num_of_communities) {
         // Get ready layer control for community layers
         var comLayerControl = L.control.layers(null, null, {collapsed:false});
         var com_layers = {}
+        // Layer for all edges
+        com_layers['all'] = L.layerGroup();
+        comLayerControl.addOverlay(com_layers['all'], "All edges");
+        com_layers['all'].addTo(com_map);
         // Layer for shared edges
         com_layers['shared'] = L.layerGroup();
         comLayerControl.addOverlay(com_layers['shared'], "All shared edges");
@@ -39,9 +51,14 @@ function getMaps(map_data) {
             comLayerControl.addOverlay(l, com_name)
             l.addTo(com_map);
         }
+
         // Get ready layer control for century layers
         var cenLayerControl = L.control.layers(null, null, {collapsed:false});
         var cen_layers = {}
+        // Layer for all edges
+        cen_layers['all'] = L.layerGroup();
+        cenLayerControl.addOverlay(cen_layers['all'], "All edges");
+        cen_layers['all'].addTo(cen_map);
         // Layer for shared edges
         cen_layers['shared'] = L.layerGroup();
         cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
@@ -77,40 +94,48 @@ function getMaps(map_data) {
 
                 // Same community
                 if (com_id == map_data.map_com_info[line[1]]) {
-                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4});
+                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge.bindPopup(line_popup);
                     edge.addTo(com_layers[com_id]);
+                    edge.addTo(com_layers['all']);
                 }
                 // Edge shared between century groups
                 else {
-                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4});
+                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge1.bindPopup(line_popup);
                     edge1.addTo(com_layers[com_id]);
                     edge1.addTo(com_layers['shared']);
-
+                    edge1.addTo(com_layers['all']);
+                    
+                    /*
                     var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4});
                     edge2.bindPopup(line_popup);
                     edge2.addTo(com_layers[map_data.map_com_info[line[1]]]);
                     edge2.addTo(com_layers['shared']);
+                    edge.addTo(com_layers['all']);
+                    */
                 }
                 // Same century group
                 if(map_data.map_cen_info[line[0]] == map_data.map_cen_info[line[1]])
                 {
-                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4});
+                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge.bindPopup(line_popup);
                     edge.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
                 }
                 // Edge shared between century groups
                 else {
-                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4});
+                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge1.bindPopup(line_popup);
                     edge1.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
                     edge1.addTo(cen_layers['shared']);
+                    edge1.addTo(cen_layers['all']);
 
-                    var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4});
+                    /*
+                    var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge2.bindPopup(line_popup);
                     edge2.addTo(cen_layers[map_data.map_cen_info[line[1]]]);
                     edge2.addTo(cen_layers['shared']);
+                    */
                 }
                 
             }
@@ -125,11 +150,11 @@ function getMaps(map_data) {
                                   "</b> <br> Provenance: " + map_data.map_sources_dict[source].provenance + 
                                   "<br> Century: " + map_data.map_sources_dict[source].century;
             // Community map
-            var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]]});
+            var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
             point1.bindPopup(marker_popup);
             point1.addTo(com_layers[map_data.map_com_info[source]]);
             // Century map
-            var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]]});
+            var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
             point2.bindPopup(marker_popup);
             point2.addTo(cen_layers[map_data.map_cen_info[source]]);
         }
