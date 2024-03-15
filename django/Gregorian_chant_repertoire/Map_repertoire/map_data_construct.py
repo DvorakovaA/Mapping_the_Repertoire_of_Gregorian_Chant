@@ -5,9 +5,11 @@ which are used in javascript that creates leaflet map of communities
 
 import matplotlib.pyplot as plt
 from matplotlib.colors import TwoSlopeNorm, rgb2hex
+from collections import Counter
 
 from .models import Sources, Geography
 
+MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025, 0.04], [-0.025, -0.04], [0.025, 0.04]]
 def get_map_data(communities: list[set [str]], edges : list [tuple]):
     """
     Given communities of sources and info about conections beetween sources
@@ -36,14 +38,21 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         map_cen_info = {}
         used_centuries = []
         no_prov_sources = []
+        # For position collisions
+        used_provenances = Counter()
         for community in communities:
             for source in community:
                 source_info = Sources.objects.filter(drupal_path = source).values()[0]
                 try:
                     prov_id = source_info['provenance_id']
+                    used_provenances[prov_id] = (used_provenances[prov_id] + 1) % 9
                     place = Geography.objects.filter(provenance_id = prov_id).values()
                     lat = place[0]['latitude']
                     long = place[0]['longitude']
+                    # Collisison detection
+                    if used_provenances[prov_id] > 1:
+                        lat += MOVES[used_provenances[prov_id]-2][0]
+                        long += MOVES[used_provenances[prov_id]-2][1]
                     map_sources_dict[source] = {'siglum' : source_info['siglum'], 'provenance' : source_info['provenance'], 
                                                 'title' : source_info['title'], 'century' : source_info['century'], 
                                                 'lat' : lat, 'long' : long }
