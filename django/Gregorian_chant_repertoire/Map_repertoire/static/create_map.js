@@ -1,4 +1,5 @@
 // Function for construction of leaflet maps given map_data
+// Function for construction of leaflet map of all provenances given map_data_all
 
 const center = [47.466667, 11.166667]
 
@@ -70,8 +71,6 @@ function getMaps(map_data) {
             if (century == "unknown") {
                 cen_name = "unknown";
             }
-            //else {
-             //   cen_name = century + "th century"; }
 
             var l = L.layerGroup();
             cen_layers[century] = l;
@@ -121,6 +120,7 @@ function getMaps(map_data) {
                     var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge.bindPopup(line_popup);
                     edge.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
+                    edge.addTo(cen_layers['all']);
                 }
                 // Edge shared between century groups
                 else {
@@ -130,12 +130,13 @@ function getMaps(map_data) {
                     edge1.addTo(cen_layers['shared']);
                     edge1.addTo(cen_layers['all']);
 
-                    /*
+                    
                     var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
                     edge2.bindPopup(line_popup);
                     edge2.addTo(cen_layers[map_data.map_cen_info[line[1]]]);
                     edge2.addTo(cen_layers['shared']);
-                    */
+                    edge2.addTo(cen_layers['all']);
+                    
                 }
                 
             }
@@ -164,4 +165,29 @@ function getMaps(map_data) {
     cenLayerControl.addTo(cen_map);
 
     return com_map, cen_map;
+}
+
+
+
+function getMapOfAllSources(map_of_all_data) {
+    // Get map
+    var map = L.map('com_map').setView(center, 5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+        { 
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+
+    for (const point of map_of_all_data) {
+        //Collect data
+        const lat = point[1];
+        const long = point[2];
+        const popup_info = point[0];
+        
+        var marker = L.circleMarker([lat, long], {radius : 8, color : '#2e8bc0'});
+        marker.bindPopup(popup_info);
+        marker.addTo(map);
+    }
+
+    return map;
 }

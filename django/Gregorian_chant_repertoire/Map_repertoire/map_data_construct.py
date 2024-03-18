@@ -1,6 +1,8 @@
 """
-Script with function that creates data structures com_map_data and cen_map_data
+Script with 
+* function get_map_data that creates data structures com_map_data and cen_map_data
 which are used in javascript that creates leaflet map of communities
+* function that returns all provences geographical data to create map of all places
 """
 
 import matplotlib.pyplot as plt
@@ -10,6 +12,7 @@ from collections import Counter
 from .models import Sources, Geography
 
 MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025, 0.04], [-0.025, -0.04], [0.025, 0.04]]
+
 def get_map_data(communities: list[set [str]], edges : list [tuple]):
     """
     Given communities of sources and info about conections beetween sources
@@ -75,3 +78,26 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         return map_data
     else:
         return []
+    
+
+def get_map_of_all_data():
+    '''
+    Construct data structure for js script that contains 
+    geographical info about all sources with known provenances
+    '''
+    all_map_data = []
+    unknown = 0
+
+    sources = Sources.objects.values()
+    for source in sources:
+        provenance = source['provenance']
+        try:
+            provenance_id = source['provenance_id']
+            place = Geography.objects.filter(provenance_id = provenance_id).values()
+            lat = place[0]['latitude']
+            long = place[0]['longitude']
+            all_map_data.append([provenance, lat, long])
+        except:
+            unknown += 1
+
+    return all_map_data

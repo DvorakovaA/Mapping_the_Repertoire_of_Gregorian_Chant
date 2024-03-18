@@ -9,7 +9,7 @@ from .models import Feasts
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table
-from Map_repertoire.map_data_construct import get_map_data
+from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
 
 def index(request):
     """
@@ -50,6 +50,7 @@ def index(request):
     context['sig_level'] = sig_level
     
     context['map_data'] = get_map_data(communities, edges_info)
+    context['map_data_all'] = get_map_of_all_data()
     context['tab_data'] = get_table(communities, feast_ids, filtering_office)
     
     return render(request, "map_repertoire/index.html", context)
