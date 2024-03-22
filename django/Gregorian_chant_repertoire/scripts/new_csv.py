@@ -12,24 +12,25 @@ import pandas as pd
 
 def run():
     provenance_ids = pd.read_csv('data/given/provenance_ids.csv')
-    sources_without = pd.read_csv('data/given/sources-of-all-ci-antiphons_OPTIONAL-CENTURY.csv')
+    original_sources = pd.read_csv('data/given/sources-of-all-ci-antiphons_OPTIONAL-CENTURY.csv')
 
     antiphons = pd.read_csv('data/given/all-ci-antiphons.csv')
     responsories = pd.read_csv('data/given/all-ci-responsories.csv')
     chant_data = pd.concat([antiphons, responsories])
 
+    # Filter sources to avoid working with fragments (to use only those with more than 100 chants)
     freq_of_sources = chant_data['source_id'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
-    sources_without_f = sources_without[sources_without['drupal_path'].isin(bigger_sources)]
+    sources_without_fragments = original_sources[original_sources['drupal_path'].isin(bigger_sources)]
 
     # Add provenance_id to sources file and save uknown
-    sources_with = []
+    sources_with_new_info = []
     unknown_provenances = []
-    for index, row in sources_without_f.iterrows():
+    for index, row in sources_without_fragments.iterrows():
         try:
             filt_prov = provenance_ids['provenance'] == row['provenance'].strip()
             prov_id = (provenance_ids[filt_prov]['provenance_id']).to_list()
-            sources_with.append({
+            sources_with_new_info.append({
                 'drupal_path' : row['drupal_path'],
                 'title' : row['title'],
                 'provenance' : row['provenance'],
@@ -38,7 +39,7 @@ def run():
                 'provenance_id' : prov_id[0]
             })
         except:
-            sources_with.append({
+            sources_with_new_info.append({
                 'drupal_path' : row['drupal_path'],
                 'title' : row['title'],
                 'provenance' : row['provenance'],
@@ -48,11 +49,11 @@ def run():
             unknown_provenances.append(row['provenance'].strip())
 
 
-    new_csv = pd.DataFrame.from_dict(sources_with)
+    new_csv = pd.DataFrame.from_dict(sources_with_new_info)
     
-    # Change nan in century into unknown
+    # Change nan in century column to unknown
     new_csv['century'] = new_csv['century'].fillna('unknown')
-    
+
     # Add new numeric century column to sources file
     numerical_century = []
     old_century = new_csv['century'].to_numpy()
@@ -70,19 +71,20 @@ def run():
         else:
             numerical_century.append('unknown')
     
-    # Edited file with new columns
+    # Save edited file with new columns
     new_csv.insert(4, "num_century", numerical_century, allow_duplicates=True)
     new_csv.to_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv')
 
 
-    # Back to unknown provenances 
+    # Inform about unknown provenances 
     unknown_provenances = set(unknown_provenances)
-    print('Unknown provenances found:', len(unknown_provenances))
-    print()
     last_suggested_id = max(provenance_ids['provenance_id'].to_list())
-    #print(sorted(geography['provenance_id'].to_list()))
+
+    print("Unknown provenances:")
     for new in unknown_provenances:
         new_id = "provenance_" + str(int(last_suggested_id[-3:]) + 1)
         last_suggested_id = new_id
         print(new, '\n Suggested new provenance_id:', new_id, '\n')
+    
+    print('Unknown provenances found:', len(unknown_provenances))
     
