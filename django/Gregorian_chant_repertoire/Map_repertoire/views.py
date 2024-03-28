@@ -11,13 +11,25 @@ from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table
 from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
 
+
 def index(request):
     """
-    Function that manages main html page of app - displays input form and shows results (table and map)
+    Function that manages intro page of the app
+    """
+    context = {}
+    context['map_data_all'] = get_map_of_all_data()
+    return render(request, "map_repertoire/index.html", context)
+
+
+
+def tool(request):
+    """
+    Function that manages page of app itself - displays input form and shows results (table and map)
     """
     context = {}
 
     form = InputForm(request.POST or None, initial={'feast' : '---'})
+    context = {"form" : form}
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
         request.session['All'] = form.cleaned_data['All']
@@ -27,33 +39,32 @@ def index(request):
         request.session['V2'] = form.cleaned_data['V2']
 
         
-    context = {"form" : form}
-    feast_names = []
-    for id in request.session.get('feast'):
-        feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)])
-    context['feasts'] = feast_names
-    print(feast_names)
-    feast_ids = []
-    for feast_name in feast_names:
-        feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
-    context['feast_id'] = [feast_ids]
-    filtering_office = []
-    if not request.session.get('All'):
-        office_shortcuts = ['V', 'M', 'L', 'V2']
-        office_names = ['office_v', 'office_m', 'office_l', 'office_v2']
-        for i in range(len(office_shortcuts)):
-            if request.session.get(office_shortcuts[i]):
-                filtering_office.append(office_names[i])
-    # else filtering_office is empty list -> we select All
+        context = {"form" : form}
+        feast_names = []
+        for id in request.session.get('feast'):
+            feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)])
+        context['feasts'] = feast_names
+        print(feast_names)
+        feast_ids = []
+        for feast_name in feast_names:
+            feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
+        context['feast_id'] = [feast_ids]
+        filtering_office = []
+        if not request.session.get('All'):
+            office_shortcuts = ['V', 'M', 'L', 'V2']
+            office_names = ['office_v', 'office_m', 'office_l', 'office_v2']
+            for i in range(len(office_shortcuts)):
+                if request.session.get(office_shortcuts[i]):
+                    filtering_office.append(office_names[i])
+        # else filtering_office is empty list -> we select All
 
-    communities, edges_info, sig_level = get_communities(feast_ids, filtering_office)
-    context['sig_level'] = sig_level
-    
-    context['map_data'] = get_map_data(communities, edges_info)
-    context['map_data_all'] = get_map_of_all_data()
-    context['tab_data'] = get_table(communities, feast_ids, filtering_office)
-    
-    return render(request, "map_repertoire/index.html", context)
+        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office)
+        context['sig_level'] = sig_level
+        
+        context['map_data'] = get_map_data(communities, edges_info)
+        context['tab_data'] = get_table(communities, feast_ids, filtering_office)
+        
+    return render(request, "map_repertoire/tool.html", context)
 
 
 def help(request):

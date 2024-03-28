@@ -171,11 +171,11 @@ function getMaps(map_data) {
 
 function getMapOfAllSources(map_of_all_data) {
     // Get map
-    var map = L.map('com_map').setView(center, 5);
+    var complete_map = L.map('com_map').setView(center, 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
         { 
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        attribution: '&copy; <a href="http://weww.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(complete_map);
 
 
     for (const point of map_of_all_data) {
@@ -186,8 +186,8 @@ function getMapOfAllSources(map_of_all_data) {
         
         var marker = L.circleMarker([lat, long], {radius : 8, color : '#2e8bc0'});
         marker.bindPopup(popup_info);
-        marker.addTo(map);
+        marker.addTo(complete_map);
     }
 
-    return map;
+    return complete_map;
 }
