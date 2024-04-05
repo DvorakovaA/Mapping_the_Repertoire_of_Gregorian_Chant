@@ -9,6 +9,7 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier-Leaflet/0.2.6/oms.min.js"></script>
+     <script src="leaflet-svg-shape-markers/dist/leaflet-svg-shape-markers.js"></script>
      <style>
         #map { height: 800px; }
      </style>
@@ -54,15 +55,27 @@
         var parks = L.layerGroup([crownHill, rubyHill, marker1, marker2, line1]);
         layerControl.addOverlay(parks, "Parks");
 
-        var shared = L.layerGroup([marker1, marker2, line1]);
+        var shared = L.layerGroup([marker1, marker2]);
         layerControl.addOverlay(shared, "Shared")
-
+        line1.addTo(shared);
         layerControl.addTo(map);
 
         //import OverlappingMarkerSpiderfier from 'overlapping-marker-spiderfier'
         //const oms = new OverlappingMarkerSpiderfier(map);
         
+        var square = L.shapeMarker([51.505, -0.09], {
+                        shape: "square",
+                        radius: 10,
+                        color : '#A06700'
+                      }).addTo(map);
 
+        var triangle = L.shapeMarker([51.505, -0.1], {
+                          shape: "triangle",
+                          radius: 10,
+                          color : "#D03330"
+                        });
+        triangle.bindPopup('ahoj');
+        triangle.addTo(map);
         // Need to specifically import the distributed JS file
         
         // Note access to constructor via window object
@@ -83,6 +96,29 @@
         //    map.addLayer(marker)
         //   oms.addMarker(marker);
         //});
-    
+
+        // Rozstrelovani bodiku
+        const POSUNY = [[0, 0.04], [-0.025, -0.04], [0.025, 0.04], [0, -0.04], 
+                        [-0.025, 0], [0.025, -0.04], [-0.025, 0.04], [0.025, 0]];
+        const point = [51.964112, 7.621824];
+        for (let i = 0; i < POSUNY.length; i++) {
+            var moved = [point[0]+POSUNY[i][0], point[1]+POSUNY[i][1]];
+            var marker = L.circleMarker(moved, {radius : 10, color : '#A06700'});
+            marker.bindPopup("I am marker no" + i);
+            marker.addTo(map);
+        }
+        /*
+        var moved1 = [point[0]+0.025, point[1]];
+        var moved2 = [point[0], point[1]+0.04];
+        var marker1 = L.circleMarker(point, {radius: 10, color: '#006500'});
+        marker1.bindPopup("<b>Hello world!</b><br>I am a popup1.");
+        marker1.addTo(map);
+        var marker2 = L.circleMarker(moved1, {radius: 10, color: '#106700'});
+        marker2.bindPopup("<b>Hello world!</b><br>I am a popup2.");
+        marker2.addTo(map);
+        var marker3 = L.circleMarker(moved2, {radius: 10, color: '#A06700'});
+        marker3.bindPopup("<b>Hello world!</b><br>I am a popup3.");
+        marker3.addTo(map);  
+        */
     </script>
   </body>
