@@ -22,6 +22,10 @@ def run():
     freq_of_sources = chant_data['source_id'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
     sources_without_fragments = original_sources[original_sources['drupal_path'].isin(bigger_sources)]
+    
+    # Change nan in provenance / cursus column to unknown
+    sources_without_fragments['provenance'] = sources_without_fragments['provenance'].fillna('unknown')
+    sources_without_fragments['cursus'] = sources_without_fragments['cursus'].fillna('Unknown')
 
     # Add provenance_id to sources file and save uknown
     sources_with_new_info = []
@@ -36,6 +40,7 @@ def run():
                 'provenance' : row['provenance'],
                 'siglum' : row['siglum'],
                 'century' : row['century'],
+                'cursus' : row['cursus'],
                 'provenance_id' : prov_id[0]
             })
         except:
@@ -44,6 +49,7 @@ def run():
                 'title' : row['title'],
                 'provenance' : row['provenance'],
                 'siglum' : row['siglum'],
+                'cursus' : row['cursus'],
                 'century' : row['century']
             })
             unknown_provenances.append(row['provenance'].strip())

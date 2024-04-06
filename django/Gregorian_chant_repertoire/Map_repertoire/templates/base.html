@@ -5,6 +5,7 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}" />
         <script src="{% static 'leaflet/leaflet.js' %}"></script>
+        <script src="{% static 'leaflet-svg-shape-markers.js' %}"></script>
         <script src="{% static 'create_map.js' %}"></script>
 
         <style>
@@ -75,6 +76,10 @@
 
             h4, .h4 {
                 margin-top: 0;
+            }
+
+            li {
+                display: inline;
             }
 
         </style>

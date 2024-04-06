@@ -58,7 +58,7 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
                         long += MOVES[used_provenances[prov_id]-2][1]
                     map_sources_dict[source] = {'siglum' : source_info['siglum'], 'provenance' : source_info['provenance'], 
                                                 'title' : source_info['title'], 'century' : source_info['century'], 
-                                                'lat' : lat, 'long' : long }
+                                                'cursus' : source_info['cursus'], 'lat' : lat, 'long' : long }
                     map_com_info[source] = i
                     map_cen_info[source] = source_info['num_century']
                     used_centuries.append(source_info['num_century'])

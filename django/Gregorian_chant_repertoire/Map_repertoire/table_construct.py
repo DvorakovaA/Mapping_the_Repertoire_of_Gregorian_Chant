@@ -24,7 +24,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
     {
         'head': [{'com':'CommunityX, 'sources':'XY sources','color':'hex'}, {}, ...],
         'body': {'OFFICE_CODE_V': [{'collapsed':[{'incipit':'Text','cantus_id':'XXXXXX','freq':X}, {}, ...],'uncollapsed':[{'incipit':,...}, ...]}],
-                 'OFFICE_CODE_C: [{...}], 'OFFICE_CODE_M':[{...}], ...}
+                 'OFFICE_CODE_C': [{...}, {...}, ...], 'OFFICE_CODE_M':[{...}], ...}
         'tail': [[{'source_id':'https//..', 'siglum':'XY'}, {}, ...], [{}, {}, ...], [{}]]
     }
     '''
@@ -48,7 +48,6 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
         chants_of_community = {}
         used_offices = []
         i = 0
-        print(communities)
         for community in communities:
             chants_of_community[i] = []
             tab_data['head'].append({'com' : "Community "+str(i+1), 'sources' : str(len(community))+" sources", 'color' : colors[i]})
@@ -68,8 +67,9 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             tab_data['tail'].append([])
             for source_id in community:
                 tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
+            #sort sources based on siglum to better display in table tail
+            tab_data['tail'][i].sort(key=lambda x : x['siglum'])
             i += 1
-        print(tab_data['tail'])
         
         # Fill body
         offices = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 

@@ -27,6 +27,7 @@ class Sources(models.Model):
     num_century = models.CharField(("num_century"), max_length=7, null = True) # Not integer bc UNKNOWN century
     siglum = models.CharField(("siglum"), max_length=20, null=True)
     drupal_path = models.CharField(("drupal_path"), max_length=500, null=True) #PK
+    cursus = models.CharField(("cursus"), max_length=10, null=True)
 
 
 class Geography(models.Model):

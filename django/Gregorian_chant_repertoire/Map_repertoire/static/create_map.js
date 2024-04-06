@@ -150,14 +150,38 @@ function getMaps(map_data) {
                                   "<br> <b>" + map_data.map_sources_dict[source].title +   
                                   "</b> <br> Provenance: " + map_data.map_sources_dict[source].provenance + 
                                   "<br> Century: " + map_data.map_sources_dict[source].century;
-            // Community map
-            var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
-            point1.bindPopup(marker_popup);
-            point1.addTo(com_layers[map_data.map_com_info[source]]);
-            // Century map
-            var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
-            point2.bindPopup(marker_popup);
-            point2.addTo(cen_layers[map_data.map_cen_info[source]]);
+            
+            // Markers
+            if (map_data.map_sources_dict[source].cursus === 'Secular') {
+                // Community map
+                var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point1.bindPopup(marker_popup);
+                point1.addTo(com_layers[map_data.map_com_info[source]]);
+                // Century map
+                var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point2.bindPopup(marker_popup);
+                point2.addTo(cen_layers[map_data.map_cen_info[source]]);
+            }
+            else if (map_data.map_sources_dict[source].cursus === 'Monastic') {
+                // Community map
+                var point1 = L.shapeMarker([lat, long], {shape : 'square', radius: 8.5, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point1.bindPopup(marker_popup);
+                point1.addTo(com_layers[map_data.map_com_info[source]]);
+                // Century map
+                var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point2.bindPopup(marker_popup);
+                point2.addTo(cen_layers[map_data.map_cen_info[source]]);
+            }
+            else {
+                // Community map
+                var point1 = L.shapeMarker([lat, long], {shape : 'triangle', radius: 8.5, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point1.bindPopup(marker_popup);
+                point1.addTo(com_layers[map_data.map_com_info[source]]);
+                // Century map
+                var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                point2.bindPopup(marker_popup);
+                point2.addTo(cen_layers[map_data.map_cen_info[source]]);
+            }
         }
     }
 
