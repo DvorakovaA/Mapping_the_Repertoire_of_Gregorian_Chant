@@ -82,6 +82,10 @@
                 display: inline;
             }
 
+            #numberOfTopicsSelection {
+                display: none;
+            }
+
         </style>
 
         <title>{% block title %} Map_repertoire {% endblock %}</title>
@@ -212,6 +216,22 @@
                 });
             });
         });
+    
+        
+        // Dynamic changes in displaying form
+        // Louvein      
+        var Louvein_checked = document.getElementById('id_community_detection_algorithm_0');
+        Louvein_checked.addEventListener('click', function() {
+                document.getElementById('metricSelection').style.display = 'inline';
+                document.getElementById('numberOfTopicsSelection').style.display = 'none';
+        })
+        // Topic model
+        var Topic_checked = document.getElementById('id_community_detection_algorithm_1');
+        Topic_checked.addEventListener('click', function() { 
+            document.getElementById('metricSelection').style.display = 'none';
+            document.getElementById('numberOfTopicsSelection').style.display = 'block';
+        });
+        
     </script>
         
 </html>

@@ -19,7 +19,33 @@
 {% block content %}
   <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
+      <!-- {{ form.as_ul }} -->
+      <div id="feastSelection">
+        <label for="{{ form.feast.id_for_label }}">Feast:</label>
+        {{ form.feast }}
+      </div>
+      <br>
+      <div id="allSelection">
+        <label for="{{ form.all.id_for_label }}">Select complete repertoire for feast:</label>
+        {{ form.all }}
+      </div>
+      <div id="officeSelection">
+        <label for="{{ form.office.id_for_label }}">or select only particular office:</label>
+        {{ form.office }}
+      </div>
+      <br>
+      <div id="algoSelection">
+        <label for="{{ form.community_detection_algorithm.id_for_label }}">Community detection algorithm</label>
+        {{ form.community_detection_algorithm }}
+      </div>
+      <div id="metricSelection">
+        <label for="{{ form.metric.id_for_label }}">Metric:</label>
+        {{ form.metric }}
+      </div>
+      <div id="numberOfTopicsSelection">
+        <label for="{{ form.number_of_topics.id_for_label }}">Number of topics:</label>
+        {{ form.number_of_topics }}
+      </div>
       <input type="submit" value="Show">
   </form> 
 <br><br>
