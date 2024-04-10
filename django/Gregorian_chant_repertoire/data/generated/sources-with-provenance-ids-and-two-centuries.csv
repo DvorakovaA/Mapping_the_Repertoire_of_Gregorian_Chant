@@ -75,19 +75,19 @@
 73,http://cantusdatabase.org/source/123724,Münster Antiphoner (1537),Muenster,MA Impr. 1537,16,16th century (1525-1550),Secular,provenance_103
 74,http://cantusdatabase.org/source/589069,"Wroclaw, Biblioteka Uniwersytecka (University Library), I F 401",Lubiąż,PL-WRu I F 401,13,13th century (1275-1300),Monastic,provenance_088
 75,http://cantusdatabase.org/source/123756,"Wrocław, Biblioteka Uniwersytecka, Ms. R 503",Wrocław,PL-WRu R 503,14,14th century (2nd half),Secular,provenance_212
-76,https://pemdatabase.eu/source/46683,Antiphonarium Hymnarium P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. Ms. 025,"Alcobaça, Mosteiro de Santa Maria?",P-AR Res. Ms. 025,13, c. 1200,Monastic,
+76,https://pemdatabase.eu/source/46683,Antiphonarium Hymnarium P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. Ms. 025,"Alcobaça, Mosteiro de Santa Maria?",P-AR Res. Ms. 025,13, c. 1200,Monastic,provenance_246
 77,http://cantusbohemiae.cz/source/2150,CZ-Bu (Brno) R 387,Rajhrad,CZ-Bu R 387,12,12th century,Unknown,provenance_219
-78,http://cantusbohemiae.cz/source/2152,CZ-Pu (Praha) VI E 13,St George's Convent in Prague,CZ-Pu VI E 13,12,12th century,Unknown,provenance_129
+78,http://cantusbohemiae.cz/source/2152,CZ-Pu (Praha) VI E 13,St George's Convent in Prague,CZ-Pu VI E 13,12,12th century,Monastic,provenance_129
 79,http://cantusbohemiae.cz/source/2161,CZ-R (Rajhrad) R 17,Rajhrad,CZ-R R 17,14,14th century,Unknown,provenance_219
-80,http://cantusbohemiae.cz/source/9137,CZ-Pu (Praha) XIV C 20,St George's Convent in Prague ,CZ-Pu XIV C 20,14,14th century,Unknown,provenance_129
+80,http://cantusbohemiae.cz/source/9137,CZ-Pu (Praha) XIV C 20,St George's Convent in Prague ,CZ-Pu XIV C 20,14,14th century,Monastic,provenance_129
 81,http://cantus.sk/source/6775,SK-BRsa (Bratislava) Slovenský národný archív Antiphonary of Bratislava V,Bohemia,SK-BRsa SNA 17,15,15th century,Unknown,provenance_225
 82,http://musicahispanica.eu/source/20420,"E-H, Archivo de la Catedral de Huesca, ms. 9",Huesca,"E-H, ms. 9",13,13th century,Unknown,provenance_228
-83,http://musicahispanica.eu/source/20168,"E-Mh (Madrid) E-Mh, Cód. 45","Monasterio de San Millán de la Cogolla, La Rioja.","E-Mh E-Mh, Cód. 45",12,12th century,Unknown,
+83,http://musicahispanica.eu/source/20168,"E-Mh (Madrid) E-Mh, Cód. 45","Monasterio de San Millán de la Cogolla, La Rioja.","E-Mh E-Mh, Cód. 45",12,12th century,Unknown,provenance_254
 84,http://musicahispanica.eu/source/20199,GB-Lbl (London) Add MS 30850,Ascribed to Santo Domingo de Silos (see 'Description' above),GB-Lbl Add MS 30850,11,11th century,Unknown,
 85,http://musicahispanica.eu/source/59988,Antifonario de la Santa Cruz de Serós,Monasterio de Santa Cruz de la Serós (Huesca),Antifonario Antifonario de la Santa Cruz de Serós,12,12th century,Unknown,provenance_230
 86,http://musicahispanica.eu/source/74655,GB-Lbl (London) Add MS 30848,Santo Domingo de Silos,GB-Lbl Add MS 30848,11,11th century,Unknown,provenance_235
 87,http://musmed.eu/source/29527,GB-Lbl : Harley 4951,Saint-Sernin de Toulouse,GB-Lbl Harley 4951,11,11th century,Unknown,provenance_243
-88,http://musmed.eu/source/13022,F-Pn : Lat. 903,Saint Yrieix,F-Pn Lat. 903,11,11th century,Unknown,
+88,http://musmed.eu/source/13022,F-Pn : Lat. 903,Saint Yrieix,F-Pn Lat. 903,11,11th century,Unknown,provenance_245
 89,http://musmed.eu/source/13060,F-Pn : Lat. 1121,St. Martial de Limoges,F-Pn Lat. 1121,11,11th century,Unknown,provenance_176
 90,http://cantusdatabase.org/source/123706,"Istanbul, Topkapı Sarayı Müzesi, Deissmann 42",Esztergom,TR-Itks 42,unknown,unknown,Secular,provenance_051
 91,http://cantusdatabase.org/source/123644,"Wien, Diözesanarchiv, C-10",Kirnberg,A-Wda C-10,15,15th century,Unknown,provenance_075
@@ -102,14 +102,14 @@
 100,http://cantusdatabase.org/source/123668,"London, British Library, printed book IB.6753 (Augsburg Antiphoner 1495, olim AA Impr. 1495)",Augsburg,GB-Lbl IB.6753,15,15th century (1475-1500),Secular,provenance_016
 101,http://cantusdatabase.org/source/123609,Gottschalk Antiphoner (fragments),Lambach Abbey,GOTTSCHALK,12,12th century,Monastic,provenance_081
 102,http://cantusdatabase.org/source/123604,"Chiavenna, Tesoro della Collegiata di S. Lorenzo - Museo Capitolare, s.c.",Chiavenna,I-CHV,11,11th century,Secular,provenance_035
-103,http://cantusbohemiae.cz/source/28488,CZ-Pu (Praha) VI G 11,St George's Convent in Prague,CZ-Pu VI G 11,13,13th century,Unknown,provenance_129
+103,http://cantusbohemiae.cz/source/28488,CZ-Pu (Praha) VI G 11,St George's Convent in Prague,CZ-Pu VI G 11,13,13th century,Monastic,provenance_129
 104,http://musmed.eu/source/9343,F-CHRm : Ms 0047 (40),St sauveur de Redon,F-CHRm Ms 0047 (40),10,10th century,Unknown,provenance_231
 105,http://musmed.eu/source/13486,F-Pn : Lat. 17296, Abbaye royale de Saint-Denis,F-Pn Lat. 17296,12,12th century,Monastic,provenance_121
 106,http://musmed.eu/source/13026,F-Pn : Lat. 909,St Martial de Limoges,F-Pn Lat. 909,11,11th century,Unknown,provenance_176
 107,http://cantus.sk/source/6777,SK-Sk (Spišska Kapitula) Antiphonale Scepusiense,Slovakia,SK-Sk 2,15,15th century,Unknown,provenance_226
 108,http://cantusdatabase.org/source/123610,"Graz, Universitätsbibliothek, 29 (olim 38/8 f.)",St-Lambrecht,A-Gu 29,14,14th century,Monastic,provenance_165
 109,http://cantusdatabase.org/source/123727,"Praha (Prague), Národní knihovna České republiky (National Library), VI.E.4c","Prague, St. George Monastery",CZ-Pu VI.E.4c,12,12th century (2nd half),Monastic,provenance_129
-110,http://cantusdatabase.org/source/123730,"Praha (Prague), Národní knihovna České republiky (National Library), XIV.B.13","Prague, St. George Monastery",CZ-Pu XIV B 13,14,14th century,Unknown,provenance_129
+110,http://cantusdatabase.org/source/123730,"Praha (Prague), Národní knihovna České republiky (National Library), XIV.B.13","Prague, St. George Monastery",CZ-Pu XIV B 13,14,14th century,Monastic,provenance_129
 111,http://cantusdatabase.org/source/123653,"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1010",Klosterneuburg,A-KN 1010,12,12th century,Secular,provenance_076
 112,http://cantusdatabase.org/source/123654,"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1011",Klosterneuburg,A-KN 1011,14,14th century,Secular,provenance_076
 113,http://cantusdatabase.org/source/123655,"Klosterneuburg, Augustiner-Chorherrenstift - Bibliothek, 1015",Klosterneuburg,A-KN 1015,14,14th century,Secular,provenance_076
@@ -122,7 +122,7 @@
 120,http://cantusbohemiae.cz/source/4478,Cz-Pu (Praha) XIV A 19,Prague,CZ-Pu Pu XIV A 19,14,14th century,Unknown,provenance_128
 121,http://cantus.ispan.pl/source/4557,PL-Klk 1 Antyfonarz kielecki,Kielce,1,14,14th century,Unknown,provenance_074
 122,http://cantus.ispan.pl/source/21018,PL-STAb 1 Antiphonarium,Staniątki,ms. 1,16,16th century,Unknown,provenance_221
-123,http://cantus.ispan.pl/source/22868,D-B Theol. Lat. Qu. 149 Breviarium monasticum,Lubiń,Theol. Lat. Qu. 149,unknown,unknown,Unknown,
+123,http://cantus.ispan.pl/source/22868,D-B Theol. Lat. Qu. 149 Breviarium monasticum,Lubiń,Theol. Lat. Qu. 149,unknown,unknown,Unknown,provenance_247
 124,http://cantusdatabase.org/source/123682,"München, Bayerische Staatsbibliothek, Clm 4304",Augsburg,D-Mbs Clm 4304,16,16th century (1500-1525),Monastic,provenance_016
 125,http://cantusdatabase.org/source/123766,"Vercelli, Biblioteca Capitolare, CLXX",Arras,I-VCd CLXX,unknown,unknown,Secular,provenance_014
 126,http://cantusdatabase.org/source/123710,"Kraków, Klastor OO. Karmelitów na Piasku (Carmelite Convent), Ms.4 (rkp. Perg. 20)",Kraków,PL-Kkar 4 (Rkp 20),15,15th century,Secular,provenance_077
@@ -165,7 +165,7 @@
 163,https://pemdatabase.eu/source/47990,P-BRs (Braga) Arquivo da Sé Ms. 032,"Braga, Catedral",P-BRs Ms. 032,16,16th century (first quarter),Secular,provenance_218
 164,http://cantus.ispan.pl/source/14457,"PL-PŁsem MsEPl 12 Antyfonarz z Płocka, pars de tempore",Płock,MsEPl 12,15,15th century,Unknown,provenance_220
 165,http://musicahispanica.eu/source/20425,"E-H, Archivo de la Catedral de Huesca, ms. 7",Huesca,"E-H, Ms. 7 (ant. 5)",13,13th century,Unknown,provenance_228
-166,http://musicahispanica.eu/source/22495,"E-H Archivo de la Catedral de Huesca, ms. 2",Auch,E-H Ms. 2,12,12th century,Unknown,
+166,http://musicahispanica.eu/source/22495,"E-H Archivo de la Catedral de Huesca, ms. 2",Auch,E-H Ms. 2,12,12th century,Unknown,provenance_251
 167,http://musicahispanica.eu/source/20228,"E-Bbc (Barcelona) E-Bbc, M 705",Sant Cugat (Barcelona),"E-Bbc E-Bbc, M 705",14,14th century,Unknown,provenance_234
 168,http://cantusdatabase.org/source/123598,"Budapest, Egyetemi Könyvtár (University Library), lat. 119",Franciscan,H-Bu lat. 119,14,14th century,Secular,provenance_146
 169,http://cantusdatabase.org/source/123722,"Dubrovnik, Franjevački Samostan (Franciscan Monastery), Cod. F Nr. 6",Venice,HR-Hf Cod. F,15,15th century (2nd half),Secular,provenance_199
@@ -177,7 +177,7 @@
 175,http://cantusdatabase.org/source/123605,"Città del Vaticano (Roma), Biblioteca Apostolica Vaticana, Cappella Sistina 27",Rome (Roma),V-CVbav Capp.Sist. 27,unknown,unknown,Unknown,provenance_146
 176,http://cantus.ispan.pl/source/13720,"PL-Wn  12720 V Antyfonarz opata Mścisława z Tyńca, pars de tempore",Tyniec, rps 12720 V,15,15th century,Unknown,provenance_227
 177,https://pemdatabase.eu/source/48357,"E-SAu (Salamanca) Universidad, Archivo y Biblioteca Ms 2637",Astorga?,E-SAu Ms 2637,12,12th century (second half),Unknown,
-178,http://cantusbohemiae.cz/source/9190,CZ-Pu (Praha) XII E 15c,St George's Convent in Prague,CZ-Pu XII E 15c,14,14th century,Unknown,provenance_129
+178,http://cantusbohemiae.cz/source/9190,CZ-Pu (Praha) XII E 15c,St George's Convent in Prague,CZ-Pu XII E 15c,14,14th century,Monastic,provenance_129
 179,http://cantusdatabase.org/source/123619,"London (Canada), University of Western Ontario - Music Library, M2150",Burgos (?),CDN-Lu M2150,16,16th century,Secular,provenance_028
 180,http://cantusdatabase.org/source/680970,"Montréal, McGill University - Rare Books and Special Collections - Manuscript Collection, MS Medieval 0073",Dominican,CDN-Mlr MS Medieval 0073,unknown,unknown,Secular,provenance_042
 181,http://cantusdatabase.org/source/123695,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [07] VII",Augsburg,DK-Kk 3449 8o [07] VII,16,16th century (1575-1600),Secular,provenance_016
@@ -194,12 +194,12 @@
 192,https://pemdatabase.eu/source/62867,P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. Ms. 021,"Arouca, Mosteiro de Santa Maria",P-AR Res. Ms. 021,13,c. 1200,Monastic,provenance_241
 193,http://musicahispanica.eu/source/23205,"E-TZ, Archivo de Música de la Catedral de Tarazona, Ms. 18",Tarazona,"E-TZ, Ms. 18",15,15th century,Unknown,provenance_238
 194,http://musicahispanica.eu/source/27599,"E-BAR, Archivo Diocesano de Barbastro, Antifonario s.s.",Barbastro,"E-BAR, s.s.",15,15th century,Unknown,provenance_229
-195,http://cantusbohemiae.cz/source/9308,CZ-Pu (Praha) XXIII D 156 ,St George's convent in Prague,CZ-Pu XXIII D 156 ,13,13th century,Unknown,
-196,http://cantusbohemiae.cz/source/9194,CZ-Pu (Praha) XIV G 46,St George's Convent in Prague,CZ-Pu XIV G 46,14,14th century,Unknown,provenance_129
+195,http://cantusbohemiae.cz/source/9308,CZ-Pu (Praha) XXIII D 156 ,St George's convent in Prague,CZ-Pu XXIII D 156 ,13,13th century,Monastic,provenance_129
+196,http://cantusbohemiae.cz/source/9194,CZ-Pu (Praha) XIV G 46,St George's Convent in Prague,CZ-Pu XIV G 46,14,14th century,Monastic,provenance_129
 197,http://cantusdatabase.org/source/123697,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [09] IX",Augsburg,DK-Kk 3449 8o [09] IX,16,16th century (1575-1600),Secular,provenance_016
 198,http://cantusdatabase.org/source/123704,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [16] XVI",Augsburg,DK-Kk 3449 8o [16] XVI,16,16th century (1575-1600),Secular,provenance_016
 199,http://cantusdatabase.org/source/669030,"Chicago, Art Institute of Chicago, Mrs. William E. Kelley Collection, 1911.142b",Dominican,US-Cai 1911.142b,unknown,unknown,Monastic,provenance_042
-200,http://musmed.eu/source/12990,F-Pn : Lat. 780,Cathédrale d'Arles; Colbert 1686; Regius 3880b,F-Pn Lat. 780,11,11th century,Unknown,
+200,http://musmed.eu/source/12990,F-Pn : Lat. 780,Cathédrale d'Arles; Colbert 1686; Regius 3880b,F-Pn Lat. 780,11,11th century,Unknown,provenance_249
 201,http://musicahispanica.eu/source/20426,"E-H, Archivo de la Catedral de Huesca, ms. 8",Huesca,"E-H, ms. 8",13,13th century,Unknown,provenance_228
 202,http://cantusdatabase.org/source/589026,"New York, Columbia University - Rare Book and Manuscript Library, Plimpton MS 041",Italy,US-NYcub Plimpton MS 041,15,15th century (1450-1475),Monastic,provenance_071
 203,http://cantusdatabase.org/source/123700,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [12] XII",Augsburg,DK-Kk 3449 8o [12] XII,16,16th century (1575-1600),Secular,provenance_016
@@ -209,39 +209,39 @@
 207,http://cantusdatabase.org/source/123691,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [03] III",Augsburg,DK-Kk 3449 8o [03] III,16,16th century (1575-1600),Secular,provenance_016
 208,http://cantusdatabase.org/source/123692,"København (Copenhagen), Det kongelige Bibliotek Slotsholmen, Gl. Kgl. S. 3449, 8o [04] IV",Augsburg,DK-Kk 3449 8o [04] IV,16,16th century (1575-1600),Secular,provenance_016
 209,http://musmed.eu/source/13534,F-Pn : NAL 01235,Nevers,F-Pn NAL 01235,12,12th century,Unknown,provenance_237
-210,http://cantusbohemiae.cz/source/9189,CZ-Pu (Praha) XII E 15b,St George's Convent in Prague,CZ-Pu XII E 15b,14,14th century,Unknown,provenance_129
+210,http://cantusbohemiae.cz/source/9189,CZ-Pu (Praha) XII E 15b,St George's Convent in Prague,CZ-Pu XII E 15b,14,14th century,Monastic,provenance_129
 211,http://cantusdatabase.org/source/123652,"Salamanca, Catedral - Archivo Musical, 8",Salamanca,E-SA 8,14,14th century,Secular,provenance_151
-212,http://musmed.eu/source/14915,V-CVbav : Vat.lat.05319,Latran,V-CVbav Vat.lat.05319,12,12th century,Unknown,
+212,http://musmed.eu/source/14915,V-CVbav : Vat.lat.05319,Latran,V-CVbav Vat.lat.05319,12,12th century,Unknown,provenance_146
 213,http://cantusdatabase.org/source/123657,"Den Haag, Koninklijke Bibliotheek - Nationale Bibliotheek van Nederland, 70 E 4",Tongeren,NL-DHk 70 E 4,12,12th century,Secular,provenance_186
 214,https://pemdatabase.eu/source/62421,P-AR (Arouca) Museu Regional de Arte Sacra do Mosteiro de Arouca Res. L 005,"Arouca, Mosteiro de Santa Maria",P-AR Res. L 005,15,1513,Unknown,provenance_241
-215,http://cantus.ispan.pl/source/14397,"PL-GD Mar. F 408 Antiphonarium, prima pars",St. Mary Church in Gdańsk,Mar. F 408,16,16th century,Unknown,
-216,http://musicahispanica.eu/source/19872,E-Mn (Madrid) Mss. 1361,Toledo (Catalunya). Procedente de la biblioteca de F. A. Barbieri,E-Mn Mss/1361,14,14th century,Unknown,
+215,http://cantus.ispan.pl/source/14397,"PL-GD Mar. F 408 Antiphonarium, prima pars",St. Mary Church in Gdańsk,Mar. F 408,16,16th century,Unknown,provenance_255
+216,http://musicahispanica.eu/source/19872,E-Mn (Madrid) Mss. 1361,Toledo (Catalunya). Procedente de la biblioteca de F. A. Barbieri,E-Mn Mss/1361,14,14th century,Unknown,provenance_185
 217,http://musmed.eu/source/13509,F-Pn : Lat. 17991,Jacobins de la rue Saint-Jacques,F-Pn Lat. 17991,11,11th century,Romanum,provenance_121
 218,http://cantusdatabase.org/source/678936,"Montréal, McGill University - Rare Books and Special Collections - Manuscript Collection, MS Medieval 0234",Germany,CDN-Mlr MS Medieval 0234,16,16th century (1575-1600),Secular,provenance_060
 219,http://musmed.eu/source/9475,F-Col_part : Mont-Renaud,"Noyon, St-Éloi",F-Col_part Mont-Renaud,10,10th century,Unknown,
-220,http://musmed.eu/source/15154,D-W : Cod Guelf Helmst 1008,"Minden, pour l'usage de l'évêque Siegbert",D-W Cod Guelf Helmst 1008,11,11th century,Unknown,
+220,http://musmed.eu/source/15154,D-W : Cod Guelf Helmst 1008,"Minden, pour l'usage de l'évêque Siegbert",D-W Cod Guelf Helmst 1008,11,11th century,Unknown,provenance_252
 221,http://cantusbohemiae.cz/source/28509,CZ-Pn (Praha) XV A 10,Prague,CZ-Pn XV A 10,14,14th century,Secular,provenance_128
 222,http://cantusbohemiae.cz/source/9147,CZ-Pu (Praha) VI G 3a,St George's Convent in Prague,CZ-Pu VI G 3a,14,14th century,Monastic,provenance_129
-223,http://cantusbohemiae.cz/source/37034,CZ-Pn (Praha) XII A 21,Kolín,CZ-Pn XII A 21,15,15th century,Secular,
+223,http://cantusbohemiae.cz/source/37034,CZ-Pn (Praha) XII A 21,Kolín,CZ-Pn XII A 21,15,15th century,Secular,provenance_248
 224,http://musicahispanica.eu/source/96055,E-Lc (León) Cod. LIV,unknown,E-Lc Ms. LIV,15,15th century,Unknown,
 225,http://musicahispanica.eu/source/20340,E-Tc Archivo y Biblioteca Capitulares de la Catedral de Toledo,unknown,E-Tc Ms. 33.4,14,14th century,Unknown,
 226,http://musicahispanica.eu/source/20229,E-Bbc (Barcelona) E-Bbc M 706,unknown,E-Bbc M 706,15,15th century,Unknown,
 227,http://cantusdatabase.org/source/123707,"Oxford, Bodleian Library, MS. Laud Misc. 284",Würzburg,GB-Ob MS. Laud Misc. 284,12,12th century,Secular,provenance_213
-228,http://musicahispanica.eu/source/20227,"E-Bbc (Barcelona) E-Bbc, M 663",Barcelona,E-Bbc M 663,15,15th century,Unknown,
+228,http://musicahispanica.eu/source/20227,"E-Bbc (Barcelona) E-Bbc, M 663",Barcelona,E-Bbc M 663,15,15th century,Unknown,provenance_234
 229,http://cantusdatabase.org/source/694888,"Toronto, University of Toronto - Thomas Fisher Rare Book Library, MSS 09700",Firenze,CDN-Ttfl MSS 09700,15,15th century,Secular,provenance_052
-230,http://musicahispanica.eu/source/20238,"E-Bbc (Barcelona) E-Bbc, M 1327",Convento de las clarisas de la Santísima Trinidad (Valencia),E-Bbc M 1327,15,15th century,Unknown,
-231,http://musmed.eu/source/12848,F-Pa : Ms 0135,"Angleterre, Londres",F-Pa : Ms 0135,13,13th century (1260),Unknown,
+230,http://musicahispanica.eu/source/20238,"E-Bbc (Barcelona) E-Bbc, M 1327",Convento de las clarisas de la Santísima Trinidad (Valencia),E-Bbc M 1327,15,15th century,Unknown,provenance_250
+231,http://musmed.eu/source/12848,F-Pa : Ms 0135,"Angleterre, Londres",F-Pa : Ms 0135,13,13th century (1260),Unknown,provenance_256
 232,http://musicahispanica.eu/source/94494,B-Br (Bruselas) IV/473,unknown,B-Br Ms IV/473,14,14th century,Unknown,
 233,http://austriamanus.org/source/4399,A-KN CCl 272 Antiphonarium (Fragm.),Klosterneuburg,A-KN CCl. 272,12,12th century,Unknown,provenance_076
 234,http://cantusbohemiae.cz/source/33177,CZ-Pn (Praha) XII A 24,Pilsen,Cz-Pn XII A 24,15,15th century,Unknown,provenance_222
 235,http://musmed.eu/source/9070,F-CA : Ms 0060 (61),Cambrai,F-CA : Ms 0060 (61),11,11th century,Unknown,provenance_029
 236,http://musicahispanica.eu/source/95215,E-BAR (Huesca) 95,unknown,E-BAR Cj. 95,15,15th century,Unknown,
 237,http://cantusdatabase.org/source/123634,"Piacenza, Archivio e Biblioteca Capitolare della Cattedrale, cod. 65",Piacenza,I-PCd cod. 65,unknown,unknown,Secular,provenance_124
-238,http://musicahispanica.eu/source/20226,E-Bbc (Barcelona) M662,Barcelona, E-Bbc M 662,15,15th century,Unknown,
+238,http://musicahispanica.eu/source/20226,E-Bbc (Barcelona) M662,Barcelona, E-Bbc M 662,15,15th century,Unknown,provenance_234
 239,http://musmed.eu/source/9076,F-CA : Ms 0078 (79),Cambrai,F-CA : Ms 0078 (79),11,11th century,Unknown,provenance_029
 240,http://cantusdatabase.org/source/123593,"Arras, Mediathèque de l'Abbaye Saint-Vaast, 465 (CGM 893)",Arras,F-AS 465 (CGM 893),14,14th century,Monastic,provenance_014
 241,http://musicahispanica.eu/source/20248,E-Bbc (Barcelona) E-Bbc Ms. 2545,Cataluña o sur de Francia (?),E-Bbc Ms. 2545,15,15th century,Unknown,
-242,http://musicahispanica.eu/source/20241,E-Bbc (Barcelona) E-Bbc M 3701,Canónica de Sant Martí Sacosta (Girona),E-Bbc M 3701,15,15th century,Unknown,
+242,http://musicahispanica.eu/source/20241,E-Bbc (Barcelona) E-Bbc M 3701,Canónica de Sant Martí Sacosta (Girona),E-Bbc M 3701,15,15th century,Unknown,provenance_253
 243,http://cantusdatabase.org/source/123687,"Oxford, Bodleian Library, MS. Canon. Liturg. 202",Germany,GB-Ob MS. Canon. Liturg. 202,13,13th century,Unknown,provenance_060
 244,https://pemdatabase.eu/source/46520,P-Cua Liber Catenatus,unknown,P-Cua Liber Catenatus,unknown,unknown,Unknown,
 245,https://pemdatabase.eu/source/74864,P-EVpc 000,unknown,P-EVpc 000,unknown,unknown,Unknown,
