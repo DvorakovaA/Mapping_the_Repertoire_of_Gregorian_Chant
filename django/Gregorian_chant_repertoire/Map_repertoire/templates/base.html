@@ -229,8 +229,13 @@
         var Topic_checked = document.getElementById('id_community_detection_algorithm_1');
         Topic_checked.addEventListener('click', function() { 
             document.getElementById('metricSelection').style.display = 'none';
-            document.getElementById('numberOfTopicsSelection').style.display = 'block';
+            document.getElementById('numberOfTopicsSelection').style.display = 'inline';
         });
+        // to preserve choices after Show (refresh)
+        if (document.getElementById('id_community_detection_algorithm_1').checked) {
+            document.getElementById('metricSelection').style.display = 'none';
+            document.getElementById('numberOfTopicsSelection').style.display = 'inline'
+        }
         
     </script>
         
