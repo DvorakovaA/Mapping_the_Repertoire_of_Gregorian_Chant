@@ -88,7 +88,7 @@ function getMaps(map_data) {
                 const long2 = map_data.map_sources_dict[line[1]].long
                 const line_popup = "<h5> <a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[0]].siglum+"</a>" + " : " +  line[2] +
                                    "<br> <a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[1]].siglum+"</a>" + " : " +  line[3] + 
-                                   "<br> Jaccard distance: " + line[4]['weight'] + "</h5>";
+                                   "<br> Weight: " + line[4]['weight'] + "</h5>";
                 const com_id = map_data.map_com_info[line[0]];
 
                 // Same community
@@ -152,7 +152,7 @@ function getMaps(map_data) {
                                   "<br> Century: " + map_data.map_sources_dict[source].century;
             
             // Markers
-            if (map_data.map_sources_dict[source].cursus === 'Secular') {
+            if (map_data.map_sources_dict[source].cursus === 'Unknown') {
                 // Community map
                 var point1 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
                 point1.bindPopup(marker_popup);
@@ -168,25 +168,25 @@ function getMaps(map_data) {
                 point1.bindPopup(marker_popup);
                 point1.addTo(com_layers[map_data.map_com_info[source]]);
                 // Century map
-                var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                var point2 = L.shapeMarker([lat, long], {shape : 'square', radius: 8.5, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
                 point2.bindPopup(marker_popup);
                 point2.addTo(cen_layers[map_data.map_cen_info[source]]);
             }
-            else {
+            else { //Secular and Romanum
                 // Community map
                 var point1 = L.shapeMarker([lat, long], {shape : 'triangle', radius: 8.5, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
                 point1.bindPopup(marker_popup);
                 point1.addTo(com_layers[map_data.map_com_info[source]]);
                 // Century map
-                var point2 = L.circleMarker([lat, long], {radius: 10, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
+                var point2 = L.shapeMarker([lat, long], {shape : 'triangle', radius: 8.5, color: map_data.colors[map_data.map_com_info[source]], pane : "point"});
                 point2.bindPopup(marker_popup);
                 point2.addTo(cen_layers[map_data.map_cen_info[source]]);
             }
         }
+    
+        comLayerControl.addTo(com_map);
+        cenLayerControl.addTo(cen_map);
     }
-
-    comLayerControl.addTo(com_map);
-    cenLayerControl.addTo(cen_map);
 
     return com_map, cen_map;
 }
