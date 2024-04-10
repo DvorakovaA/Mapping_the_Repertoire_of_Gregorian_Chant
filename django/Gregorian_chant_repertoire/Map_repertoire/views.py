@@ -34,7 +34,12 @@ def tool(request):
         request.session['feast'] = form.cleaned_data['feast']
         request.session['all'] = form.cleaned_data['all']
         request.session['office'] = form.cleaned_data['office']
-        
+        request.session['algo'] = form.cleaned_data['community_detection_algorithm']
+        if request.session['algo'] == 'Louvein':
+             request.session['add_info_algo'] = form.cleaned_data['metric']
+        else:
+             request.session['add_info_algo'] = form.cleaned_data['number_of_topics']
+
         context = {"form" : form}
 
         feast_names = []
@@ -51,9 +56,9 @@ def tool(request):
             office_dict = {'V' : 'office_v', 'M' : 'office_m', 'L' : 'office_l', 'V2' : 'office_v2'}
             for off in request.session['office']:
                     filtering_office.append(office_dict[off])
-        # else filtering_office is empty list -> we select All
+        # else means filtering_office is empty list -> we select All
 
-        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office)
+        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'])
         context['sig_level'] = sig_level
         
         context['map_data'] = get_map_data(communities, edges_info)
