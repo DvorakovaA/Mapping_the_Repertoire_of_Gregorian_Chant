@@ -9,13 +9,13 @@ from .models import Feasts
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
-ALGO_CHOICES = {"Louvein": "Louvein algorithm", "Topic": "Topic model"}
+ALGO_CHOICES = {"Louvein": "Louvein algorithm", "DBSCAN": "DBSCAN clustering", "Topic": "Topic model"}
 METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model"}
-TOPIC_CHOICES = {"5": "5", "10": "10", "15":"15"}
+TOPIC_CHOICES = {"5": "5", "10": "10", "20":"20"}
 
 
 class InputForm(forms.Form):
-    feast = forms.MultipleChoiceField(widget=forms.SelectMultiple, 
+    feast = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'form-control'}), 
                                       choices=[(None, '---')]+[(f[0], f[1]) for f in zip([i for i in range(len(Feasts.objects.all()))], Feasts.objects.values_list('name', flat=True))])
     all = forms.MultipleChoiceField(label="Select complete repertoire for feast:", widget=forms.CheckboxSelectMultiple, choices={"All": "All"}, required=False)
     office = forms.MultipleChoiceField(label="or select only particular office:", widget=forms.CheckboxSelectMultiple, choices=OFFICE_CHOICES, required=False)
@@ -23,6 +23,7 @@ class InputForm(forms.Form):
     community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvein")
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
+
 
     def clean(self):
         cleaned_data = super().clean()

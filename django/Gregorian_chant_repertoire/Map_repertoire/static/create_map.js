@@ -9,6 +9,7 @@ function getMaps(map_data) {
      * com_map as map with layer control for given communities
      * cen_map as map with layer control for centuries of origin of sources
     */
+
     // Get basic maps with OpenStreetMap map layer
     var com_map = L.map('com_map').setView(center, 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
@@ -65,7 +66,6 @@ function getMaps(map_data) {
         cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
         cen_layers['shared'].addTo(cen_map);
         // Create layer for each century group and add it to layerControl
-        //var cen_name;
         for(century of map_data.used_centuries) {
             var cen_name = century + "th century";
             if (century == "unknown") {
@@ -86,59 +86,44 @@ function getMaps(map_data) {
                 const long1 = map_data.map_sources_dict[line[0]].long
                 const lat2 = map_data.map_sources_dict[line[1]].lat
                 const long2 = map_data.map_sources_dict[line[1]].long
-                const line_popup = "<h5> <a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[0]].siglum+"</a>" + " : " +  line[2] +
+                const line_popup = "<a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[0]].siglum+"</a>" + " : " +  line[2] +
                                    "<br> <a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[1]].siglum+"</a>" + " : " +  line[3] + 
-                                   "<br> Weight: " + line[4]['weight'] + "</h5>";
+                                   "<br> Weight: " + line[4]['weight'];
                 const com_id = map_data.map_com_info[line[0]];
+                var weight = 1.4;
+                if (line[4]['weight'] != '-') {
+                    weight = line[4]['weight']*1.8 + 1.3;
+                }
 
                 // Same community
                 if (com_id == map_data.map_com_info[line[1]]) {
-                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
+                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
                     edge.addTo(com_layers[com_id]);
                     edge.addTo(com_layers['all']);
                 }
                 // Edge shared between century groups
                 else {
-                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
+                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : weight, pane : "line"});
                     edge1.bindPopup(line_popup);
-                    edge1.addTo(com_layers[com_id]);
                     edge1.addTo(com_layers['shared']);
                     edge1.addTo(com_layers['all']);
-                    
-                    /*
-                    var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4});
-                    edge2.bindPopup(line_popup);
-                    edge2.addTo(com_layers[map_data.map_com_info[line[1]]]);
-                    edge2.addTo(com_layers['shared']);
-                    edge.addTo(com_layers['all']);
-                    */
                 }
                 // Same century group
                 if(map_data.map_cen_info[line[0]] == map_data.map_cen_info[line[1]])
                 {
-                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
+                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
                     edge.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
                     edge.addTo(cen_layers['all']);
                 }
                 // Edge shared between century groups
                 else {
-                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
+                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : weight, pane : "line"});
                     edge1.bindPopup(line_popup);
-                    edge1.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
                     edge1.addTo(cen_layers['shared']);
                     edge1.addTo(cen_layers['all']);
-
-                    
-                    var edge2 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : line[4]['weight']*1.8 + 1.4, pane : "line"});
-                    edge2.bindPopup(line_popup);
-                    edge2.addTo(cen_layers[map_data.map_cen_info[line[1]]]);
-                    edge2.addTo(cen_layers['shared']);
-                    edge2.addTo(cen_layers['all']);
-                    
                 }
-                
             }
         }
 
@@ -188,7 +173,7 @@ function getMaps(map_data) {
         cenLayerControl.addTo(cen_map);
     }
 
-    return com_map, cen_map;
+    return {com_map, cen_map};
 }
 
 
