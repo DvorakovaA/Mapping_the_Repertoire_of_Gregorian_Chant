@@ -1,33 +1,24 @@
 
 {% extends "base.html" %}
 
-    {% block header %}
-      <h1> Map Gregorian chant repertoire </h1>
-    {% endblock %}
-
-    {% block side_buttons %}
-    <!--
-          <button onclick="location.href = '/chant/login'" style="float:right">Login</button> <br><br>
-          <button onclick="location.href = '/chant/register'" style="float:right">Create account</button> <br><br>
-          <button onclick="location.href = '/chant/logout'" style="float:right">Logout</button> <br>
-    -->
-    {% endblock %}
-
-    {% block history %}
-    {% endblock %}
-
     {% block content %}
-    <h3>Wellcome!</h3>
-    <p> Here we provide a tool for musicologists to help them discover 
-        possible traditions in Gregorian chant repertoire as well as some hints for transimissions. </p>
-    <button onclick="location.href = '/map_repertoire/tool'" style="float:left">Tool</button> <br> <br>
+    <div class="container ms-4 mt-3">
+      <h2>Wellcome!</h2>
+      <p> Here we provide a tool for musicologists to help them discover 
+          possible traditions in Gregorian chant repertoire as well as some hints for possible 
+          transimissions of repertoire. </p>
+      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:left">Tool</button> <br> <br>
+    </div>
     {% endblock %}
+    
 
     {% block map %}
-    <h4>Map of all provenances included in this tool:</h4>
-      
-      <div id="com_map"> </div>
-      <!-- pass data from djnago context to js script part -->
+      <div class="container ms-4 mt-3">
+        <h4>Map of all provenances included in this tool:</h4>
+          
+          <div id="com_map"> </div>
+      </div>
+    <!-- pass data from djnago context to js script part -->
       {{ map_data_all|json_script:"map_data_all" }}
       <script>
         const map_data_all = JSON.parse(document.getElementById('map_data_all').textContent);

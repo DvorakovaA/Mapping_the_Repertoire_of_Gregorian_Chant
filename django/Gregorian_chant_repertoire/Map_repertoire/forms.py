@@ -23,7 +23,7 @@ class InputForm(forms.Form):
     community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvein")
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
-
+    
 
     def clean(self):
         cleaned_data = super().clean()

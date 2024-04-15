@@ -2,12 +2,16 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         {% load static %}
         <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}" />
         <script src="{% static 'leaflet/leaflet.js' %}"></script>
         <script src="{% static 'leaflet-svg-shape-markers.js' %}"></script>
         <script src="{% static 'create_map.js' %}"></script>
 
+        <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}" />
+        <script async src="{% static 'bootstrap/bootstrap.bundle.min.js' %}" ></script>
+        
         <style>
             .tabcontent {
             display: none;
@@ -86,33 +90,35 @@
                 display: none;
             }
 
+            #navbar-app
+                {
+                font-size: larger;
+                }
+
         </style>
 
         <title>{% block title %} Map_repertoire {% endblock %}</title>
     </head>
 
     <body>
-        <div id="right_top_corner" style="float:right" class="container">
-
-            <div id="help" class="child">
-                <button onclick="location.href = '/map_repertoire/help'">Help</button>
-             </div>
-        </div>
-
-
-        {% block header %}  {% endblock %}
-
-        <div id="side_buttons" style="float: right;">
-            {% block side_buttons %}
-
-            {% endblock %}
-        </div>
-
-        <div id="history">
-            {% block history %}
-
-            {% endblock %}
-        </div>
+          
+        {% block header %} 
+         <!-- A grey horizontal navbar that becomes vertical on small screens -->
+            <nav class="navbar navbar-expand-sm bg-secondary navbar-dark sticky-top">
+                <div class="container-fluid">
+                  <ul class="navbar-nav">
+                    <li class="nav-item">
+                      <a id="navbar-app" class="nav-link active ms-3" href = '/map_repertoire/'>Map Gregorian chant repertoire</a>
+                    </li>
+                  </ul>
+                  <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                      <a class="nav-link ms-auto" href="/map_repertoire/help">Help</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+        {% endblock %}
 
         <div id="content">
             {% block content %}
@@ -136,107 +142,4 @@
         {% endblock %}
         </div>
     </body>
-
-    <script>
-        function openView(evt, viewName) {
-          let i, tabcontent, tablinks;
-          //clear previous
-          tabcontent = document.getElementsByClassName("tabcontent");
-          for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-          }
-          //set new
-          tablinks = document.getElementsByClassName("tablinks");
-          for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-          }
-          document.getElementById(viewName).style.display = "block";
-          evt.currentTarget.className += " active";
-        }
-
-
-        // Toggle parts of table view
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var mainTable = document.getElementsByClassName('mainTable')[0];
-            
-            // Get all elements with data-collapsible-trigger attribute
-            var triggerElements = mainTable.querySelectorAll('[data-collapsible-trigger]');
-
-            // Iterate through each trigger element
-            triggerElements.forEach(function (trigger) {
-                // Add click event listener to each trigger
-                trigger.addEventListener('click', function () {
-                    // Find the closest parent with data-collapsible-container attribute
-                    var container = this.closest('[data-collapsible-container]');
-
-                    // Find the collapsible element within the container
-                    var collapsible = container.querySelector('[data-collapsible]');
-
-                    // Toggle the collapsed class on the collapsible element
-                    collapsible.classList.toggle('collapsed');
-
-                    // Toggle the text content of the trigger
-                    var triggerText = collapsible.classList.contains('collapsed') ? 'Show more' : 'Hide';
-                    this.textContent = triggerText;
-                });
-            });
-        
-            var expandAllTrigger = document.querySelectorAll('[data-collapsible-expand-all]');
-            expandAllTrigger.forEach(function (trigger) {
-                trigger.addEventListener('click', function () {
-                var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
-                collabsibleContainers.forEach(function (container) {
-                    var collapsibleElements = container.querySelectorAll('[data-collapsible]');
-                    collapsibleElements.forEach(function (collapsibleEl) {
-                    collapsibleEl.classList.remove('collapsed');
-                    });
-                    var collapsibleTriggers = container.querySelectorAll('[data-collapsible-trigger]');
-                    collapsibleTriggers.forEach(function (triggerEl) {
-                    triggerEl.textContent = 'Hide';
-                    });
-                });
-                });
-            });
-        
-            var collapseAllTrigger = document.querySelectorAll('[data-collapsible-collapse-all]');
-            collapseAllTrigger.forEach(function (trigger) {
-                trigger.addEventListener('click', function () {
-                var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
-                collabsibleContainers.forEach(function (container) {
-                    var collapsibleElements = container.querySelectorAll('[data-collapsible]');
-                    collapsibleElements.forEach(function (collapsibleEl) {
-                    collapsibleEl.classList.add('collapsed');
-                    });
-                    var collapsibleTriggers = container.querySelectorAll('[data-collapsible-trigger]');
-                    collapsibleTriggers.forEach(function (triggerEl) {
-                    triggerEl.textContent = 'Show more';
-                    });
-                });
-                });
-            });
-        });
-    
-        
-        // Dynamic changes in displaying form
-        // Louvein      
-        var Louvein_checked = document.getElementById('id_community_detection_algorithm_0');
-        Louvein_checked.addEventListener('click', function() {
-                document.getElementById('metricSelection').style.display = 'inline';
-                document.getElementById('numberOfTopicsSelection').style.display = 'none';
-        })
-        // Topic model
-        var Topic_checked = document.getElementById('id_community_detection_algorithm_1');
-        Topic_checked.addEventListener('click', function() { 
-            document.getElementById('metricSelection').style.display = 'none';
-            document.getElementById('numberOfTopicsSelection').style.display = 'inline';
-        });
-        // to preserve choices after Show (refresh)
-        if (document.getElementById('id_community_detection_algorithm_1').checked) {
-            document.getElementById('metricSelection').style.display = 'none';
-            document.getElementById('numberOfTopicsSelection').style.display = 'inline'
-        }
-        
-    </script>
-        
 </html>

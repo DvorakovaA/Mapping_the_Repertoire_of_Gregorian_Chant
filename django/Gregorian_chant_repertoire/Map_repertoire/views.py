@@ -60,7 +60,7 @@ def tool(request):
 
         communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'])
         context['sig_level'] = sig_level
-        
+
         context['map_data'] = get_map_data(communities, edges_info)
         context['tab_data'] = get_table(communities, feast_ids, filtering_office)
         
