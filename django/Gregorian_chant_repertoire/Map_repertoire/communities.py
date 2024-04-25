@@ -55,7 +55,7 @@ def find_comms_stability(community_versions : list[list[set[str]]]):
         else:
             sig_level = 1
 
-        return community_versions[0], sig_level
+        return community_versions[0], float(sig_level)
     else:
         return [], 0
 
