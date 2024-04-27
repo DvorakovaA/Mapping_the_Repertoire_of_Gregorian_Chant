@@ -2,7 +2,8 @@
 Script that process desired changes in csvs:
 - add provenance_id into source file
 - add new century column into source file that can be used for century groups in map (leave only number)
-- generate new csv file with these additions (sources-with-provenance-ids-and-two-centuries.csv)
+- generate new csv file with only bigger sources (over 100 chants) and 
+  with these additions (sources-with-provenance-ids-and-two-centuries.csv)
 - check if there are any new uknown provenances in given data (not existing in geography_data.csv)
   and tell user via console (plus suggest new unused provenance_ids)
 """
@@ -22,7 +23,7 @@ def run():
     freq_of_sources = chant_data['source_id'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
     sources_without_fragments = original_sources[original_sources['drupal_path'].isin(bigger_sources)]
-    
+
     # Change nan in provenance / cursus column to unknown
     sources_without_fragments['provenance'] = sources_without_fragments['provenance'].fillna('unknown')
     sources_without_fragments['cursus'] = sources_without_fragments['cursus'].fillna('Unknown')
@@ -62,9 +63,9 @@ def run():
 
     # Add new numeric century column to sources file
     numerical_century = []
-    old_century = new_csv['century'].to_numpy()
+    original_century = new_csv['century'].to_numpy()
 
-    for cent in old_century:
+    for cent in original_century:
         if '9th century' == cent or '09th century' == cent:
             numerical_century.append('9')
         elif ' c. 1200' == cent or 'c. 1200' == cent:
@@ -72,7 +73,11 @@ def run():
         elif 'mid 14th century' == cent:
             numerical_century.append('14')
         elif cent[0:2].isnumeric():
-            numerical_century.append(cent[0:2])
+            if cent[2].isnumeric():
+                numerical_century.append(str(int(cent[0:2])+1))
+                print(cent, str(int(cent[0:2])+1))
+            else:
+                numerical_century.append(cent[0:2])
         # Century unknown
         else:
             numerical_century.append('unknown')
