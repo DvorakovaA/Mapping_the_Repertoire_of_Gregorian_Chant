@@ -40,18 +40,23 @@ function getMaps(map_data) {
         // Layer for all edges
         com_layers['all'] = L.layerGroup();
         comLayerControl.addOverlay(com_layers['all'], "All edges");
-        com_layers['all'].addTo(com_map);
+        //com_layers['all'].addTo(com_map);
         // Layer for shared edges
         com_layers['shared'] = L.layerGroup();
         comLayerControl.addOverlay(com_layers['shared'], "All shared edges");
-        com_layers['shared'].addTo(com_map);
+        //com_layers['shared'].addTo(com_map);
         // Create layer for each community and add it to layerControl
         for(let i = 0; i < map_data.num_of_communities; i++) {
             const com_name = "Community " + (i+1);
             var l = L.layerGroup();
             com_layers[i] = l;
-            comLayerControl.addOverlay(l, com_name)
+            comLayerControl.addOverlay(l, com_name);
             l.addTo(com_map);
+
+            var lE = L.layerGroup();
+            var edgeKey = i+"edges";
+            com_layers[edgeKey] = lE;
+            comLayerControl.addOverlay(lE, com_name+" edges");
         }
 
         // Get ready layer control for century layers
@@ -60,11 +65,11 @@ function getMaps(map_data) {
         // Layer for all edges
         cen_layers['all'] = L.layerGroup();
         cenLayerControl.addOverlay(cen_layers['all'], "All edges");
-        cen_layers['all'].addTo(cen_map);
+        //cen_layers['all'].addTo(cen_map);
         // Layer for shared edges
         cen_layers['shared'] = L.layerGroup();
         cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
-        cen_layers['shared'].addTo(cen_map);
+        //cen_layers['shared'].addTo(cen_map);
         // Create layer for each century group and add it to layerControl
         for(century of map_data.used_centuries) {
             var cen_name = century + "th century";
@@ -76,6 +81,11 @@ function getMaps(map_data) {
             cen_layers[century] = l;
             cenLayerControl.addOverlay(l, cen_name);
             l.addTo(cen_map);
+
+            var lE = L.layerGroup();
+            var edgeKey = century+"edges";
+            cen_layers[edgeKey] = lE;
+            cenLayerControl.addOverlay(lE, cen_name+" edges");
         }
 
         // First add edges
@@ -99,7 +109,7 @@ function getMaps(map_data) {
                 if (com_id == map_data.map_com_info[line[1]]) {
                     var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
-                    edge.addTo(com_layers[com_id]);
+                    edge.addTo(com_layers[com_id+"edges"]);
                     edge.addTo(com_layers['all']);
                 }
                 // Edge shared between century groups
@@ -114,7 +124,7 @@ function getMaps(map_data) {
                 {
                     var edge = L.polyline([[lat1, long1], [lat2, long2]], {color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
-                    edge.addTo(cen_layers[map_data.map_cen_info[line[0]]]);
+                    edge.addTo(cen_layers[map_data.map_cen_info[line[0]]+"edges"]);
                     edge.addTo(cen_layers['all']);
                 }
                 // Edge shared between century groups
