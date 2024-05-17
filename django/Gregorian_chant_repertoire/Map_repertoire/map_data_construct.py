@@ -11,7 +11,9 @@ from collections import Counter
 
 from .models import Sources, Geography
 
-MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025, 0.04], [-0.025, -0.04], [0.025, 0.04]]
+MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025, 0.04], [-0.025, -0.04], [0.025, 0.04], 
+         [0.012, 0.02], [0.012, -0.02], [-0.012, 0.02], [-0.012, -0.02], [0, 0.07], [0, -0.07], [0.05, 0], [-0.05, 0], 
+         [0.05, 0.07], [-0.05, -0.07], [0.05, -0.07], [-0.05, 0.07]]
 
 def get_map_data(communities: list[set [str]], edges : list [tuple]):
     """
@@ -41,14 +43,13 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         map_cen_info = {}
         used_centuries = []
         no_prov_sources = []
-        # For position collisions
-        used_provenances = Counter()
+        used_provenances = Counter() # For position collisions
         for community in communities:
             for source in community:
                 source_info = Sources.objects.filter(drupal_path = source).values()[0]
                 try:
                     prov_id = source_info['provenance_id']
-                    used_provenances[prov_id] = (used_provenances[prov_id] + 1) % 9
+                    used_provenances[prov_id] = (used_provenances[prov_id] + 1) % (len(MOVES)+2)
                     place = Geography.objects.filter(provenance_id = prov_id).values()
                     lat = place[0]['latitude']
                     long = place[0]['longitude']
