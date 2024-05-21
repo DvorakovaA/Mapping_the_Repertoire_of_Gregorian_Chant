@@ -97,7 +97,7 @@ function getMaps(map_data) {
                 const lat2 = map_data.map_sources_dict[line[1]].lat
                 const long2 = map_data.map_sources_dict[line[1]].long
                 const line_popup = "<a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[0]].siglum+"</a>" + " : " +  line[2] +
-                                   "<br> <a href="+line[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[1]].siglum+"</a>" + " : " +  line[3] + 
+                                   "<br> <a href="+line[1]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[line[1]].siglum+"</a>" + " : " +  line[3] + 
                                    "<br> Weight: " + line[4]['weight'];
                 const com_id = map_data.map_com_info[line[0]];
                 var weight = 1.4;
@@ -112,7 +112,7 @@ function getMaps(map_data) {
                     edge.addTo(com_layers[com_id+"edges"]);
                     edge.addTo(com_layers['all']);
                 }
-                // Edge shared between century groups
+                // Edge shared between community groups
                 else {
                     var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {color : 'black', weight : weight, pane : "line"});
                     edge1.bindPopup(line_popup);
