@@ -35,21 +35,24 @@ def tool(request):
         request.session['all'] = form.cleaned_data['all']
         request.session['office'] = form.cleaned_data['office']
         request.session['algo'] = form.cleaned_data['community_detection_algorithm']
-        if request.session['algo'] == 'Louvein':
+        if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
              request.session['add_info_algo'] = form.cleaned_data['metric']
         else:
              request.session['add_info_algo'] = form.cleaned_data['number_of_topics']
 
         context = {"form" : form}
 
-        feast_names = []
-        for id in request.session.get('feast'):
-            feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)])
-        context['feasts'] = feast_names
-        feast_ids = []
-        for feast_name in feast_names:
-            feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
-        context['feast_id'] = [feast_ids]
+        if '0' in request.session.get('feast'): # All feasts selected
+            context['feasts'] = ['All feasts']
+            feast_ids = ['All'] #list(Feasts.objects.values_list('feast_id', flat=True))
+        else:
+            feast_names = []
+            for id in request.session.get('feast'):
+                feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)-1])
+            context['feasts'] = feast_names
+            feast_ids = []
+            for feast_name in feast_names:
+                feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
 
         filtering_office = []
         if not request.session.get('all'):

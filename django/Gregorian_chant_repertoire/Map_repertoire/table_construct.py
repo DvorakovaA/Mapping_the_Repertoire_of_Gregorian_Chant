@@ -28,6 +28,10 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
         'tail': [[{'source_id':'https//..', 'siglum':'XY'}, {}, ...], [{}, {}, ...], [{}]]
     }
     '''
+    OFFICES = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
+                'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 
+                'office_x' : 'X', 'nan' : 'UNKNOWN'}
+    
     if communities != []:
         # Get ready the base of returned structure
         tab_data = {}
@@ -52,12 +56,20 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             chants_of_community[i] = []
             tab_data['head'].append({'com' : "Community "+str(i+1), 'sources' : str(len(community))+" sources", 'color' : colors[i]})
             chants_of_feast = []
-            for feast_id in feast_ids:
-                chants_of_feast += [chant for chant in Data_Chant.objects.filter(feast_id = feast_id).values()]
-                used_offices += [chant['office_id'] for chant in chants_of_feast]
-                for source_id in community:
-                    chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
-                    chants_of_community[i]+= chants_of_source
+            if feast_ids == ['All']:
+                #chants_of_community[i] = []
+                #used_offices = list(OFFICES.keys())
+                #for source_id in community:
+                #    chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in Data_Chant.objects.filter(source_id = source_id).values()]
+                #    chants_of_community[i]+= set(chants_of_source)
+                chants_of_community[i] = []
+            else:
+                for feast_id in feast_ids:
+                    chants_of_feast += Data_Chant.objects.filter(feast_id = feast_id).values() #[chant for chant in Data_Chant.objects.filter(feast_id = feast_id).values()]
+                    used_offices += [chant['office_id'] for chant in chants_of_feast]
+                    for source_id in community:
+                        chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
+                        chants_of_community[i]+= chants_of_source
             i += 1
         used_offices = set(used_offices)
 
@@ -72,13 +84,9 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             i += 1
         
         # Fill body
-        offices = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
-                'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 
-                'office_x' : 'X', 'nan' : 'UNKNOWN'}
-        
         # Check for possible filter
         if filtering_office == []:
-            filtering_office = offices
+            filtering_office = OFFICES.keys()
         # Go over data in office point of view (= rows)    
         for office in filtering_office:
             # Check for empty rows (empty offices)
@@ -110,9 +118,9 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                         collapsed_chant_info.append({'incipit' : community_office_chants_dict[ordered_freq[j][0]], 'cantus_id' : ordered_freq[j][0], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
 
                     try:
-                        tab_data['body'][offices[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
+                        tab_data['body'][OFFICES[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
-                        tab_data['body'][offices[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
+                        tab_data['body'][OFFICES[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
         
         return tab_data
     
