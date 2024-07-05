@@ -1,7 +1,7 @@
 '''
 Script providing function to construct result table of source communities 
-found by Louvein algorithm for community detection
-Table on page then contains info about particular chants
+found by choosen principle
+Table on page then contains info about particular chants for each community and each office
 It is constructed as dictionary of three parts
     - head - header of table - CommunityXY and number of sources in it
     - body - offices as rows - chants ordered by frequnecy in particular community (column)
@@ -48,46 +48,55 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             color=rgb2hex(cmap(scale)) # without translation to hex it is blue - green scale
             colors.append(color)
 
-        # Head plus collecting chants and offices
+        # Get head part, tail part and collect chants and offices
         chants_of_community = {}
         used_offices = []
-        i = 0
+        i = 0  # number for assignement to each community
         for community in communities:
-            chants_of_community[i] = []
+            # Head part
             tab_data['head'].append({'com' : "Community "+str(i+1), 'sources' : str(len(community))+" sources", 'color' : colors[i]})
-            chants_of_feast = []
-            if feast_ids == ['All']:
-                #chants_of_community[i] = []
-                #used_offices = list(OFFICES.keys())
-                #for source_id in community:
-                #    chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in Data_Chant.objects.filter(source_id = source_id).values()]
-                #    chants_of_community[i]+= set(chants_of_source)
-                chants_of_community[i] = []
-            else:
-                for feast_id in feast_ids:
-                    chants_of_feast += Data_Chant.objects.filter(feast_id = feast_id).values() #[chant for chant in Data_Chant.objects.filter(feast_id = feast_id).values()]
-                    used_offices += [chant['office_id'] for chant in chants_of_feast]
-                    for source_id in community:
-                        chants_of_source = [(chant['office_id'], chant['cantus_id'], chant['incipit']) for chant in chants_of_feast if chant['source_id'] == source_id]
-                        chants_of_community[i]+= chants_of_source
-            i += 1
-        used_offices = set(used_offices)
-
-        # Fill tail
-        i = 0
-        for community in communities:
+            
+            # Tail part
             tab_data['tail'].append([])
             for source_id in community:
                 tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
-            #sort sources based on siglum to better display in table tail
+            # Sort sources based on siglum to better display in table tail
             tab_data['tail'][i].sort(key=lambda x : x['siglum'])
+
+            # Collecting part
+            chants_of_community[i] = []
+            if feast_ids == ['All']:
+                chants_of_community[i] = []
+                used_offices = list(OFFICES.keys())
+                for source_id in community:
+                    # Check for duplicates of CIDs in one table cell
+                    chants_of_source_dict = {}
+                    for chant in Data_Chant.objects.filter(source_id = source_id).values():
+                        chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                    chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
+                    chants_of_community[i] += chants_of_source
+
+            else: # Not all feasts
+                chants_of_feasts = []
+                for feast_id in feast_ids:
+                    chants_of_feasts += Data_Chant.objects.filter(feast_id = feast_id).values()
+                    used_offices += [chant['office_id'] for chant in chants_of_feasts]
+                    for source_id in community:
+                        # Check for duplicates of CIDs in one table cell
+                        chants_of_source_dict = {}
+                        for chant in chants_of_feasts:
+                            if chant['source_id'] == source_id:
+                                chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                        chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
+                        chants_of_community[i] += chants_of_source
             i += 1
-        
+        used_offices = set(used_offices)
+
         # Fill body
         # Check for possible filter
         if filtering_office == []:
             filtering_office = OFFICES.keys()
-        # Go over data in office point of view (= rows)    
+        # Go over data in office point of view (= rows)
         for office in filtering_office:
             # Check for empty rows (empty offices)
             if office in used_offices:
@@ -95,9 +104,9 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                     # Get info into better structure for computation and display
                     community_office_chants_dict = {}
                     community_office_chants = []
-                    for chant in chants_of_community[i]:
+                    for chant in chants_of_community[i]: # chant = (office, cantus, incipit)
                         if chant[0] == office:
-                            community_office_chants_dict[chant[1]] = chant[2]
+                            community_office_chants_dict[chant[1]] = chant[2]  #cantus_id -> incipit 
                             community_office_chants.append(chant[1])
                     # Frequency count
                     frequency = Counter(chant for chant in community_office_chants)
