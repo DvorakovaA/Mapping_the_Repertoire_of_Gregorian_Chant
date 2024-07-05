@@ -9,7 +9,7 @@ from .models import Feasts
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
-ALGO_CHOICES = {"Louvein": "Louvein algorithm", "DBSCAN": "DBSCAN clustering", "Topic": "Topic model"}
+ALGO_CHOICES = {"Louvein": "Louvein algorithm", "DBSCAN": "DBSCAN clustering - DO NOT USE (no meaningful results, only for replication)", "Topic": "Topic model"}
 METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model"}
 TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
 ALL_CHOICE = 0
