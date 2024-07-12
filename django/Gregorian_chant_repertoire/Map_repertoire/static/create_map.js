@@ -91,11 +91,11 @@ function getMaps(map_data) {
             l.addTo(cen_map);
             cenLayerControl.addOverlay(l, cen_name);
 
-            var lE = L.layerGroup();
-            var edgeKey = century+"edges";
-            cen_layers[edgeKey] = lE;
-            lE.addTo(cen_map);
-            cenLayerControl.addOverlay(lE, cen_name+" edges");
+            //var lE = L.layerGroup();
+            //var edgeKey = century+"edges";
+            //cen_layers[edgeKey] = lE;
+            //lE.addTo(cen_map);
+            //cenLayerControl.addOverlay(lE, cen_name+" edges");
         }
 
         // First add edges
@@ -134,7 +134,7 @@ function getMaps(map_data) {
                 {
                     var edge = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
-                    edge.addTo(cen_layers[map_data.map_cen_info[line[0]]+"edges"]);
+                    //edge.addTo(cen_layers[map_data.map_cen_info[line[0]]+"edges"]);
                     edge.addTo(cen_layers['all']);
                 }
                 // Edge shared between century groups
@@ -198,7 +198,7 @@ function getMaps(map_data) {
 
 
 
-function getMapOfAllSources(map_of_all_data) {
+function getMapOfAllSources(map_all_data) {
     // Get map
     var complete_map = L.map('com_map').setView(center, 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
@@ -207,7 +207,7 @@ function getMapOfAllSources(map_of_all_data) {
         }).addTo(complete_map);
 
 
-    for (const point of map_of_all_data) {
+    for (const point of map_all_data) {
         //Collect data
         const lat = point[1];
         const long = point[2];
