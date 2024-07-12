@@ -68,7 +68,7 @@
     <h4> Significance level: {{ sig_level }} </h4> <br>
   </div>
 
-  <div class="container ms-4 mb-3">
+  <div class="container-xxl ms-4 mb-0">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" id="myTabs" role="tablist">
       <li class="nav-item" role="presentation">
@@ -149,6 +149,7 @@
           
             </tbody>
           </table>
+          <br><br>
 
         {% else %}
           <h3> No data for given request </h3>
@@ -160,15 +161,15 @@
           <div id="missing_provenance" class="mt-3 mb-3">
             <h5> Sourses with unknown provenances: </h5>
             <div class="ms-3">
-              {% for source in map_data.no_prov_sources %}
-                <a href='{{ source }}'  target="_blank" rel="noopener noreferrer">{{ source }}</a> <br>
+              {% for source in map_data.no_prov_sources_siglum %}
+                <a href='{{ source.id }}'  target="_blank" rel="noopener noreferrer">{{ source.siglum }}</a> <br>
               {% endfor %}
             </div>
           </div>
         {% endif %}
 
         <container class="mt-1 mb-0">
-          <p style="float: right;"> △ - Secular | ▢ - Monastic | 〇 - unknown </p>
+          <p style="float: right;"> △ - secular | ▢ - monastic | 〇 - unknown </p>
         </container>
 
         <div id="com_map" class="mb-3 mt-1"></div>
@@ -187,7 +188,7 @@
         {% endif %}
 
         <container class="mt-3 mb-0">
-          <p style="float: right;"> △ - Secular | ▢ - Monastic | 〇 - unknown </p>
+          <p style="float: right;"> △ - secular | ▢ - monastic | 〇 - unknown </p>
         </container>
 
         <div id="cen_map" class="mb-3 mt-1"></div>
