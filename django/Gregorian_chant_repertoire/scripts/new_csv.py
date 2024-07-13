@@ -1,10 +1,10 @@
 """
 Script that process desired changes in csvs:
-- add provenance_id into source file
+- add provenance_id into source file (based on provenance_ids.csv)
 - add new century column into source file that can be used for century groups in map (leave only number)
 - generate new csv file with only bigger sources (over 100 chants) and 
   with these additions (sources-with-provenance-ids-and-two-centuries.csv)
-- check if there are any new uknown provenances in given data (not existing in geography_data.csv)
+- check if there are any new uknown provenances in given data (not existing in provenance_ids.csv)
   and tell user via console (plus suggest new unused provenance_ids)
 """
 
@@ -12,6 +12,11 @@ import pandas as pd
 
 
 def run():
+    """ 
+    Main function providing all data operations to create file
+    sources-with-provenance-ids-and-two-centuries.csv with help of pandas library
+    """
+    # Read data
     provenance_ids = pd.read_csv('data/given/provenance_ids.csv')
     original_sources = pd.read_csv('data/given/sources-of-all-ci-antiphons_OPTIONAL-CENTURY.csv')
 
@@ -28,7 +33,7 @@ def run():
     sources_without_fragments['provenance'] = sources_without_fragments['provenance'].fillna('unknown')
     sources_without_fragments['cursus'] = sources_without_fragments['cursus'].fillna('Unknown')
 
-    # Add provenance_id to sources file and save uknown
+    # Add provenance_id to sources file and collect unknown
     sources_with_new_info = []
     unknown_provenances = []
     for index, row in sources_without_fragments.iterrows():
@@ -65,6 +70,7 @@ def run():
     numerical_century = []
     original_century = new_csv['century'].to_numpy()
 
+    print("Unresolved centuries:")
     for cent in original_century:
         if '9th century' == cent or '09th century' == cent:
             numerical_century.append('9')
@@ -75,14 +81,15 @@ def run():
         elif cent[0:2].isnumeric():
             if cent[2].isnumeric():
                 numerical_century.append(str(int(cent[0:2])+1))
-                print(cent, str(int(cent[0:2])+1))
             else:
                 numerical_century.append(cent[0:2])
         # Century unknown
         else:
+            print(cent)
             numerical_century.append('unknown')
+    print()
     
-    # Save edited file with new columns
+    # Save edited file with two new columns and only big sources
     new_csv.insert(4, "num_century", numerical_century, allow_duplicates=True)
     new_csv.to_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv')
 

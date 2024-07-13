@@ -1,42 +1,43 @@
 """
-Python script that loads data from csv to django databases
-Data_Chant
-Sources
-Geography
-Feasts
+Python script that loads data from csv files (from folder data) to django databas
+Data_Chant - all_ci_antiphons.csv, all_ci_responsories.csv
+Sources - sources-with-provenance-ids-and-two-centuries.csv
+Geography - geography_data.csv
+Feasts - feast.csv
 
 Loads only chants from surces where we have more than 100 chants from that source
+and belongig to feast where there are more than 5 chants for it
 """
 
 from Map_repertoire.models import Data_Chant, Sources, Geography, Feasts
-from django.conf import settings
+
 import pandas as pd
 
 
 def run():
     """
     Main function of script load_csv.py that gets data from csv files (merged, filtered) via pandas library 
-    and loads it to django database 
+    and loads it to modules of prepared django database 
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])  # converters={'cantus_id' : str})
+    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])
     responsories = pd.read_csv('data/given/all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])
-    sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'provenance', 'drupal_path', 'cursus'])
+    bigger_sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'provenance', 'drupal_path', 'cursus'])
     geography = pd.read_csv('data/given/geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('data/given/feast.csv', usecols=['id', 'name', 'feast_code'])
 
     # Merge antiphons and responsories
     chant_data = pd.concat([antiphons, responsories])
 
-    # Filter feasts to use only those having more than 10 chants 
+    # Filter feasts to use only those having more than 5 chants 
     freq_of_feasts = chant_data['feast_id'].value_counts()
     bigger_feasts = freq_of_feasts.drop(freq_of_feasts[freq_of_feasts.values < 5].index).index.tolist()
     feasts_without_fragments = feasts[feasts['id'].isin(bigger_feasts)]
-    print(len(feasts), len(feasts_without_fragments))
-    # Filter chants based on filtered sources and feasts
-    chant_data_f = chant_data[chant_data['source_id'].isin(sources['drupal_path']) & chant_data['feast_id'].isin(feasts_without_fragments['id'])]
-    print(len(chant_data_f))
+
+    # Filter chants based on being in bigger sources and bigger feasts
+    chant_data_filtered = chant_data[chant_data['source_id'].isin(bigger_sources['drupal_path']) & chant_data['feast_id'].isin(feasts_without_fragments['id'])]
+
 
     # Database ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get ready databases
@@ -47,7 +48,7 @@ def run():
 
     
     # Fill Chant info
-    row_iter = chant_data_f.iterrows()
+    row_iter = chant_data_filtered.iterrows()
     objs = [
         Data_Chant( 
             cantus_id=row['cantus_id'],
@@ -61,7 +62,7 @@ def run():
     Data_Chant.objects.bulk_create(objs)
 
     # Fill Sources info
-    row_iter = sources.iterrows()
+    row_iter = bigger_sources.iterrows()
     objs = [
         Sources(
             title=row['title'],

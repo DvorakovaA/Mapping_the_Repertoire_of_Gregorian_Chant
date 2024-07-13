@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Gets external code shared by (almost) all pages in one one place -->
         {% load static %}
         <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}" />
         <script src="{% static 'leaflet/leaflet.js' %}"></script>
@@ -12,6 +13,7 @@
         <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}" />
         <script async src="{% static 'bootstrap/bootstrap.bundle.min.js' %}" ></script>
         
+        <!-- All visual stuff, no need for separate ones for each page -->
         <style>
             .tabcontent {
             display: none;
@@ -95,10 +97,9 @@
                 display: none;
             }
 
-            #navbar-app
-                {
+            #navbar-app{
                 font-size: larger;
-                }
+            }
 
         </style>
 
@@ -109,7 +110,7 @@
           
         {% block header %} 
          <!-- A grey horizontal navbar that becomes vertical on small screens -->
-            <nav class="navbar navbar-expand-sm bg-secondary navbar-dark sticky-top">
+            <nav class="navbar navbar-expand-sm bg-secondary navbar-dark sticky-top w-100">
                 <div class="container-fluid">
                   <ul class="navbar-nav">
                     <li class="nav-item">
@@ -124,7 +125,8 @@
                 </div>
               </nav>
         {% endblock %}
-
+        
+        <!-- Blocks that might be filled by pages -->
         <div id="content">
             {% block content %}
 

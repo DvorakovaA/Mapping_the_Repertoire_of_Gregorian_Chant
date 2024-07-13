@@ -1,8 +1,8 @@
 """
-Script with 
+File with 
 * function get_map_data that creates data structures com_map_data and cen_map_data
 which are used in javascript that creates leaflet map of communities
-* function that returns all provences geographical data to create map of all places
+* function that returns all provences geographical data to create map of all places same way
 """
 
 import matplotlib.pyplot as plt
@@ -11,18 +11,21 @@ from collections import Counter
 
 from .models import Sources, Geography
 
+# To change position of sources from one place
 MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025, 0.04], [-0.025, -0.04], [0.025, 0.04], 
          [0.012, 0.02], [0.012, -0.02], [-0.012, 0.02], [-0.012, -0.02], [0, 0.07], [0, -0.07], [0.05, 0], [-0.05, 0], 
          [0.05, 0.07], [-0.05, -0.07], [0.05, -0.07], [-0.05, 0.07]]
+
 
 def get_map_data(communities: list[set [str]], edges : list [tuple]):
     """
     Given communities of sources and info about conections beetween sources
     function constructs data structures for javascript that creates leaflet map
-    map_data = {map_sources_dict : {}, no_prov_sources : [], map_com_info : {}, map_cen_info : {}, edges : [], used_centuries : [], num_of_com : int, colors : []}
+    map_data = {map_sources_dict : {}, no_prov_sources : [], map_com_info : {}, 
+                map_cen_info : {}, edges : [], used_centuries : [], num_of_com : int, colors : []}
     """
     if communities != []: # We have data to show
-        # Inicialize final data structure
+        # Inicialize data structure to be returned
         map_data = {'edges' : edges}
 
         # Color scale for points and lines connecting them 
@@ -42,7 +45,8 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         map_com_info = {}
         map_cen_info = {}
         used_centuries = []
-        no_prov_sources = []
+        no_prov_sources = [] # List of source_ids
+        no_prov_sources_siglum = [] # source_id as well as siglum for nicer view
         used_provenances = Counter() # For position collisions
         for community in communities:
             for source in community:
@@ -63,8 +67,9 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
                     map_com_info[source] = i
                     map_cen_info[source] = source_info['num_century']
                     used_centuries.append(source_info['num_century'])
+                # Source with unknown provenance
                 except:
-                    #no_prov_sources.append((source, source_info['siglum'], i))
+                    no_prov_sources_siglum.append({'id' : source, 'siglum' : source_info['siglum']})
                     no_prov_sources.append(source)
             i+=1
         
@@ -75,6 +80,7 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         map_data['used_centuries'] = used_centuries
         map_data['map_cen_info'] = map_cen_info
         map_data['no_prov_sources'] = no_prov_sources
+        map_data['no_prov_sources_siglum'] = no_prov_sources_siglum
 
         return map_data
     else:

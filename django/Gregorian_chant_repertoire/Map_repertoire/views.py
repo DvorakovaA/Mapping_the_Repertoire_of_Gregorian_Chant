@@ -1,6 +1,5 @@
 """
-Script that contains functions which handle 
-displaying of htmls and data transfer between script components
+Function that handle displaying of html files and data transfer between components
 """
 
 from django.shortcuts import render
@@ -8,7 +7,7 @@ from .forms import InputForm
 from .models import Feasts
 
 from Map_repertoire.communities import get_communities
-from Map_repertoire.table_construct import get_table
+from Map_repertoire.table_construct import get_table_data
 from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
 
 
@@ -24,9 +23,9 @@ def index(request):
 
 def tool(request):
     """
-    Function that manages page of app itself - displays input form and shows results (table and map)
+    Function that manages page with tool - displays request form and shows results (table and map)
     """
-    context = {}
+    context = {} # back-end and front-end communication variable
 
     form = InputForm(request.POST or None, initial={'feast' : '---'})
     context = {"form" : form}
@@ -44,7 +43,7 @@ def tool(request):
 
         if '0' in request.session.get('feast'): # All feasts selected
             context['feasts'] = ['All feasts']
-            feast_ids = ['All'] #list(Feasts.objects.values_list('feast_id', flat=True))
+            feast_ids = ['All']
         else:
             feast_names = []
             for id in request.session.get('feast'):
@@ -59,13 +58,13 @@ def tool(request):
             office_dict = {'V' : 'office_v', 'M' : 'office_m', 'L' : 'office_l', 'V2' : 'office_v2'}
             for off in request.session['office']:
                     filtering_office.append(office_dict[off])
-        # else means filtering_office is empty list -> we select All
+        # else means filtering_office is empty list -> we select All offices
 
         communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'])
         context['sig_level'] = sig_level
 
         context['map_data'] = get_map_data(communities, edges_info)
-        context['tab_data'] = get_table(communities, feast_ids, filtering_office)
+        context['tab_data'] = get_table_data(communities, feast_ids, filtering_office)
         
     return render(request, "map_repertoire/tool.html", context)
 

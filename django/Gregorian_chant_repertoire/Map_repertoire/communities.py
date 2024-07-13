@@ -1,6 +1,6 @@
 """
 Module providing main function get_communities
-that finds communities on sources (by chants) for given feast(s)
+that finds communities on sources (by chants) for given feast(s) and office selection
 by given algorithm (and metric/number of topics)
 """
 
@@ -27,6 +27,7 @@ def Jaccard_metric(a : list, b : list):
         return len(set(a).intersection(set(b))) / len(set(a).union(set(b)))
     else:
         return 0
+
 
 @functools.lru_cache(maxsize=None)
 def JensenShannon_metric(s1, s2):
@@ -77,7 +78,7 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
     """
     Function that constructs data structures that are
     used by clustering algorithms and for construction of graph on map 
-    based on given feast ids, metric to be used (Jaccard od topic model comparison)
+    based on given feast ids, metric to be used (Jaccard or topic model comparison)
     and offices to be considered -> returns: source_chants_dict, edges_info, edges, used_sources
     """
     drupals = Sources.objects.values_list('drupal_path')
@@ -88,7 +89,7 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
     if filtering_office != []:
         DO_FILTER_OFFICE = True
     
-    # All all data
+    # All all data = takes long to construct, co we load them ready
     if feast_ids == ['All'] and not DO_FILTER_OFFICE:
         with lzma.open("Map_repertoire/big_data_structures/all_source_chants_dict.txt", "rb") as file:
             source_chants_dict = pickle.load(file)
@@ -99,19 +100,19 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
                     edges = pickle.load(file)
                 with lzma.open("Map_repertoire/big_data_structures/all_jaccard_edges_info.txt", "rb") as file:
                     edges_info = pickle.load(file)
-            else:
+            else: # topic modeling compare
                 with lzma.open("Map_repertoire/big_data_structures/all_top_dist_edges.txt", "rb") as file:
                     edges = pickle.load(file)
                 with lzma.open("Map_repertoire/big_data_structures/all_top_dist_edges_info.txt", "rb") as file:
                     edges_info = pickle.load(file)
-        else:
+        else: # Uses topic modeling as detection principle
             edges = []
             with lzma.open("Map_repertoire/big_data_structures/all_topics_edges_info.txt", "rb") as file:
                     edges_info = pickle.load(file)
 
 
     else: # other selection than All feasts and All offices
-        if feast_ids == ['All']: # W 
+        if feast_ids == ['All']: 
             # Construct needed data structures to construct networks from all data
             for source_id in drupals:
                 chants_of_source = []
@@ -138,6 +139,7 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
                     used_sources.append(source_id[0])
                     source_chants_dict[source_id[0]] = chants_of_source
         
+        # Complete columns
         used_sources = list(set(used_sources))
         len_s = len(used_sources)
         s1_column = [j for i in [len_s * [s] for s in used_sources] for j in i]
@@ -229,7 +231,7 @@ def get_louvein_communities(feast_ids : list[str], filtering_office : list[str],
 # DBSCAN specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_distance_matrix(source_chants_dict, used_sources, metric : str):
     '''
-    Construct distance matrix for sources based on chants in them
+    Construct distance matrix for given sources based on chants in them
     using given metric
     '''
     source_dict = {}
@@ -262,10 +264,18 @@ def get_distance_matrix(source_chants_dict, used_sources, metric : str):
 
 
 def shuffle(perm, sources):
+    ''' 
+    Shuffles sources based on given permutation of indexess
+    '''
     shuffled_sources = [sources[j] for j in perm]
     return shuffled_sources
 
+
 def unshuffle(perm, labels):
+    '''
+    Restore original order of elemenets from permutation,
+    that was used for their shuffling
+    '''
     unshuffled_labels = np.zeros(len(labels))
     for i, j in enumerate(perm):
         unshuffled_labels[j] = labels[i]
@@ -303,11 +313,12 @@ def get_dbscan_communities(feast_ids : list[str], filtering_office : list[str], 
     return communities, edges_info, sig_level
 
 
+
 # Topic model specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_topic_model_communities(feast_ids : list[str], filtering_office : list[str], add_info_algo : str):
     ''''
     Returns communities based on how sources (=documents) are devided into topic groups
-    based on chants in them and info about edges for map construction
+    based on chants in them and info about edges for map construction while using LDA
     '''
     source_chants_dict, edges_info, _, used_sources = get_network_info(feast_ids=feast_ids, filtering_office=filtering_office, compare_metrics="", get_shared=False)
 
@@ -333,7 +344,7 @@ def get_topic_model_communities(feast_ids : list[str], filtering_office : list[s
     result = model.transform(trans_data)
     labels = result.argmax(axis=1)
 
-    # Create not lables format of data
+    # Create not lables format of data (dict if label number : [source_ids])
     groups = set(labels)
     communities_dict = {}
     for label in groups:
@@ -344,7 +355,7 @@ def get_topic_model_communities(feast_ids : list[str], filtering_office : list[s
     return list(communities_dict.values()), edges_info, '---'
 
 
-
+# Common ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_communities(feast_ids : list[str], filtering_office : list[str], algorithm : str, add_info_algo : str):
     """
     Main function of this script
@@ -360,6 +371,7 @@ def get_communities(feast_ids : list[str], filtering_office : list[str], algorit
     else: #Topic models
         communities, edges_info, sig_level = get_topic_model_communities(feast_ids, filtering_office, add_info_algo)
 
+    # Order communities based on their size
     communities.sort(key=len, reverse=True)
 
     return communities, edges_info, sig_level

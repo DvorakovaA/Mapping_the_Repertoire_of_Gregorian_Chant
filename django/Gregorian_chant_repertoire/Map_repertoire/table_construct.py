@@ -1,9 +1,9 @@
 '''
-Script providing function to construct result table of source communities 
+File providing function to construct result table of source communities 
 found by choosen principle
-Table on page then contains info about particular chants for each community and each office
+Results table on tool page then contains info about particular chants for each community and each office
 It is constructed as dictionary of three parts
-    - head - header of table - CommunityXY and number of sources in it
+    - head - header of table - CommunityXY and number of sources in it with certain colour background
     - body - offices as rows - chants ordered by frequnecy in particular community (column)
     - tail - drupal path and siglum of sources in community
 '''
@@ -16,7 +16,7 @@ from .models import Sources, Data_Chant
 
 
 
-def get_table(communities : list[set [str]], feast_ids : list[str], filtering_office : list[str]) -> dict:
+def get_table_data(communities : list[set [str]], feast_ids : list[str], filtering_office : list[str]) -> dict:
     '''
     Function that constructs data structure readable for django templating language,
     so it is possible to present results of community search for some feast(s) in table
@@ -51,7 +51,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
         # Get head part, tail part and collect chants and offices
         chants_of_community = {}
         used_offices = []
-        i = 0  # number for assignement to each community
+        i = 0  # number for assignement to each community in header and for indexing in construction
         for community in communities:
             # Head part
             tab_data['head'].append({'com' : "Community "+str(i+1), 'sources' : str(len(community))+" sources", 'color' : colors[i]})
@@ -60,7 +60,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
             tab_data['tail'].append([])
             for source_id in community:
                 tab_data['tail'][i].append({'source_id' : source_id, 'siglum' : Sources.objects.filter(drupal_path = source_id).values_list('siglum')[0][0]})
-            # Sort sources based on siglum to better display in table tail
+            # Sort sources based on siglum to nicer display in table tail
             tab_data['tail'][i].sort(key=lambda x : x['siglum'])
 
             # Collecting part
@@ -69,20 +69,21 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                 chants_of_community[i] = []
                 used_offices = list(OFFICES.keys())
                 for source_id in community:
-                    # Check for duplicates of CIDs in one table cell
+                    # Check for duplicates of CIDs within one source
                     chants_of_source_dict = {}
                     for chant in Data_Chant.objects.filter(source_id = source_id).values():
                         chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                    # 
                     chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
                     chants_of_community[i] += chants_of_source
 
             else: # Not all feasts
                 chants_of_feasts = []
                 for feast_id in feast_ids:
-                    chants_of_feasts += Data_Chant.objects.filter(feast_id = feast_id).values()
+                    chants_of_feasts = Data_Chant.objects.filter(feast_id = feast_id).values()
                     used_offices += [chant['office_id'] for chant in chants_of_feasts]
                     for source_id in community:
-                        # Check for duplicates of CIDs in one table cell
+                        # Check for duplicates of CIDs within one table cell
                         chants_of_source_dict = {}
                         for chant in chants_of_feasts:
                             if chant['source_id'] == source_id:
@@ -112,7 +113,7 @@ def get_table(communities : list[set [str]], feast_ids : list[str], filtering_of
                     frequency = Counter(chant for chant in community_office_chants)
                     ordered_freq = [k for k in frequency.most_common()]
                     uncollapsed_chant_info = []
-                    # Take six most frequent chants for uncollapsed
+                    # Take six most frequent chants for being uncollapsed
                     j = 0
                     while j < 6:
                         try:

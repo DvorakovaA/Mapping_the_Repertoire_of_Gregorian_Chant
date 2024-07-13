@@ -1,3 +1,8 @@
+// Library from https://github.com/rowanwins/Leaflet.SvgShapeMarkers.git
+
+// Enriched by Canvas support for square and basic triangle (bellow) 
+// with visual settings suited for my thesis (opacity, outline)
+
 (function (factory) {
     typeof define === 'function' && define.amd ? define(factory) :
     factory();
@@ -125,6 +130,9 @@
         },
     });
 
+
+
+// Canvas technology support
 
     L.Canvas.include({
         _updateShapeCanvas: function _updateShapeCanvas(layer) {

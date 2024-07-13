@@ -1,6 +1,8 @@
-// Function for construction of leaflet maps given map_data
-// Function for construction of leaflet map of all provenances given map_data_all
+// File with two functions:
+//  Function for construction of leaflet maps given map_data
+//  Function for construction of leaflet map of all provenances given map_data_all
 
+// Center of returned map (centre of Europe somewhere in Slovenia, we do not need to view Scandinavia)
 const center = [47.466667, 11.166667]
 
 function getMaps(map_data) {
@@ -23,7 +25,7 @@ function getMaps(map_data) {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(cen_map);
     
-    // Pane to preserve good order on z axis (points on top)
+    // Pane to preserve good order on z axis (points on top of edges)
     com_map.createPane("point");
     com_map.createPane("line");
     com_map.getPane("point").style.zIndex = 650;
@@ -34,9 +36,9 @@ function getMaps(map_data) {
     
     // We have data to show
     if (map_data.num_of_communities) {
-        //Renderers speed up display up via Canvas
-        var comRenderer = L.canvas(); //{ padding: 0.5 });
-        var cenRenderer = L.canvas(); //{ padding: 0.5 });
+        //Renderers speed up display via Canvas (instead of default SVG)
+        var comRenderer = L.canvas();
+        var cenRenderer = L.canvas(); 
 
         // Get ready layer control for community layers
         var comLayerControl = L.control.layers(null, null, {collapsed:false});
@@ -51,7 +53,8 @@ function getMaps(map_data) {
         com_layers['shared'] = sharedCom;
         com_layers['shared'].addTo(com_map);
         comLayerControl.addOverlay(com_layers['shared'], "All shared edges");
-        // Create layer for each community and add it to layerControl
+        // Create layer for each community and its edges
+        // Add it to layerControl
         for(let i = 0; i < map_data.num_of_communities; i++) {
             const com_name = "Community " + (i+1);
             var l = L.layerGroup();
@@ -80,28 +83,23 @@ function getMaps(map_data) {
         cen_layers['shared'].addTo(cen_map);
         cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
         // Create layer for each century group and add it to layerControl
+        // no edges layer needed
         for(century of map_data.used_centuries) {
             var cen_name = century + "th century";
             if (century == "unknown") {
                 cen_name = "unknown";
             }
-
             var l = L.layerGroup();
             cen_layers[century] = l;
             l.addTo(cen_map);
             cenLayerControl.addOverlay(l, cen_name);
-
-            //var lE = L.layerGroup();
-            //var edgeKey = century+"edges";
-            //cen_layers[edgeKey] = lE;
-            //lE.addTo(cen_map);
-            //cenLayerControl.addOverlay(lE, cen_name+" edges");
         }
 
-        // First add edges
+        // First add edges to particular layers
         for (const line of map_data.edges) {
-            // Check if we have coordinates
+            // Check if we have coordinates for such edge (both ends have known provenance)
             if(! map_data.no_prov_sources.includes(line[0]) &&  ! map_data.no_prov_sources.includes(line[1])) {
+                // Collect info
                 const lat1 = map_data.map_sources_dict[line[0]].lat
                 const long1 = map_data.map_sources_dict[line[0]].long
                 const lat2 = map_data.map_sources_dict[line[1]].lat
@@ -134,7 +132,6 @@ function getMaps(map_data) {
                 {
                     var edge = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : map_data.colors[com_id], weight : weight, pane : "line"});
                     edge.bindPopup(line_popup);
-                    //edge.addTo(cen_layers[map_data.map_cen_info[line[0]]+"edges"]);
                     edge.addTo(cen_layers['all']);
                 }
                 // Edge shared between century groups
@@ -149,6 +146,7 @@ function getMaps(map_data) {
 
         // Add sources markers
         for(source in map_data.map_com_info) {
+            // Collect info
             const lat = map_data.map_sources_dict[source].lat
             const long = map_data.map_sources_dict[source].long
             const marker_popup = "<a href="+source+" target=\"_blank'\" rel=\"noopener noreferrer\">"+map_data.map_sources_dict[source].siglum + "</a>" + 
@@ -188,7 +186,7 @@ function getMaps(map_data) {
                 point2.addTo(cen_layers[map_data.map_cen_info[source]]);
             }
         }
-    
+        // Finally add layer controls (and layers in them) to the maps
         comLayerControl.addTo(com_map);
         cenLayerControl.addTo(cen_map);
     }
@@ -213,6 +211,7 @@ function getMapOfAllSources(map_all_data) {
         const long = point[2];
         const popup_info = point[0];
         
+        // Create marker for source
         var marker = L.circleMarker([lat, long], {radius : 8, color : '#2e8bc0'});
         marker.bindPopup(popup_info);
         marker.addTo(complete_map);

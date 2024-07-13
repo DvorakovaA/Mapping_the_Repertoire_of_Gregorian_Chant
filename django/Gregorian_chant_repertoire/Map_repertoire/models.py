@@ -1,5 +1,5 @@
 """
-Script containing definitions of used models (= database tables) 
+Class definitions of used models (= database tables) and their fields 
 """
 
 from django.db import models
@@ -9,7 +9,7 @@ class Data_Chant(models.Model):
     """
     Table for data about all antiphons and responsories (chants)
     """
-    cantus_id = models.CharField(("cantus_id"), max_length=20) # PK
+    cantus_id = models.CharField(("cantus_id"), max_length=20) # PK - setting it as "primary_key = True" did not work
     feast_id = models.CharField(("feast_id"), max_length=20) #FK
     source_id = models.CharField(("source_id"), max_length=500, null=True) #FK
     office_id = models.CharField(("office_id"), max_length=20, null=True)
