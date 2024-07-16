@@ -1,9 +1,9 @@
-## Mapování gregoriánského repertoáru - výzkum
+## Mapping the Repertoire of Gregorian Chant - research
 
-Výzkumná část práce, jak je popsána v kapitole 4.  
+Research part of the thesis, as described in Chapter 4.   
 
-Pro replikaci výpočtů je potřeba tuto složku mít umístěnou ve stejné složce jako `data` a dále mít nainstalovaný Python (verze 3.11.6 a vyšší) a dále jeho knihovny podle souboru `research_requirements.txt`.
+To replicate the computations, it is necessary to have this folder located in the same folder as `data` and also to have Python (version 3.11.6 and above) and its libraries installed according to the `research_requirements.txt` file.
 
-Složka `saved_results` obsahuje předpočítané výsledky některých časově náročných výpočtů (název souboru odpovídá názvu proměnné v příslušném výzkumném jupyter notebooku, navíc jsou v sešitech hned pod buňkou s příslušným výpočtem ponechány zakomentované buňky s načtením odpovídajícího souboru).  
+The `saved_results` folder contains the precomputed results of some time-consuming computations (the file name corresponds to the variable name in the corresponding research jupyter notebook, in addition, commented cells loading corresponding file are left in the notebooks immediately below the cell with the corresponding computation).  
 
-Obsah jednotlivých jupyter notebook souborů je u každého uveden v úvodní buňce.
+The contents of each jupyter notebook file are listed in its initial cell.

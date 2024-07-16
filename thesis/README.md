@@ -1,12 +1,12 @@
-### Mapování gregoriánského repertoáru
-(Mapping the Repertoire of Gregorian Chant)  
+## Mapping the Repertoire of Gregorian Chant
+(Mapování gregoriánského repertoáru)  
 Anna Dvořáková, 2024
 
-Příloha bakalářské práce.  
-Podsložky:  
-- `app` - složka obsahuje vše potřebné ke spuštění lokální aplikace poskytující nástroj pro muzikology (dokumentace viz kapitoly 5 a 6)
-- `data`- složka s datovými soubory (popsány v kapitole 3)
-- `research` - složka s jupyter notebooky, které pokrývají výzkumné experimenty v práci, viz kapitola 4   
-(pro replikace experimentů musí `research` ležet vedle složky `data`)
+Attachment to the bachelor thesis.  
+Subfolders:  
+- `app` - folder contains everything needed to run a local application providing a tool for musicologists (see Chapters 5 and 6 for documentations)
+- `data`- folder with data files (described in chapter 3)
+- `research` - folder with jupyter notebooks that cover the research experiments in the thesis, see Chapter 4   
+(to replicate the experiments, `research` folder must be placed next to the `data` folder)
 
-Soubor `thesis_requirements.txt` obsahuje používané knihovny k instalaci pro výzkum i aplikaci. Příslušné části mají ve svých složkách soubory s požadavky pouze pro danou část práce.
+The `thesis_requirements.txt` file contains Python libraries for both research and application. Each part has its requirements file in its directory that can be used for that particular part of the thesis.

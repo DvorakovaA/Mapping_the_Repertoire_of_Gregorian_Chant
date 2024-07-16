@@ -1,8 +1,7 @@
-## Mapování gregoriánského repertoáru - nástroj
+## ## Mapping the Repertoire of Gregorian Chant - tool
 
-Složka Gregorian_chant_repertoire obsahuje aplikaci naprogramovanou ve frameworku Django. Jedná se o nástroj pro muzikology pomáhající se zkoumáním výsledků výpočetního hledání repertoárových tradic v rámci gregoriánského chorálu.
+The `Gregorian_chant_repertoire` folder contains an application programmed in the Django framework. It is a tool for musicologists to help them with exploring the results of a computational search for repertoire traditions within Gregorian chant.
 
-Kroky k jejímu lokálnímu spuštění obsahuje příloha A2. Uživatelské dokumentaci odpovídá kapitola 5, vývojové kapitola 6. Spuštění aplikace není závislé na zbytku této přílohy.
+The steps to run the application locally are given in Appendix A2. User documentation corresponds to Chapter 5, development to Chapter 6. Running the application is not dependent on the rest of this appendix.
 
-
-Pro spuštění aplikace je třeba mít nainstalovaný Python (verze 3.11.6 a vyšší) a dále jeho knihovny podle souboru `app_requirements.txt`.
+In order to run the application, Python (version 3.11.6 and higher) as well as its libraries listed in `app_requirements.txt` file must be installed.

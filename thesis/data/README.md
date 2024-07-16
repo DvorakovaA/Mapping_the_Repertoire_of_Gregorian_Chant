@@ -1,5 +1,5 @@
-## Mapování gregoriánského repertoáru - data
+## ## Mapping the Repertoire of Gregorian Chant - data 
 
-Datová sada použitá při výzkumu (její kopii, spolu se souborem provenance_ids.csv, využívá i nástroj).  
+The dataset used in the research. (A copy of this, along with the `provenance_ids.csv` file, is used by the tool.) 
 
-Podrobný popis jednotlivých souborů je uveden v kapitole 3 (Datová sada).
+A detailed description of each file is given in Chapter 3.
