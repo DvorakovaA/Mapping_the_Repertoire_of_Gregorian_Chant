@@ -60,13 +60,16 @@ def find_comms_stability(community_versions : list[list[set[str]]]):
                     for s_pair in combinations(com, 2):
                         friends_matrix[source_to_id[s_pair[0]], source_to_id[s_pair[1]]] += 1
             unique, counts = np.unique(friends_matrix.flatten(), return_counts=True)
-            try:
-                twos = dict(zip(unique, counts))[2]
-                sig_level = (twos + len(source_to_id)) / (np.count_nonzero(friends_matrix) + len(source_to_id))
-            except:
-                sig_level = len(source_to_id) / (np.count_nonzero(friends_matrix) + len(source_to_id))
-            jaccard.append(sig_level)
-        
+            if friends_matrix.size != 0:
+                try:
+                    twos = dict(zip(unique, counts))[2]
+                    sig_level = (twos + len(source_to_id)) / (np.count_nonzero(friends_matrix) + len(source_to_id))
+                except:
+                    sig_level = len(source_to_id) / (np.count_nonzero(friends_matrix) + len(source_to_id))
+                jaccard.append(sig_level)
+            else:
+                return [], 0
+            
         return community_versions[0], round(np.mean(jaccard), 2)
         
     else:
