@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+
+    {% block content %}
+        
+        <div class="container ms-4 mt-3 mr-1">
+            <h3>Registration</h3> <br>
+            
+            {% if not request.user.is_authenticated %}
+                <form method = POST> 
+                    {% csrf_token %}
+                    <label for="{{ form.username.id_for_label }}">Username:</label>
+                    <div class="ms-3">
+                        {{ form.username }}
+                    </div>
+
+                    <label for="{{ form.password1.id_for_label }}">Password:</label>
+                    <div class="ms-3">
+                        {{ form.password1 }}
+                    </div>
+
+                    <label for="{{ form.password2.id_for_label }}">Password confirmation:</label>
+                    <div class="ms-3">
+                        {{ form.password2 }}
+                    </div>
+                    <br>
+
+                    <button class="btn btn-outline-secondary" type="submit"> Register</button>
+                </form>
+                <br><br>
+                <p> Already have account? Please, <a href="/map_repertoire/login" >login</a>.</p> <br>
+
+            {% else %}
+                <p> You are already logged in. </p> <br>
+            {% endif %}
+
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/'">Back to insertion form</button> <br>
+        </div>
+    {% endblock %}

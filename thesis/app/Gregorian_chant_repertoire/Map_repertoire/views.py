@@ -5,6 +5,9 @@ Function that handle displaying of html files and data transfer between componen
 from django.shortcuts import render
 from .forms import InputForm
 from .models import Feasts
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.http import HttpResponseRedirect
+from django.contrib.auth import login, logout
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
@@ -74,3 +77,44 @@ def help(request):
     Function that manages displaying of help page
     """
     return render(request, "map_repertoire/help.html")
+
+
+def register_view(request):
+    """
+    Function providing page with registration form (and registration) for new users
+    """
+    reg_form = UserCreationForm(request.POST or None)
+    if reg_form.is_valid():
+        new_user = reg_form.save()
+        return HttpResponseRedirect('/map_repertoire/login/', request)
+    
+    context = {"form": reg_form}
+    return render(request, 'map_repertoire/register.html', context)
+
+
+def login_view(request):
+    """
+    Function porvading page with login form for registrated users
+    """
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return HttpResponseRedirect('/map_repertoire/')
+    else:
+        form = AuthenticationForm(request)
+
+    context = {"form" : form}
+    return render(request, 'map_repertoire/login.html', context)
+
+
+def logout_view(request):
+    """
+    Function porvading logout for users (no page, just redirect action)
+    """
+    if request.user.is_authenticated:
+        logout(request)
+        return HttpResponseRedirect('/map_repertoire/')
+    else:
+        return HttpResponseRedirect('/map_repertoire/')

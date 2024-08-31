@@ -101,6 +101,10 @@
                 font-size: larger;
             }
 
+            .helptext {
+                display: none;
+            }
+
         </style>
 
         <title>{% block title %} Map_repertoire {% endblock %}</title>
@@ -117,6 +121,8 @@
                       <a id="navbar-app" class="nav-link active ms-3" href = '/map_repertoire/'>Map Gregorian chant repertoire</a>
                     </li>
                   </ul>
+
+
                   <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                       <a class="nav-link ms-auto" href="/map_repertoire/help">Help</a>
@@ -125,6 +131,23 @@
                 </div>
               </nav>
         {% endblock %}
+
+
+        <div id="side_buttons" style="float: right;">
+            <div class="container ms-4 mt-3 mr" style="float:right">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item" id="navbar-app" style="float:right">
+                    {{ request.user.username }}
+                </li>
+                {% else %}
+                        <h6> </h6>
+                {% endif %}
+            </div>
+
+            {% block side_buttons %}
+
+            {% endblock %}
+        </div>
         
         <!-- Blocks that might be filled by pages -->
         <div id="content">

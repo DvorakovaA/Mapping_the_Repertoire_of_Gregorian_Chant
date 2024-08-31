@@ -1,0 +1,23 @@
+<!-- Log in page-->
+{% extends "base.html" %}
+
+    {% block content %}
+    <!-- Add logout button to the right... -->
+    <div class="container ms-4 mt-3 mr-1">
+        {% if not request.user.is_authenticated %}
+            <form method = POST> 
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-outline-secondary" type="submit"> Login </button>
+            </form>
+            <br><br>
+            <p> Need an account? Please, <a href="/map_repertoire/register" >register</a>.</p> <br>
+
+        {% else %}
+            <p> You are already logged in. </p> <br>
+        {% endif %}
+
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/'">Back to insertion form</button> <br>
+    </div>
+
+    {% endblock %}
