@@ -1,6 +1,13 @@
 <!-- Page with tool itself = request form + results -->
 {% extends "base.html" %}
 
+{% block side_buttons %}
+  <div class="container ms-4 mt-3 mr" style="float:right">
+    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/upload_dataset'" style="float:right">Add custom dataset</button> <br><br>
+  </div>
+{% endblock %}
+
+
 
 {% block content %}
 <!-- Request form window -->

@@ -118,3 +118,8 @@ def logout_view(request):
         return HttpResponseRedirect('/map_repertoire/')
     else:
         return HttpResponseRedirect('/map_repertoire/')
+    
+
+def upload_dataset(request):
+    context = {}
+    return render(request, "map_repertoire/upload_dataset.html", context)
