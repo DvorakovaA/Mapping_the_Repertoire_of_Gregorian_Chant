@@ -122,4 +122,4 @@ def logout_view(request):
 
 def upload_dataset(request):
     context = {}
-    return render(request, "map_repertoire/upload_dataset.html", context)
+    return render(request, "map_repertoire/datasets.html", context)

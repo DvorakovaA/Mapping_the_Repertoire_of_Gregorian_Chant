@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block side_buttons %}
+    <div class="container ms-4 mt-3 mr" style="float:right">
+    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:right">Back</button> <br><br>
+    </div>
+    {% endblock %}
+
+{% block content %}
+    <div class="container ms-4 mt-3 mr-1">
+        <h3>Upload your own dataset</h3>
+    
+        <form enctype="multipart/form-data" method="post">
+
+            <input type="submit" value="Add" class="btn btn-outline-secondary">
+        </form>
+    </div>
+    <div class="container ms-4 mt-3 mr-1">
+        <h3>Delete your dataset(s)</h3>
+        <!-- Checkboxes with users dataset to be thicked-->
+        <form>
+
+            <input type="submit" value="Delete selected datasets" class="btn btn-outline-secondary">
+        </form>
+    </div>
+{% endblock %}
