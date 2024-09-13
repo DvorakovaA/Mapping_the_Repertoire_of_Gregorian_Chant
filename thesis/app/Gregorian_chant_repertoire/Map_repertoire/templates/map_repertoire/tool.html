@@ -3,7 +3,7 @@
 
 {% block side_buttons %}
   <div class="container ms-4 mt-3 mr" style="float:right">
-    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/upload_dataset'" style="float:right">Add custom dataset</button> <br><br>
+    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'" style="float:right">Maintain your datasets</button> <br><br>
   </div>
 {% endblock %}
 
@@ -11,7 +11,8 @@
 
 {% block content %}
 <!-- Request form window -->
-<div class="container ms-4 mt-3 border border-secondary rounded">
+<div class="input-form">
+<div class="container ms-4 mt-3 mr-2 border border-secondary rounded">
   <h3>Request form</h3> <br>
   <form method="post">
       {% csrf_token %}
@@ -54,10 +55,17 @@
           {{ form.number_of_topics }}
         </div>
       </div>
+      <div id="numberOfTopicsSelection">
+        <label for="{{ form.number_of_topics.id_for_label }}">Number of topics:</label>
+        <div class="ms-3">
+          {{ form.number_of_topics }}
+        </div>
+      </div>
       <br>
       <input type="submit" value="Show" class="btn btn-outline-secondary">
   </form> 
   <br>
+</div>
 </div>
 {% endblock %}
 
