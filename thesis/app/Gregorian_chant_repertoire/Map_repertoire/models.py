@@ -14,6 +14,8 @@ class Data_Chant(models.Model):
     source_id = models.CharField(("source_id"), max_length=500, null=True) #FK
     office_id = models.CharField(("office_id"), max_length=20, null=True)
     incipit = models.CharField(("incipit"), max_length=500, null=True)
+    dataset = models.CharField(("dataset"), max_length=500, null=True)
+    owner = models.CharField(("owner"), max_length=50, null=True)
 
 
 class Sources(models.Model):
@@ -47,3 +49,13 @@ class Feasts(models.Model):
     feast_id = models.CharField(("feast_id"), max_length=20, primary_key=True) #PK
     feast_code = models.CharField(("feast_code"), max_length=20)
     name = models.CharField(("name"), max_length=500)
+
+
+class Datasets(models.Model):
+    """
+    Table for info about user's datasets
+    ID form: owner_name
+    """
+    dataset_id = models.CharField(("dataset_id"), max_length=100, null=True) #PK
+    name = models.CharField(("name"), max_length=500)
+    owner = models.CharField(("owner"), max_length=50)
