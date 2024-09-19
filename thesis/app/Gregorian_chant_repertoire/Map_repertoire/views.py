@@ -3,7 +3,7 @@ Function that handle displaying of html files and data transfer between componen
 """
 
 from django.shortcuts import render
-from .forms import InputForm
+from .forms import InputForm, UploadFileForm, DeleteDatasetForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect
@@ -12,6 +12,8 @@ from django.contrib.auth import login, logout
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
 from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
+
+from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset 
 
 
 def index(request):
@@ -29,20 +31,20 @@ def tool(request):
     Function that manages page with tool - displays request form and shows results (table and map)
     """
     context = {} # back-end and front-end communication variable
-
-    form = InputForm(request.POST or None, initial={'feast' : '---'})
+    form = InputForm(data=request.POST or None, initial={'feast' : '---'}, user=request.user.username)
     context = {"form" : form}
+
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
         request.session['all'] = form.cleaned_data['all']
         request.session['office'] = form.cleaned_data['office']
         request.session['algo'] = form.cleaned_data['community_detection_algorithm']
+        request.session['datasets'] = form.cleaned_data['datasets']
+
         if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
              request.session['add_info_algo'] = form.cleaned_data['metric']
         else:
              request.session['add_info_algo'] = form.cleaned_data['number_of_topics']
-
-        context = {"form" : form}
 
         if '0' in request.session.get('feast'): # All feasts selected
             context['feasts'] = ['All feasts']
@@ -63,12 +65,12 @@ def tool(request):
                     filtering_office.append(office_dict[off])
         # else means filtering_office is empty list -> we select All offices
 
-        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'])
+        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'], request.session['datasets'])
         context['sig_level'] = sig_level
 
         context['map_data'] = get_map_data(communities, edges_info)
-        context['tab_data'] = get_table_data(communities, feast_ids, filtering_office)
-        
+        context['tab_data'] = get_table_data(communities, feast_ids, filtering_office, request.session['datasets'])
+
     return render(request, "map_repertoire/tool.html", context)
 
 
@@ -121,5 +123,28 @@ def logout_view(request):
     
 
 def upload_dataset(request):
-    context = {}
+    add_form = UploadFileForm(request.POST, request.FILES)
+    delete_form = DeleteDatasetForm(data=request.POST, user=request.user.username)
+    context = {"add_form" : add_form, "delete_form" : delete_form}
+    
+    # Dataset addition
+    if add_form.is_valid():
+        sources_file = request.FILES.get('sources_file', None)
+        validity, error_message = check_files_validity(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
+        request.session['error_message'] = error_message
+
+        if validity:
+            integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
+        return HttpResponseRedirect("")
+    
+    # Dataset removal
+    if delete_form.is_valid():
+        datasets = delete_form.cleaned_data['dataset_select']
+        print(datasets)
+        for dataset in datasets:
+            delete_dataset(dataset)
+        request.session['error_message'] = ""
+        return HttpResponseRedirect("")
+    
+
     return render(request, "map_repertoire/datasets.html", context)

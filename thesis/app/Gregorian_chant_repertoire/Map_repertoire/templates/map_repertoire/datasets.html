@@ -7,20 +7,63 @@
     {% endblock %}
 
 {% block content %}
-    <div class="container ms-4 mt-3 mr-1">
-        <h3>Upload your own dataset</h3>
-    
-        <form enctype="multipart/form-data" method="post">
+    {% if request.user.is_authenticated %}
+        <div class="container ms-4 mt-3 mr-1">
+            <div class="container ms-4 mt-3 mr-2 border border-secondary rounded">
+                <h3>Upload your own dataset</h3>
 
-            <input type="submit" value="Add" class="btn btn-outline-secondary">
-        </form>
-    </div>
-    <div class="container ms-4 mt-3 mr-1">
-        <h3>Delete your dataset(s)</h3>
-        <!-- Checkboxes with users dataset to be thicked-->
-        <form>
+                <form enctype="multipart/form-data" method="post" class="post-form", id="add_form">
+                    {% csrf_token %}
+                    <label for="{{ add_form.name.id_for_label }}">Dataset name:</label>
+                        <div class="ms-3">
+                            {{ add_form.name }}
+                        </div>
+                    <br>
+                    <label for="{{ add_form.chants_file.id_for_label }}">Chants file selection:</label>
+                        <div class="ms-3">
+                            {{ add_form.chants_file }}
+                        </div>
+                    <br>
+                    <label for="{{ add_form.sources_file.id_for_label }}">Sources file selection: <br> <i>(Only of needed)</i></label>
+                        <div class="ms-3">
+                            {{ add_form.sources_file }}
+                        </div>
+                    <br>
 
-            <input type="submit" value="Delete selected datasets" class="btn btn-outline-secondary">
-        </form>
+                    {% if request.session.error_message %}
+                        <p style="color:red;">{{ request.session.error_message }}</p>
+                    {% endif %}
+
+                    <input type="submit" value="Add" class="btn btn-outline-secondary", id="submit_add_form_btn">
+                </form>
+                <br>
+            </div>
+        </div>
+        <br>
+        <div class="container ms-4 mt-3 mr-1">
+            
+            <!-- Checkboxes with users dataset to be thicked-->
+            <div class="container ms-4 mt-3 mr-2 border border-secondary rounded">
+                <h3>Delete your dataset(s)</h3> <br>
+                <form method="post", id="delete_form">
+                    {% csrf_token %}
+                    <label for="{{ delete_form.dataset_select.id_for_label }}">Select dataset(s) to be removed:</label>
+                        <div class="ms-3">
+                            {{ delete_form.dataset_select }}
+                        </div>
+                    <br>
+                    <input id="submit_del_form_btn", type="submit" value="Delete selected datasets" class="btn btn-outline-secondary">
+                </form>
+                <br>
+            </div>
+        </div>
+    {% else %}
+    <div class="container ms-4 mt-3 mr-1">
+        <h5>You need to be logged in first.</h5> <br>
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/login'">Login</button> <br><br>
+
+
     </div>
+    {% endif %}
+
 {% endblock %}

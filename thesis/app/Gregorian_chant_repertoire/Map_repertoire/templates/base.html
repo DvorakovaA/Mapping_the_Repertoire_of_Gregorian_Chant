@@ -141,7 +141,7 @@
             <div class="container ms-4 mt-3 mr" style="float:right">
                 {% if request.user.is_authenticated %}
                 <li class="nav-item" id="navbar-app" style="float:right">
-                    {{ request.user.username }}
+                    <i>user: </i>{{ request.user.username }}
                 </li>
                 {% else %}
                         <h6> </h6>

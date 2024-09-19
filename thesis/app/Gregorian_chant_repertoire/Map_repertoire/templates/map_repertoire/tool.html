@@ -2,9 +2,11 @@
 {% extends "base.html" %}
 
 {% block side_buttons %}
-  <div class="container ms-4 mt-3 mr" style="float:right">
-    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'" style="float:right">Maintain your datasets</button> <br><br>
-  </div>
+  {% if request.user.is_authenticated %}
+    <div class="container ms-4 mt-3 mr" style="float:right">
+      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'" style="float:right">Maintain your datasets</button> <br><br>
+    </div>
+  {% endif %}
 {% endblock %}
 
 
@@ -17,14 +19,14 @@
   <form method="post">
       {% csrf_token %}
       <div id="feastSelection">
-        <label for="{{ form.feast.id_for_label }}">Feast:</label>
+        <label for="{{ form.feast.id_for_label }}">Feast(s):</label>
         <div class="ms-3">
           {{ form.feast }}
         </div>
       </div>
       <br>
       <div id="allSelection">
-        <label for="id_all">Select complete repertoire for feast:</label>
+        <label for="{{ form.all.id_for_label }}">Select complete repertoire for feast:</label>
         <div class="ms-3">
           {{ form.all }}
         </div>
@@ -55,11 +57,13 @@
           {{ form.number_of_topics }}
         </div>
       </div>
-      <div id="numberOfTopicsSelection">
-        <label for="{{ form.number_of_topics.id_for_label }}">Number of topics:</label>
+      <br>
+      <div id="datasetSelection">
+        <label for="{{ form.datasets.id_for_label }}">Dataset(s) to be used:</label>
         <div class="ms-3">
-          {{ form.number_of_topics }}
+          {{ form.datasets }}
         </div>
+        <i>(At least one dataset must be selected!)</i>
       </div>
       <br>
       <input type="submit" value="Show" class="btn btn-outline-secondary">
@@ -170,7 +174,7 @@
           <br><br>
 
         {% else %}
-          <h3> No data for given request </h3>
+          <h3> No data for given request </h3> <br>
         {% endif %}
       </div>
       <!-- Community map -->
@@ -267,6 +271,7 @@
         {
           document.getElementById('id_all_0').checked = true;
         }
+
     // Dynamic check and uncheck of office selection
     var allChcekbox = document.getElementById('id_all_0');
     allChcekbox.addEventListener('click', function() {
@@ -274,6 +279,7 @@
       document.getElementById('id_office_1').checked = false;
       document.getElementById('id_office_2').checked = false;
       document.getElementById('id_office_3').checked = false;
+      allChcekbox.checked = true;
     });
     var VChcekbox = document.getElementById('id_office_0');
     VChcekbox.addEventListener('click', function() {
@@ -292,8 +298,6 @@
       document.getElementById('id_all_0').checked = false;
     });
 
-
-    // Toggle parts of table view
     
     document.addEventListener('DOMContentLoaded', function () {
     var mainTable = document.getElementsByClassName('mainTable')[0];
