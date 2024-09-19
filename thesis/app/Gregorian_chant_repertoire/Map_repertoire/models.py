@@ -14,8 +14,7 @@ class Data_Chant(models.Model):
     source_id = models.CharField(("source_id"), max_length=500, null=True) #FK
     office_id = models.CharField(("office_id"), max_length=20, null=True)
     incipit = models.CharField(("incipit"), max_length=500, null=True)
-    dataset = models.CharField(("dataset"), max_length=500, null=True)
-    owner = models.CharField(("owner"), max_length=50, null=True)
+    dataset = models.CharField(("dataset"), max_length=500, null=True) #FK
 
 
 class Sources(models.Model):
@@ -30,6 +29,7 @@ class Sources(models.Model):
     siglum = models.CharField(("siglum"), max_length=20, null=True)
     drupal_path = models.CharField(("drupal_path"), max_length=500, null=True) #PK
     cursus = models.CharField(("cursus"), max_length=10, null=True)
+    dataset = models.CharField(("dataset"), max_length=500, null=True) #FK
 
 
 class Geography(models.Model):
