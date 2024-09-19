@@ -1,9 +1,11 @@
 """
-Python script that loads data from csv files (from folder data) to django databas
+Python script that loads data from csv files (from folder data) to django database
 Data_Chant - all_ci_antiphons.csv, all_ci_responsories.csv
 Sources - sources-with-provenance-ids-and-two-centuries.csv
 Geography - geography_data.csv
 Feasts - feast.csv
+
+To Data_Chant and Sources it adds info about being CI_base dataset from admin
 
 Loads only chants from surces where we have more than 100 chants from that source
 and belongig to feast where there are more than 5 chants for it
@@ -11,6 +13,7 @@ and belongig to feast where there are more than 5 chants for it
 
 from Map_repertoire.models import Data_Chant, Sources, Geography, Feasts
 
+from django.db.models import Q
 import pandas as pd
 
 
@@ -40,9 +43,11 @@ def run():
 
 
     # Database ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Get ready databases
-    Data_Chant.objects.all().delete()
-    Sources.objects.all().delete()
+    # Get ready databases - delete old CI_base records and all Feast and Geography
+    dset = Q(dataset="admin_CI_base")
+    Data_Chant.objects.filter(dset).delete()
+    Sources.objects.filter(dset).delete()
+
     Geography.objects.all().delete()
     Feasts.objects.all().delete()
 
@@ -55,7 +60,8 @@ def run():
             feast_id=row['feast_id'],
             source_id=row['source_id'],
             office_id=row['office_id'],
-            incipit=row['incipit']
+            incipit=row['incipit'],
+            dataset="admin_CI_base",
         )
         for index, row in row_iter
     ]
@@ -72,7 +78,8 @@ def run():
             siglum=row['siglum'],
             provenance=row['provenance'],
             drupal_path=row['drupal_path'],
-            cursus=row['cursus']
+            cursus=row['cursus'],
+            dataset="admin_CI_base"
         )
         for index, row in row_iter
     ]
