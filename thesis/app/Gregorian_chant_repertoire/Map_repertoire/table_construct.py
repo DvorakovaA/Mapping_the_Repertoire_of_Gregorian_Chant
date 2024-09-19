@@ -16,7 +16,7 @@ from .models import Sources, Data_Chant
 
 
 
-def get_table_data(communities : list[set [str]], feast_ids : list[str], filtering_office : list[str]) -> dict:
+def get_table_data(communities : list[set [str]], feast_ids : list[str], filtering_office : list[str], datasets : list[str]) -> dict:
     '''
     Function that constructs data structure readable for django templating language,
     so it is possible to present results of community search for some feast(s) in table
@@ -80,16 +80,17 @@ def get_table_data(communities : list[set [str]], feast_ids : list[str], filteri
             else: # Not all feasts
                 chants_of_feasts = []
                 for feast_id in feast_ids:
-                    chants_of_feasts = Data_Chant.objects.filter(feast_id = feast_id).values()
-                    used_offices += [chant['office_id'] for chant in chants_of_feasts]
-                    for source_id in community:
-                        # Check for duplicates of CIDs within one table cell
-                        chants_of_source_dict = {}
-                        for chant in chants_of_feasts:
-                            if chant['source_id'] == source_id:
-                                chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
-                        chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
-                        chants_of_community[i] += chants_of_source
+                    for dataset in datasets:
+                        chants_of_feasts = Data_Chant.objects.filter(feast_id=feast_id, dataset=dataset).values()
+                        used_offices += [chant['office_id'] for chant in chants_of_feasts]
+                        for source_id in community:
+                            # Check for duplicates of CIDs within one table cell
+                            chants_of_source_dict = {}
+                            for chant in chants_of_feasts:
+                                if chant['source_id'] == source_id:
+                                    chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                            chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
+                            chants_of_community[i] += chants_of_source
             i += 1
         used_offices = set(used_offices)
 
