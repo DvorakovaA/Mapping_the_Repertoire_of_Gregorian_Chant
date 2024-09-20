@@ -28,9 +28,7 @@ def get_table_data(communities : list[set [str]], feast_ids : list[str], filteri
         'tail': [[{'source_id':'https//..', 'siglum':'XY'}, {}, ...], [{}, {}, ...], [{}]]
     }
     '''
-    OFFICES = {'office_v' : 'V', 'office_c' : 'C', 'office_m' : 'M', 'office_l' : 'L', 'office_p' : 'P', 'office_t' :'T', 'office_s' :'S', 
-                'office_n' : 'N', 'office_v2' :'V2', 'office_d' :'D', 'office_r' :'R', 'office_e' : 'E', 'office_h' : 'H', 'office_ca' : 'CA', 
-                'office_x' : 'X', 'nan' : 'UNKNOWN'}
+    OFFICES = ['V','C', 'M', 'L', 'P', 'T', 'S', 'N',  'V2', 'D', 'R',  'E',  'H', 'CA', 'X', 'UNKNOWN']
     
     if communities != []:
         # Get ready the base of returned structure
@@ -97,7 +95,7 @@ def get_table_data(communities : list[set [str]], feast_ids : list[str], filteri
         # Fill body
         # Check for possible filter
         if filtering_office == []:
-            filtering_office = OFFICES.keys()
+            filtering_office = OFFICES
         # Go over data in office point of view (= rows)
         for office in filtering_office:
             # Check for empty rows (empty offices)
@@ -129,9 +127,9 @@ def get_table_data(communities : list[set [str]], feast_ids : list[str], filteri
                         collapsed_chant_info.append({'incipit' : community_office_chants_dict[ordered_freq[j][0]], 'cantus_id' : ordered_freq[j][0], 'freq' : "("+str(ordered_freq[j][1])+" | "+str(round((ordered_freq[j][1]/len(communities[i]))*100, 2))+" %)"})
 
                     try:
-                        tab_data['body'][OFFICES[office]].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
+                        tab_data['body'][office].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
-                        tab_data['body'][OFFICES[office]] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
+                        tab_data['body'][office] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
         
         return tab_data
     

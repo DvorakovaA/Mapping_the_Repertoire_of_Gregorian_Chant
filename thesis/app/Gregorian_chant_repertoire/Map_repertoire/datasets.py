@@ -10,12 +10,15 @@ File with
 import pandas as pd
 import numpy as np
 
-from .models import Sources, Datasets, Data_Chant
+from .models import Sources, Datasets, Data_Chant, Feasts
 
-MANDATORY_CHANTS_FIELDS = ['cantus_id', 'source_id', 'feast_id', 'incipit']
+MANDATORY_CHANTS_FIELDS = ['cantus_id', 'source_id', 'feast_code', 'incipit']
 OPTIONAL_CHANTS_FIELDS = ['office_id']
 MANDATORY_SOURCES_FIELDS = ['source_id', 'siglum']
 OPTIONAL_SOURCES_FIELDS = ['century', 'provenance']
+
+OFFICES = ['V','C', 'M', 'L', 'P', 'T', 'S', 'N',  'V2', 'D', 'R',  'E',  'H', 'CA', 'X', 'UNKNOWN']
+
 
 def correct_dataset_name(name : str, user : str) -> bool:
     """
@@ -36,9 +39,9 @@ def check_complete_chants_columns(new_chants):
     user_columns = set(new_chants.columns)
     for mand_column in MANDATORY_CHANTS_FIELDS:
         if mand_column not in user_columns or (mand_column in new_chants.columns[new_chants.isna().any()].tolist()):
-            return False
+            return False, mand_column
     
-    return True
+    return True, ""
 
 
 def check_files_validity(name : str, user : str, chants_file, sources_file) -> tuple[bool, str]:
@@ -53,7 +56,8 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
             new_chants = pd.read_csv(chants_file)
         except:
             return (False, "Something is wrong with your chants file. Check it with instructions in Help section please.")
-        if check_complete_chants_columns(new_chants):
+        all_ch_columns, missing_ch = check_complete_chants_columns(new_chants)
+        if all_ch_columns:
             # check if all sources are known
             unknown_sources = []
             if sources_file is None:
@@ -68,12 +72,13 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
                 except:
                     return (False, "Something is wrong with your sources file. Check it with instructions in Help section please.")
                 
-                if check_sources_validity(new_sources):
+                all_s_columns, missing_s = check_sources_validity(new_sources)
+                if all_s_columns:
                     for source_id in set(new_chants['source_id'].to_list()):
                         if not Sources.objects.filter(drupal_path=source_id).exists() and not source_id in new_sources['source_id'].tolist():
                             unknown_sources.append(source_id)
                 else:
-                    return (False, "Some mandatory column (or value in such column) of your sources file is missing. Check what is mandatory in Help section.")
+                    return (False, "Mandatory column " + missing_s + " (or value in such column) of your sources file is missing. Check what is mandatory in Help section.")
 
             if unknown_sources == []:
                 return (True, "")
@@ -84,7 +89,7 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
                 error_m += " Please upload both files again."
                 return (False, error_m)
         else:
-            return (False, "Some mandatory column (or value in such column) of your dataset is missing. Check what is mandatory in Help section.")
+            return (False, "Mandatory column "+ missing_ch +" (or value in such column) of your dataset is missing. Check what is mandatory in Help section.")
     else:
         return (False, "Add new dataset name. " + name + " is already present in your datasets.")
 
@@ -97,9 +102,9 @@ def check_sources_validity(new_sources):
     user_columns = set(new_sources.columns)
     for mand_column in MANDATORY_SOURCES_FIELDS:
         if mand_column not in user_columns or mand_column in new_sources.columns[new_sources.isna().any()].tolist():
-            return False
+            return False, mand_column
 
-    return True
+    return True, ""
 
 
 def add_dataset_record(name : str, user : str):
@@ -129,24 +134,40 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file):
     new_chants = pd.read_csv(chants_file)
     # check if office_id column is present
     if 'office_id' not in new_chants.columns:
-        new_chants.insert(4, "office_id", 'nan', allow_duplicates=True)
+        new_chants.insert(4, "office_id", 'UNKNOWN', allow_duplicates=True)
 
-    # possibly fill office_id bz value expected in table_construct
-    new_chants['office_id'].fillna('nan', inplace=True)
+    # possibly fill office_id by value expected in table_construct
+    new_chants['office_id'].fillna('UNKNOWN', inplace=True)
     
     # Fill DB
     row_iter = new_chants.iterrows()
-    objs = [
-        Data_Chant( 
+    objs = []
+    for index, row in row_iter:
+        if row['office_id'] in OFFICES:
+            office_id = row['office_id']
+        else:
+            office_id = 'UNKNOWN'
+        objs.append(Data_Chant(
             cantus_id=row['cantus_id'],
-            feast_id=row['feast_id'],
+            #feast_id=Feasts.objects.filter(feast_code=row['feast_id']).values_list('feast_id')[0],
+            feast_id=row['feast_code'],
             source_id=row['source_id'],
-            office_id=row['office_id'],
+            office_id=office_id,
             incipit=row['incipit'],
             dataset=user+"_"+name,
-        )
-        for index, row in row_iter
-    ]
+        ))
+    #objs = [
+    #    Data_Chant( 
+    #        cantus_id=row['cantus_id'],
+    #        #feast_id=Feasts.objects.filter(feast_code=row['feast_id']).values_list('feast_id')[0],
+    #        feast_id=row['feast_code'],
+    #        source_id=row['source_id'],
+    #        office_id=row['office_id'],
+    #       incipit=row['incipit'],
+    #        dataset=user+"_"+name,
+    #   )
+    #   for index, row in row_iter
+    #]
     Data_Chant.objects.bulk_create(objs)
 
     #~ New sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
