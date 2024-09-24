@@ -78,7 +78,7 @@ def find_comms_stability(community_versions : list[list[set[str]]]):
 
 
 
-def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : list[str], get_shared : bool, datasets : list[str]):
+def get_network_info(feast_codes : list[str], compare_metrics, filtering_office : list[str], get_shared : bool, datasets : list[str]):
     """
     Function that constructs data structures that are
     used by clustering algorithms and for construction of graph on map 
@@ -94,7 +94,7 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
         DO_FILTER_OFFICE = True
     
     # All all CI data = takes long to construct, so we load them ready
-    if feast_ids == ['All'] and not DO_FILTER_OFFICE and datasets == ['admin_CI_base']:
+    if feast_codes == ['All'] and not DO_FILTER_OFFICE and datasets == ['admin_CI_base']:
         with lzma.open("Map_repertoire/big_data_structures/all_source_chants_dict.txt", "rb") as file:
             source_chants_dict = pickle.load(file)
             used_sources = [source[0] for source in drupals]
@@ -116,36 +116,56 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
 
 
     else: # other selection than All feasts and All offices and CI dataset only
-        if feast_ids == ['All']: 
-            # Construct needed data structures to construct networks from all data
-            for source_id in drupals:
-                chants_of_source = []
-                for office_id in filtering_office: # We have to pick only some office data
+        if feast_codes == ['All']:
+            # Construct needed data structures to construct networks from data for all feasts
+            if DO_FILTER_OFFICE:
+                for source_id in drupals:
+                    chants_of_source = []
+                    for office_id in filtering_office:
+                        for dataset in datasets:
+                            chants_of_source += [chant[0] for chant in Data_Chant.objects.filter(source_id=source_id[0], office_id=office_id, dataset=dataset).values_list('cantus_id')]
+                    # Write it down if something was found
+                    if chants_of_source != []:
+                        used_sources.append(source_id[0])
+                        source_chants_dict[source_id[0]] = chants_of_source
+            
+            else:
+                for source_id in drupals:
+                    chants_of_source = []
                     for dataset in datasets:
-                        chants_of_source += [chant[0] for chant in Data_Chant.objects.filter(source_id=source_id[0], office_id=office_id, dataset=dataset).values_list('cantus_id')]
-                
-                if chants_of_source != []:
-                    used_sources.append(source_id[0])
-                    source_chants_dict[source_id[0]] = chants_of_source
-        else: # Not All feasts requested
-            chants_of_feasts = []
-            for feast_id in feast_ids:
-                for dataset in datasets:
-                    chants_of_feasts += Data_Chant.objects.filter(dataset=dataset, feast_id=feast_id).values()
+                        chants_of_source += [chant[0] for chant in Data_Chant.objects.filter(source_id=source_id[0], dataset=dataset).values_list('cantus_id')]
 
-            for source_id in drupals:
-                if DO_FILTER_OFFICE:
+                    # Write it down if something was found
+                    if chants_of_source != []:
+                        used_sources.append(source_id[0])
+                        source_chants_dict[source_id[0]] = chants_of_source
+
+                
+        else: # Not All feasts requested
+            # Collect data for each feast
+            chants_of_feasts = []
+            for feast_code in feast_codes:
+                for dataset in datasets:
+                    chants_of_feasts += Data_Chant.objects.filter(dataset=dataset, feast_code=feast_code).values()
+
+            if DO_FILTER_OFFICE:
+                for source_id in drupals:
                     chants_of_source = []
                     for office in filtering_office:
                         chants_of_source += [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0] and chant['office_id'] == office]
-                else:
+                    # Write it down if something was found
+                    if chants_of_source != []:
+                        used_sources.append(source_id[0])
+                        source_chants_dict[source_id[0]] = chants_of_source
+            else: # all offices selected
+                for source_id in drupals:
                     chants_of_source = [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0]]
-
-                if chants_of_source != []:
-                    used_sources.append(source_id[0])
-                    source_chants_dict[source_id[0]] = chants_of_source
+                    # Write it down if something was found
+                    if chants_of_source != []:
+                        used_sources.append(source_id[0])
+                        source_chants_dict[source_id[0]] = chants_of_source
         
-        # Complete columns
+        # Complete needed columns
         used_sources = list(set(used_sources))
         len_s = len(used_sources)
         s1_column = [j for i in [len_s * [s] for s in used_sources] for j in i]
@@ -203,13 +223,13 @@ def get_network_info(feast_ids : list[str], compare_metrics, filtering_office : 
 
 
 # Louvein specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_graph(feast_ids : list[str], filtering_office : list[str], metric : str, datasets : list[str]):
+def get_graph(feast_codes : list[str], filtering_office : list[str], metric : str, datasets : list[str]):
     """
     Function constructs graph from networkx library
     where nodes are sources, that has chants for given feasts,
     and edges are shared chants among them
     """
-    _, edges_info, edges, used_sources = get_network_info(feast_ids=feast_ids, compare_metrics=metric, filtering_office=filtering_office, get_shared=True, datasets=datasets)
+    _, edges_info, edges, used_sources = get_network_info(feast_codes=feast_codes, compare_metrics=metric, filtering_office=filtering_office, get_shared=True, datasets=datasets)
     graph = nx.Graph()
     graph.add_nodes_from(used_sources)
     graph.add_edges_from(edges)
@@ -217,12 +237,12 @@ def get_graph(feast_ids : list[str], filtering_office : list[str], metric : str,
     return graph, edges_info
 
 
-def get_louvein_communities(feast_ids : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
+def get_louvein_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
     '''
     Finds communities by Louvein algorithm and returns one of them with info
     about stability and about edges for map construction
     '''
-    graph, edges_info = get_graph(feast_ids=feast_ids, filtering_office=filtering_office, metric=add_info_algo, datasets=datasets)
+    graph, edges_info = get_graph(feast_codes=feast_codes, filtering_office=filtering_office, metric=add_info_algo, datasets=datasets)
     
     LOUVEIN_NUM_OF_RUNS = 10
     community_versions = []
@@ -288,12 +308,12 @@ def unshuffle(perm, labels):
     return unshuffled_labels
 
 
-def get_dbscan_communities(feast_ids : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
+def get_dbscan_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
     '''
     Finds communities by DBSCAN algorithm and returns one of them with info
     about stability and about edges for map construction
     '''
-    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_ids=feast_ids, filtering_office=filtering_office, compare_metrics=add_info_algo, get_shared=True, datasets=datasets)
+    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics=add_info_algo, get_shared=True, datasets=datasets)
 
     EPS = 0.2
     MIN_SAMPLES = 3
@@ -321,12 +341,12 @@ def get_dbscan_communities(feast_ids : list[str], filtering_office : list[str], 
 
 
 # Topic model specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_topic_model_communities(feast_ids : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
+def get_topic_model_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
     ''''
     Returns communities based on how sources (=documents) are devided into topic groups
     based on chants in them and info about edges for map construction while using LDA
     '''
-    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_ids=feast_ids, filtering_office=filtering_office, compare_metrics="", get_shared=False, datasets=datasets)
+    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="", get_shared=False, datasets=datasets)
 
     # Get model
     if add_info_algo == '2':
@@ -362,20 +382,20 @@ def get_topic_model_communities(feast_ids : list[str], filtering_office : list[s
 
 
 # Common ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_communities(feast_ids : list[str], filtering_office : list[str], algorithm : str, add_info_algo : str, datasets : list[str]):
+def get_communities(feast_codes : list[str], filtering_office : list[str], algorithm : str, add_info_algo : str, datasets : list[str]):
     """
     Main function of this script
     returns communities found by Louvein algorithm, DBSCAN clustering or obtained from topic models 
     and info about edges of network to be drawn on the map as well as stability measure of clusterings
     """
     if algorithm == 'Louvein':
-        communities, edges_info, sig_level = get_louvein_communities(feast_ids, filtering_office, add_info_algo, datasets)
+        communities, edges_info, sig_level = get_louvein_communities(feast_codes, filtering_office, add_info_algo, datasets)
     
     elif algorithm == 'DBSCAN':
-        communities, edges_info, sig_level = get_dbscan_communities(feast_ids, filtering_office, add_info_algo, datasets)
+        communities, edges_info, sig_level = get_dbscan_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     else: #Topic models
-        communities, edges_info, sig_level = get_topic_model_communities(feast_ids, filtering_office, add_info_algo, datasets)
+        communities, edges_info, sig_level = get_topic_model_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     # Order communities based on their size
     communities.sort(key=len, reverse=True)

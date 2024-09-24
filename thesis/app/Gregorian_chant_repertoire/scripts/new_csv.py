@@ -24,6 +24,8 @@ def run():
     responsories = pd.read_csv('data/given/all-ci-responsories.csv')
     chant_data = pd.concat([antiphons, responsories])
 
+    feasts = pd.read_csv('data/given/feast.csv')
+
     # Filter sources to avoid working with fragments (to use only those with more than 100 chants)
     freq_of_sources = chant_data['source_id'].value_counts()
     bigger_sources = freq_of_sources.drop(freq_of_sources[freq_of_sources.values < 100].index).index.tolist()
@@ -85,7 +87,6 @@ def run():
                 numerical_century.append(cent[0:2])
         # Century unknown
         else:
-            print(cent)
             numerical_century.append('unknown')
     print()
     
@@ -95,7 +96,7 @@ def run():
 
 
     # Inform about unknown provenances 
-    unknown_provenances = set(unknown_provenances)
+    unknown_provenances = set(unknown_provenances).difference({'unknown'})
     last_suggested_id = max(provenance_ids['provenance_id'].to_list())
 
     print("Unknown provenances:")
@@ -106,3 +107,16 @@ def run():
     
     print('Unknown provenances found:', len(unknown_provenances))
     
+    # feast_code addition
+    def get_feast_code(feast_id):
+        try:
+            feast_code = feasts[feasts['id'] == feast_id]['feast_code']
+            return feast_code.item()
+        except:
+            return 'unknown'
+        
+    antiphons['feast_code'] = antiphons['feast_id'].apply(get_feast_code)
+    antiphons.to_csv('data/generated/all-ci-antiphons_feast_codes.csv')
+    
+    responsories['feast_code'] = responsories['feast_id'].apply(get_feast_code)
+    responsories.to_csv('data/generated/all-ci-responsories_feast_codes.csv')

@@ -16,7 +16,7 @@ from .models import Sources, Data_Chant
 
 
 
-def get_table_data(communities : list[set [str]], feast_ids : list[str], filtering_office : list[str], datasets : list[str]) -> dict:
+def get_table_data(communities : list[set [str]], feast_codes : list[str], filtering_office : list[str], datasets : list[str]) -> dict:
     '''
     Function that constructs data structure readable for django templating language,
     so it is possible to present results of community search for some feast(s) in table
@@ -63,23 +63,25 @@ def get_table_data(communities : list[set [str]], feast_ids : list[str], filteri
 
             # Collecting part
             chants_of_community[i] = []
-            if feast_ids == ['All']:
+            if feast_codes == ['All']:
                 chants_of_community[i] = []
-                used_offices = list(OFFICES.keys())
+                used_offices = list(OFFICES)
                 for source_id in community:
                     # Check for duplicates of CIDs within one source
                     chants_of_source_dict = {}
-                    for chant in Data_Chant.objects.filter(source_id = source_id).values():
-                        chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                    for dataset in datasets:
+                        for chant in Data_Chant.objects.filter(source_id=source_id, dataset=dataset).values():
+                            chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
                     # 
                     chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
                     chants_of_community[i] += chants_of_source
 
             else: # Not all feasts
                 chants_of_feasts = []
-                for feast_id in feast_ids:
-                    for dataset in datasets:
-                        chants_of_feasts = Data_Chant.objects.filter(feast_id=feast_id, dataset=dataset).values()
+                for feast_code in feast_codes:
+                        chants_of_feasts = []
+                        for dataset in datasets:
+                            chants_of_feasts += Data_Chant.objects.filter(feast_code=feast_code).values()
                         used_offices += [chant['office_id'] for chant in chants_of_feasts]
                         for source_id in community:
                             # Check for duplicates of CIDs within one table cell

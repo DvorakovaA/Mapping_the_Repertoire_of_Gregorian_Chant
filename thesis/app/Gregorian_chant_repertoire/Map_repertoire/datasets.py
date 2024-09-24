@@ -149,25 +149,13 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file):
             office_id = 'UNKNOWN'
         objs.append(Data_Chant(
             cantus_id=row['cantus_id'],
-            #feast_id=Feasts.objects.filter(feast_code=row['feast_id']).values_list('feast_id')[0],
-            feast_id=row['feast_code'],
+            feast_code=row['feast_code'],
             source_id=row['source_id'],
             office_id=office_id,
             incipit=row['incipit'],
             dataset=user+"_"+name,
         ))
-    #objs = [
-    #    Data_Chant( 
-    #        cantus_id=row['cantus_id'],
-    #        #feast_id=Feasts.objects.filter(feast_code=row['feast_id']).values_list('feast_id')[0],
-    #        feast_id=row['feast_code'],
-    #        source_id=row['source_id'],
-    #        office_id=row['office_id'],
-    #       incipit=row['incipit'],
-    #        dataset=user+"_"+name,
-    #   )
-    #   for index, row in row_iter
-    #]
+
     Data_Chant.objects.bulk_create(objs)
 
     #~ New sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

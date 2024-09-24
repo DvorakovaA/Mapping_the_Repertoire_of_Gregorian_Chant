@@ -10,7 +10,7 @@ class Data_Chant(models.Model):
     Table for data about all antiphons and responsories (chants)
     """
     cantus_id = models.CharField(("cantus_id"), max_length=20) # PK - setting it as "primary_key = True" did not work
-    feast_id = models.CharField(("feast_id"), max_length=20) #FK
+    feast_code = models.CharField(("feast_code"), max_length=20, null=True) #FK
     source_id = models.CharField(("source_id"), max_length=500, null=True) #FK
     office_id = models.CharField(("office_id"), max_length=20, null=True)
     incipit = models.CharField(("incipit"), max_length=500, null=True)

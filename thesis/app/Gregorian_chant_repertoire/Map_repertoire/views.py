@@ -48,15 +48,15 @@ def tool(request):
 
         if '0' in request.session.get('feast'): # All feasts selected
             context['feasts'] = ['All feasts']
-            feast_ids = ['All']
+            feast_codes = ['All']
         else:
             feast_names = []
             for id in request.session.get('feast'):
                 feast_names.append(Feasts.objects.values_list('name', flat=True)[int(id)-1])
             context['feasts'] = feast_names
-            feast_ids = []
+            feast_codes = []
             for feast_name in feast_names:
-                feast_ids.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_id'])
+                feast_codes.append(Feasts.objects.filter(name = feast_name).values()[0]['feast_code'])
 
         filtering_office = []
         if not request.session.get('all'):
@@ -66,11 +66,11 @@ def tool(request):
             filtering_office = request.session['office']
         # else means filtering_office is empty list -> we select All offices
 
-        communities, edges_info, sig_level = get_communities(feast_ids, filtering_office, request.session['algo'], request.session['add_info_algo'], request.session['datasets'])
+        communities, edges_info, sig_level = get_communities(feast_codes, filtering_office, request.session['algo'], request.session['add_info_algo'], request.session['datasets'])
         context['sig_level'] = sig_level
 
         context['map_data'] = get_map_data(communities, edges_info)
-        context['tab_data'] = get_table_data(communities, feast_ids, filtering_office, request.session['datasets'])
+        context['tab_data'] = get_table_data(communities, feast_codes, filtering_office, request.session['datasets'])
 
     return render(request, "map_repertoire/tool.html", context)
 

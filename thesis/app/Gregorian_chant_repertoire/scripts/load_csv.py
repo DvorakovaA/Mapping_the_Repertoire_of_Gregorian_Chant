@@ -27,8 +27,8 @@ def run():
     """
     # CSV ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get dataframes ready
-    antiphons = pd.read_csv('data/given/all-ci-antiphons.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])
-    responsories = pd.read_csv('data/given/all-ci-responsories.csv', usecols=['cantus_id', 'feast_id', 'source_id', 'office_id', 'incipit'])
+    antiphons = pd.read_csv('data/generated/all-ci-antiphons_feast_codes.csv', usecols=['cantus_id', 'feast_code', 'source_id', 'office_id', 'incipit'])
+    responsories = pd.read_csv('data/generated/all-ci-responsories_feast_codes.csv', usecols=['cantus_id', 'feast_code', 'source_id', 'office_id', 'incipit'])
     bigger_sources = pd.read_csv('data/generated/sources-with-provenance-ids-and-two-centuries.csv', usecols=['title', 'siglum', 'century', 'num_century', 'provenance_id', 'provenance', 'drupal_path', 'cursus'])
     geography = pd.read_csv('data/given/geography_data.csv', usecols=['provenance_id', 'provenance', 'latitude', 'longitude'])
     feasts = pd.read_csv('data/given/feast.csv', usecols=['id', 'name', 'feast_code'])
@@ -37,20 +37,20 @@ def run():
     chant_data = pd.concat([antiphons, responsories])
 
     # Filter feasts to use only those having more than 5 chants 
-    freq_of_feasts = chant_data['feast_id'].value_counts()
+    freq_of_feasts = chant_data['feast_code'].value_counts()
     bigger_feasts = freq_of_feasts.drop(freq_of_feasts[freq_of_feasts.values < 5].index).index.tolist()
-    feasts_without_fragments = feasts[feasts['id'].isin(bigger_feasts)]
+    feasts_without_fragments = feasts[feasts['feast_code'].isin(bigger_feasts)]
 
     # Filter chants based on being in bigger sources and bigger feasts
-    chant_data_filtered = chant_data[chant_data['source_id'].isin(bigger_sources['drupal_path']) & chant_data['feast_id'].isin(feasts_without_fragments['id'])]
+    chant_data_filtered = chant_data[chant_data['source_id'].isin(bigger_sources['drupal_path']) & chant_data['feast_code'].isin(feasts_without_fragments['feast_code'])]
     # Fill in missing values
     chant_data_filtered['office_id'].fillna('unknown', inplace=True)
 
     # Database ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Get ready databases - delete old CI_base records and all Feast and Geography
-    dset = Q(dataset="admin_CI_base")
-    Data_Chant.objects.filter(dset).delete()
-    Sources.objects.filter(dset).delete()
+    CI_base = Q(dataset="admin_CI_base")
+    Data_Chant.objects.filter(CI_base).delete()
+    Sources.objects.filter(CI_base).delete()
 
     Geography.objects.all().delete()
     Feasts.objects.all().delete()
@@ -64,7 +64,7 @@ def run():
             objs.append(
                 Data_Chant( 
                     cantus_id=row['cantus_id'],
-                    feast_id=row['feast_id'],
+                    feast_code=row['feast_code'],
                     source_id=row['source_id'],
                     office_id=OFFICES[row['office_id']],
                     incipit=row['incipit'],
@@ -74,24 +74,13 @@ def run():
             objs.append(
                 Data_Chant( 
                     cantus_id=row['cantus_id'],
-                    feast_id=row['feast_id'],
+                    feast_code=row['feast_code'],
                     source_id=row['source_id'],
                     office_id='UNKNOWN',
                     incipit=row['incipit'],
                     dataset="admin_CI_base",
                 ))
 
-    #objs = [
-    #    Data_Chant( 
-    #        cantus_id=row['cantus_id'],
-    #        feast_id=row['feast_id'],
-    #        source_id=row['source_id'],
-    #        office_id=OFFICES[row['office_id']],
-    #        incipit=row['incipit'],
-    #        dataset="admin_CI_base",
-    #    )
-    #    for index, row in row_iter
-    #]
     Data_Chant.objects.bulk_create(objs)
 
     # Fill Sources info
@@ -131,8 +120,8 @@ def run():
     objs = [
         Feasts(
             feast_id=row['id'],
-            name=row['name'],
-            feast_code=row['feast_code']
+            feast_code=row['feast_code'],
+            name=row['name']
         )
         for index, row in row_iter
     ]
