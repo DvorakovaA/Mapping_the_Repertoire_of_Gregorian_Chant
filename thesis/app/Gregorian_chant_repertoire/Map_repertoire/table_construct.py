@@ -30,6 +30,8 @@ def get_table_data(communities : list[set [str]], feast_codes : list[str], filte
     '''
     OFFICES = ['V','C', 'M', 'L', 'P', 'T', 'S', 'N',  'V2', 'D', 'R',  'E',  'H', 'CA', 'X', 'UNKNOWN']
     
+    print('table_construct')
+
     if communities != []:
         # Get ready the base of returned structure
         tab_data = {}
@@ -63,25 +65,26 @@ def get_table_data(communities : list[set [str]], feast_codes : list[str], filte
 
             # Collecting part
             chants_of_community[i] = []
+            # All feasts
             if feast_codes == ['All']:
                 chants_of_community[i] = []
-                used_offices = list(OFFICES)
                 for source_id in community:
                     # Check for duplicates of CIDs within one source
                     chants_of_source_dict = {}
                     for dataset in datasets:
                         for chant in Data_Chant.objects.filter(source_id=source_id, dataset=dataset).values():
                             chants_of_source_dict[(chant['office_id'], chant['cantus_id'])] = chant['incipit']
+                        used_offices += list(Data_Chant.objects.filter(source_id=source_id, dataset=dataset).values_list('office_id', flat=True))
                     # 
                     chants_of_source = [(key[0], key[1], chants_of_source_dict[key]) for key in chants_of_source_dict]
                     chants_of_community[i] += chants_of_source
-
+                
             else: # Not all feasts
                 chants_of_feasts = []
                 for feast_code in feast_codes:
                         chants_of_feasts = []
                         for dataset in datasets:
-                            chants_of_feasts += Data_Chant.objects.filter(feast_code=feast_code).values()
+                            chants_of_feasts += Data_Chant.objects.filter(feast_code=feast_code, dataset=dataset).values()
                         used_offices += [chant['office_id'] for chant in chants_of_feasts]
                         for source_id in community:
                             # Check for duplicates of CIDs within one table cell
@@ -132,7 +135,7 @@ def get_table_data(communities : list[set [str]], feast_codes : list[str], filte
                         tab_data['body'][office].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
                         tab_data['body'][office] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
-        
+        print(tab_data['body'])
         return tab_data
     
     # Nothing to be displayed
