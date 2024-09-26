@@ -127,25 +127,62 @@ def upload_dataset(request):
     add_form = UploadFileForm(request.POST, request.FILES)
     delete_form = DeleteDatasetForm(data=request.POST, user=request.user.username)
     context = {"add_form" : add_form, "delete_form" : delete_form}
-    
+
+    # Missing values control
+    if request.method == 'POST':
+
+        if 'missing_ok' in request.POST:
+            request.session['unknown_values'] = []
+            return HttpResponseRedirect("")
+        
+        # Unknown provenances control
+        elif 'geo_yes' in request.POST:
+            context['miss_provenance'] =  request.session['miss_provenance']
+            context['dataset_name'] = request.session['dataset_name']
+            request.session['miss_provenance'] = []
+            return render(request, "map_repertoire/geography.html", context)
+        
+        elif 'geo_no' in request.POST:
+            print('geo no')
+            request.session['miss_provenance'] = []
+            return HttpResponseRedirect("")
+
     # Dataset addition
     if add_form.is_valid():
         sources_file = request.FILES.get('sources_file', None)
+        request.session['dataset_name'] = add_form.cleaned_data['name']
         validity, error_message = check_files_validity(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
         request.session['error_message'] = error_message
 
         if validity:
-            integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
+            possible_unknown, miss_provenance = integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
+            request.session['unknown_values'] = possible_unknown
+            request.session['miss_provenance'] = miss_provenance
+        else:
+            request.session['unknown_values'] = []
+            request.session['miss_provenance'] = []
         return HttpResponseRedirect("")
     
+
     # Dataset removal
     if delete_form.is_valid():
         datasets = delete_form.cleaned_data['dataset_select']
         print(datasets)
         for dataset in datasets:
             delete_dataset(dataset)
+            
         request.session['error_message'] = ""
+        request.session['unknown_values'] = []
+        request.session['miss_provenance'] = []
         return HttpResponseRedirect("")
     
-
+    print(request.session['unknown_values'])
     return render(request, "map_repertoire/datasets.html", context)
+
+
+def geography(request):
+    """
+    
+    """
+
+    #return render(request, "map_repertoire/geography.html", context)

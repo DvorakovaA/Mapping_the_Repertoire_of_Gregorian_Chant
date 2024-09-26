@@ -119,44 +119,18 @@ def add_dataset_record(name : str, user : str):
     new_entry.save()
 
 
-def integrate_chants_file(name : str, user : str, chants_file, sources_file):
+def integrate_chants_file(name : str, user : str, chants_file, sources_file) -> tuple[list[str], list[str]]:
     """
     Add new record of dataset to Datasets
     Add new chants to Data_Chants
     Add possible new sources to Sources
     (Both files validity should be checked already! Mandatory fields are complete)
+    Also 
     """
+    unknown_values = []
+
     # New dataset record
     add_dataset_record(name, user)
-
-    #~ New chants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    chants_file.seek(0)
-    new_chants = pd.read_csv(chants_file)
-    # check if office_id column is present
-    if 'office_id' not in new_chants.columns:
-        new_chants.insert(4, "office_id", 'UNKNOWN', allow_duplicates=True)
-
-    # possibly fill office_id by value expected in table_construct
-    new_chants['office_id'].fillna('UNKNOWN', inplace=True)
-    
-    # Fill DB
-    row_iter = new_chants.iterrows()
-    objs = []
-    for index, row in row_iter:
-        if row['office_id'] in OFFICES:
-            office_id = row['office_id']
-        else:
-            office_id = 'UNKNOWN'
-        objs.append(Data_Chant(
-            cantus_id=row['cantus_id'],
-            feast_code=row['feast_code'],
-            source_id=row['source_id'],
-            office_id=office_id,
-            incipit=row['incipit'],
-            dataset=user+"_"+name,
-        ))
-
-    Data_Chant.objects.bulk_create(objs)
 
     #~ New sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     if sources_file is not None:
@@ -183,44 +157,101 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file):
                     numerical_century.append(cent[0:2])
             else:
                 numerical_century.append('unknown')
+                if cent != 'unknown':
+                    unknown_values.append(cent)
 
         new_sources.insert(1, 'num_century', numerical_century, allow_duplicates=True)
-
+        
         # try to match provenance to provenance_id
-        new_sources.insert(1,'provenance_id',"")
+        new_sources['provenance_id'] = ""
         for index, row in new_sources.iterrows():
             if Sources.objects.filter(provenance=row['provenance']).exists():
-                row['provenance_id'] = Sources.objects.filter(provenance=row['provenance']).values_list('provenance_id')[0]
-        
+                new_sources.at[index, 'provenance_id'] = Sources.objects.filter(provenance=row['provenance']).values_list('provenance_id')[0]
+            else:
+                print("does not exist provenance in sources")
+                new_sources.at[index, 'provenance_id'] = "unknown"
+
         # add or fill title column with siglum...
         if 'title' not in new_sources.columns:
-            new_sources['title'] = np.nan
-        new_sources['title'].fillna(new_sources['siglum'], inplace=True)
+            new_sources['title'] = ""
+        new_sources['title'] = np.where(new_sources['title'] == "", new_sources['siglum'], new_sources['title'])
+        new_sources['title'].fillna(new_sources.siglum, inplace=True)
 
         # add or fill cursus
         if 'cursus' not in new_sources.columns:
-            new_sources['cursus'] = np.nan
+            new_sources['cursus'] = ""
+        new_sources['cursus'].replace(to_replace="", value="Unknown", inplace=True)
         new_sources['cursus'].fillna("Unknown", inplace=True)
 
         # Fill DB
+        known_sources = Sources.objects.values_list('drupal_path', flat=True)
         row_iter = new_sources.iterrows()
-        objs = [
-            Sources(
-                title=row['title'],
-                provenance_id=row['provenance_id'],
-                century=row['century'],
-                num_century=row['num_century'],
-                siglum=row['siglum'],
-                provenance=row['provenance'],
-                drupal_path=row['source_id'],
-                cursus=row['cursus'],
-                dataset=user+"_"+name
-            )
-            for index, row in row_iter
-        ]
+        objs = []
+        for index, row in row_iter:
+            if row['source_id'] not in known_sources:
+                objs.append(Sources(
+                    title=row['title'],
+                    provenance_id=row['provenance_id'],
+                    century=row['century'],
+                    num_century=row['num_century'],
+                    siglum=row['siglum'],
+                    provenance=row['provenance'],
+                    drupal_path=row['source_id'],
+                    cursus=row['cursus'],
+                    dataset=user+"_"+name
+                ))
+        
         Sources.objects.bulk_create(objs)
 
 
+    #~ New chants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    chants_file.seek(0)
+    new_chants = pd.read_csv(chants_file)
+    # check if office_id column is present
+    if 'office_id' not in new_chants.columns:
+        new_chants.insert(4, "office_id", 'UNKNOWN', allow_duplicates=True)
+
+    # possibly fill office_id by value expected in table_construct
+    new_chants['office_id'].fillna('UNKNOWN', inplace=True)
+    
+    # Fill DB
+    feast_codes = Feasts.objects.all().values_list('feast_code', flat=True)
+    row_iter = new_chants.iterrows()
+    objs = []
+    for index, row in row_iter:
+        # Catch bad office_ids
+        if row['office_id'] in OFFICES:
+            office_id = row['office_id']
+        else:
+            office_id = 'UNKNOWN'
+            unknown_values.append(row['office_id'])
+        # Catch bad feast_codes
+        if row['feast_code'] in feast_codes:
+            feast_code = row['feast_code']
+        else:
+            feast_code = 'unknown'
+            unknown_values.append(row['feast_code'])
+        # Save for upload
+        objs.append(Data_Chant(
+            cantus_id=row['cantus_id'],
+            feast_code=row['feast_code'],
+            source_id=row['source_id'],
+            office_id=office_id,
+            incipit=row['incipit'],
+            dataset=user+"_"+name,
+        ))
+
+    Data_Chant.objects.bulk_create(objs)
+
+    # Check unmatched provenances
+    unmatched_provenances = []
+    used_sources = list(Data_Chant.objects.filter(dataset=user+"_"+name).values_list('source_id', flat=True))
+    for source_id in used_sources:
+        s_info = Sources.objects.filter(drupal_path=source_id).values()[0]
+        if s_info['provenance_id'] == 'unknown':
+            unmatched_provenances.append(s_info['provenance'])
+
+    return list(set(unknown_values)), list(set(unmatched_provenances))
 
 
 def delete_dataset(dataset_id: str):

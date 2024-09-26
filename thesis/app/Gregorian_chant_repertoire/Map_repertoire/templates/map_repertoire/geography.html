@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+    {% block content %}
+    <button type="button" class="btn btn-outline-secondary me-3" style="float:right" onclick="location.href = '/map_repertoire/tool'">Back to tool</button>
+    <div class="container ms-4 mt-3">
+      <h2></h2>
+      <h5> </h5>
+      {{ miss_provenance }} <br>
+      {{ dataset_name }} <br>
+      {{ request.user.username }}
+    </div>
+    {% endblock %}

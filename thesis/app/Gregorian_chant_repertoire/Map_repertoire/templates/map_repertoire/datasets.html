@@ -38,6 +38,44 @@
                 </form>
                 <br>
             </div>
+            {% if request.session.unknown_values %}
+                <div class="container ms-4 mt-3 mr-1" id="unknown_values">
+                    <h5 style="color:red;"> Unknown values </h5>
+                    <p> 
+                        There are few unknown values in your data. <br>
+                        All were given lable unknown in uploaded dataset. <br>
+                        If you wnat otherwise please delete uploaded dataset and upload it again with desired corrections.
+                    </p>
+                    <div class="container ms-4 mt-3 mr-5">
+                        {% for unknown in request.session.unknown_values %}
+                            {{ unknown }} <br>
+                        {% endfor %}
+                    </div>
+                    <!-- <button id="ok" type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'">OK</button> <br><br>   
+                -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-outline-secondary" value="OK" name="missing_ok">
+                    </form>
+                </div>
+            {% endif %}
+
+            {% if request.session.miss_provenance %}
+                <div class="container ms-4 mt-3 mr-1" >
+                    <h5> Unmatched provenances </h5>
+                    <p> These provenances were not matched with existing provenances in system. </p>
+                    {% for prov in request.session.miss_provenance %}
+                        {{ prov }} <br>
+                    {% endfor %}
+                    <p> Would you like to solve this? </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-outline-secondary" value="Yes" name="geo_yes">
+                        <input type="submit" class="btn btn-outline-secondary" value="No" name="geo_no">
+                    </form>
+                </div>
+            {% endif %}
+
         </div>
         <br>
         <div class="container ms-4 mt-3 mr-1">
@@ -65,5 +103,5 @@
 
     </div>
     {% endif %}
-
+    
 {% endblock %}
