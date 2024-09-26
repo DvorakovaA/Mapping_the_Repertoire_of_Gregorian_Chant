@@ -6,6 +6,7 @@ Script that process desired changes in csvs:
   with these additions (sources-with-provenance-ids-and-two-centuries.csv)
 - check if there are any new uknown provenances in given data (not existing in provenance_ids.csv)
   and tell user via console (plus suggest new unused provenance_ids)
+- enrich antiphons and responsories with feast_code (besides feast_id)
 """
 
 import pandas as pd
@@ -58,7 +59,8 @@ def run():
                 'provenance' : row['provenance'],
                 'siglum' : row['siglum'],
                 'cursus' : row['cursus'],
-                'century' : row['century']
+                'century' : row['century'],
+                'provenance_id' : 'unknown'
             })
             unknown_provenances.append(row['provenance'].strip())
 
