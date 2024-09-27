@@ -3,7 +3,7 @@ Function that handle displaying of html files and data transfer between componen
 """
 
 from django.shortcuts import render
-from .forms import InputForm, UploadFileForm, DeleteDatasetForm
+from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect
@@ -124,7 +124,7 @@ def logout_view(request):
     
 
 def upload_dataset(request):
-    add_form = UploadFileForm(request.POST, request.FILES)
+    add_form = UploadDatasetForm(request.POST, request.FILES)
     delete_form = DeleteDatasetForm(data=request.POST, user=request.user.username)
     context = {"add_form" : add_form, "delete_form" : delete_form}
 
@@ -143,7 +143,6 @@ def upload_dataset(request):
             return render(request, "map_repertoire/geography.html", context)
         
         elif 'geo_no' in request.POST:
-            print('geo no')
             request.session['miss_provenance'] = []
             return HttpResponseRedirect("")
 
@@ -155,7 +154,7 @@ def upload_dataset(request):
         request.session['error_message'] = error_message
 
         if validity:
-            possible_unknown, miss_provenance = integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
+            possible_unknown, miss_provenance = integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file, add_form.cleaned_data['visibility'])
             request.session['unknown_values'] = possible_unknown
             request.session['miss_provenance'] = miss_provenance
         else:
@@ -167,7 +166,6 @@ def upload_dataset(request):
     # Dataset removal
     if delete_form.is_valid():
         datasets = delete_form.cleaned_data['dataset_select']
-        print(datasets)
         for dataset in datasets:
             delete_dataset(dataset)
             
@@ -176,7 +174,6 @@ def upload_dataset(request):
         request.session['miss_provenance'] = []
         return HttpResponseRedirect("")
     
-    print(request.session['unknown_values'])
     return render(request, "map_repertoire/datasets.html", context)
 
 

@@ -59,3 +59,4 @@ class Datasets(models.Model):
     dataset_id = models.CharField(("dataset_id"), max_length=100, null=True) #PK
     name = models.CharField(("name"), max_length=500)
     owner = models.CharField(("owner"), max_length=50)
+    public = models.BooleanField(("public"), default=False)

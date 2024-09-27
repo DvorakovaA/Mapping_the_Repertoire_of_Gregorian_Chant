@@ -107,7 +107,7 @@ def check_sources_validity(new_sources):
     return True, ""
 
 
-def add_dataset_record(name : str, user : str):
+def add_dataset_record(name : str, user : str, visibility : str):
     """
     Creates complete record in Datasets
     """
@@ -116,21 +116,25 @@ def add_dataset_record(name : str, user : str):
     new_entry.dataset_id = id
     new_entry.name = name
     new_entry.owner = user
+    if visibility == 'private':
+        new_entry.public = False
+    else: # public dataset
+        new_entry.public = True
     new_entry.save()
 
 
-def integrate_chants_file(name : str, user : str, chants_file, sources_file) -> tuple[list[str], list[str]]:
+def integrate_chants_file(name : str, user : str, chants_file, sources_file, visibility : str) -> tuple[list[str], list[str]]:
     """
     Add new record of dataset to Datasets
     Add new chants to Data_Chants
     Add possible new sources to Sources
     (Both files validity should be checked already! Mandatory fields are complete)
-    Also 
+    Also returns unknown values for feasts and office_ids and unmatched or unknown provenances
     """
     unknown_values = []
 
     # New dataset record
-    add_dataset_record(name, user)
+    add_dataset_record(name, user, visibility)
 
     #~ New sources ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     if sources_file is not None:
@@ -188,7 +192,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file) -> 
         row_iter = new_sources.iterrows()
         objs = []
         for index, row in row_iter:
-            if row['source_id'] not in known_sources:
+            if row['source_id'] not in known_sources: # First entry of pramen is authoritative
                 objs.append(Sources(
                     title=row['title'],
                     provenance_id=row['provenance_id'],
@@ -234,7 +238,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file) -> 
         # Save for upload
         objs.append(Data_Chant(
             cantus_id=row['cantus_id'],
-            feast_code=row['feast_code'],
+            feast_code=feast_code,
             source_id=row['source_id'],
             office_id=office_id,
             incipit=row['incipit'],

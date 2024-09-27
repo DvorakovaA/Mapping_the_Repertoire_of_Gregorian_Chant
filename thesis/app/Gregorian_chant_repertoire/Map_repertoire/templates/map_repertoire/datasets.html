@@ -29,6 +29,11 @@
                             {{ add_form.sources_file }}
                         </div>
                     <br>
+                    <label for="{{ add_form.visibility.id_for_label}}">Visibility:</label>
+                        <div class="ms-3">
+                            {{ add_form.visibility }}
+                        </div>
+                    <br>
 
                     {% if request.session.error_message %}
                         <p style="color:red;">{{ request.session.error_message }}</p>
@@ -103,5 +108,14 @@
 
     </div>
     {% endif %}
+
+    <script>
+        // Set private as default visibility option
+        privateSelect = document.getElementById('id_visibility_0');
+        publicSelect = document.getElementById('id_visibility_1');
+        if (!privateSelect.checked & !publicSelect.checked) {
+            privateSelect.checked = true;
+        }
+    </script>
     
 {% endblock %}

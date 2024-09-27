@@ -38,13 +38,14 @@ class InputForm(forms.Form):
 
 
 
-class UploadFileForm(forms.Form):
+class UploadDatasetForm(forms.Form):
     """
     Form for upload of own data sets
     """
     name = forms.CharField(max_length=50)
     chants_file = forms.FileField()
     sources_file = forms.FileField(required=False)
+    visibility = forms.ChoiceField(widget=forms.RadioSelect, choices={"private" : "private", "public" : "public"}, initial="private")
 
 
 class DeleteDatasetForm(forms.Form):
