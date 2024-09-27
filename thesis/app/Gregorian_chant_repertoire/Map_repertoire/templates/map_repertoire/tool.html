@@ -59,11 +59,21 @@
       </div>
       <br>
       <div id="datasetSelection">
-        <label for="{{ form.datasets.id_for_label }}">Dataset(s) to be used:</label>
+        <label for="{{ form.datasets_own.id_for_label }}">Dataset(s) to be used:</label>
         <div class="ms-3">
-          {{ form.datasets }}
+          {{ form.datasets_own }}
         </div>
-        <i>(At least one dataset must be selected!)</i>
+        <div class="ms-3 mt-1">
+          <button type="button" class="btn btn-outline-secondary" id="show_pub_datasets" style="float:inline-end;">Show other public datasets</button>
+          <div id="public_datasets" class="mt-1">
+            <label for="{{ form.datasets_public.id_for_label}}">Other public datasets:</label>
+              <div class="ms-3">
+                {{ form.datasets_public }}
+              </div>
+            <button type="button" class="btn btn-outline-secondary" id="hide_pub_datasets" style="float:inline-end;">Hide other public datasets</button>   
+          </div>
+          <br> <i>(At least one dataset must be selected!)</i>
+        </div>
       </div>
       <br>
       <input type="submit" value="Show" class="btn btn-outline-secondary">
@@ -298,7 +308,27 @@
       document.getElementById('id_all_0').checked = false;
     });
 
-    
+    // Show and Hide other public datasets
+    var OtherDatasets = document.getElementById('public_datasets');
+    OtherDatasets.style.display = "none";
+
+    var ShowPubDatasets = document.getElementById('show_pub_datasets');
+    var HidePubDatasets = document.getElementById('hide_pub_datasets');
+
+    ShowPubDatasets.addEventListener('click', function() {
+      OtherDatasets.style.display = "block";
+      ShowPubDatasets.style.display = "none";
+      HidePubDatasets.style.display = "block";
+    });
+
+    HidePubDatasets.addEventListener('click', function() {
+      OtherDatasets.style.display = "none";
+      ShowPubDatasets.style.display = "block";
+      HidePubDatasets.style.display = "none";
+    });
+
+
+    // Collapsibility of table
     document.addEventListener('DOMContentLoaded', function () {
     var mainTable = document.getElementsByClassName('mainTable')[0];
     

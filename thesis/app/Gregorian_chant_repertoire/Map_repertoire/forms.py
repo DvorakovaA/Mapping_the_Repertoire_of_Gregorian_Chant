@@ -5,6 +5,7 @@ Class definition of form(s) (their fields and their behaviour)
 from django import forms
 
 from .models import Feasts, Datasets
+from django.db.models import Q
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
@@ -21,7 +22,9 @@ class InputForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(InputForm, self).__init__(*args, **kwargs)
-        self.fields['datasets'].choices = [("admin_CI_base", "Basic CI dataset")]+[(f[0], f[1]) for f in zip(Datasets.objects.filter(owner=user).values_list('dataset_id', flat=True), Datasets.objects.filter(owner=user).values_list('name', flat=True))]
+        self.fields['datasets_own'].choices = [("admin_CI_base", "Basic CI dataset")]+list(Datasets.objects.filter(owner=user).values_list('dataset_id', 'name')) #[f for f in zip(Datasets.objects.filter(owner=user).values_list('dataset_id', flat=True), Datasets.objects.filter(owner=user).values_list('name', flat=True))]
+        self.fields['datasets_public'].choices = [(f[0], f[1]+" (owner: "+f[2]+")") for f in list(Datasets.objects.filter(~Q(owner=user) & Q(public=True)).values_list('dataset_id', 'name', 'owner'))]
+
 
     feast = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'form-control'}), 
                                     choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(f[0], f[1]) for f in zip([i for i in range(1, len(Feasts.objects.all())+1)], Feasts.objects.values_list('name', flat=True))])
@@ -31,7 +34,8 @@ class InputForm(forms.Form):
     community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvein")
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
-    datasets = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, initial=True)
+    datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, initial=True)
+    datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None)
 
 
 

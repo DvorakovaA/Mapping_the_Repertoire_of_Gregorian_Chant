@@ -39,7 +39,9 @@ def tool(request):
         request.session['all'] = form.cleaned_data['all']
         request.session['office'] = form.cleaned_data['office']
         request.session['algo'] = form.cleaned_data['community_detection_algorithm']
-        request.session['datasets'] = form.cleaned_data['datasets']
+        data_own = form.cleaned_data['datasets_own']
+        data_pub = form.cleaned_data['datasets_public']
+        request.session['datasets'] = data_own + data_pub
 
         if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
              request.session['add_info_algo'] = form.cleaned_data['metric']
@@ -60,11 +62,7 @@ def tool(request):
 
         filtering_office = []
         if not request.session.get('all'):
-            #office_dict = {'V' : 'office_v', 'M' : 'office_m', 'L' : 'office_l', 'V2' : 'office_v2'}
-            #for off in request.session['office']:
-            #        filtering_office.append(office_dict[off])
             filtering_office = request.session['office']
-        # else means filtering_office is empty list -> we select All offices
 
         communities, edges_info, sig_level = get_communities(feast_codes, filtering_office, request.session['algo'], request.session['add_info_algo'], request.session['datasets'])
         context['sig_level'] = sig_level
