@@ -34,8 +34,8 @@ class InputForm(forms.Form):
     community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvein")
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
-    datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, initial=True)
-    datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None)
+    datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, initial=True, required=False)
+    datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False)
 
 
 
