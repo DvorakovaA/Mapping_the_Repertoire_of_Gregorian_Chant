@@ -210,7 +210,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
 
     #~ New chants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     chants_file.seek(0)
-    new_chants = pd.read_csv(chants_file)
+    new_chants = pd.read_csv(chants_file, dtype={'feast_code' : str})
     # check if office_id column is present
     if 'office_id' not in new_chants.columns:
         new_chants.insert(4, "office_id", 'UNKNOWN', allow_duplicates=True)
@@ -219,7 +219,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
     new_chants['office_id'].fillna('UNKNOWN', inplace=True)
     
     # Fill DB
-    feast_codes = Feasts.objects.all().values_list('feast_code', flat=True)
+    feast_codes = list(Feasts.objects.all().values_list('feast_code', flat=True))
     row_iter = new_chants.iterrows()
     objs = []
     for index, row in row_iter:
