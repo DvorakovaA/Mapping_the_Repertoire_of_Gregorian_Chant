@@ -41,6 +41,11 @@ def tool(request):
         request.session['algo'] = form.cleaned_data['community_detection_algorithm']
         data_own = form.cleaned_data['datasets_own']
         data_pub = form.cleaned_data['datasets_public']
+        if data_pub + data_own == []:
+            request.session['dataset_error_message'] = 'Please, select at least one dataset!'
+            return HttpResponseRedirect("")
+        else:
+            request.session['dataset_error_message'] = ''
         request.session['datasets'] = data_own + data_pub
 
         if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
@@ -128,7 +133,6 @@ def upload_dataset(request):
 
     # Missing values control
     if request.method == 'POST':
-
         if 'missing_ok' in request.POST:
             request.session['unknown_values'] = []
             return HttpResponseRedirect("")
@@ -147,7 +151,7 @@ def upload_dataset(request):
     # Dataset addition
     if add_form.is_valid():
         sources_file = request.FILES.get('sources_file', None)
-        request.session['dataset_name'] = add_form.cleaned_data['name']
+        request.session['dataset_name'] = add_form.cleaned_data['name'].strip()
         validity, error_message = check_files_validity(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
         request.session['error_message'] = error_message
 
@@ -180,4 +184,4 @@ def geography(request):
     
     """
 
-    #return render(request, "map_repertoire/geography.html", context)
+    return render(request, "map_repertoire/geography.html")

@@ -72,7 +72,12 @@
               </div>
             <button type="button" class="btn btn-outline-secondary" id="hide_pub_datasets" style="float:inline-end;">Hide other public datasets</button>   
           </div>
-          <br> <i>(At least one dataset must be selected!)</i>
+          <br> 
+          {% if request.session.dataset_error_message.strip %}
+            <p style="color: red;"> <b> {{ request.session.dataset_error_message }} </b> </p>
+          {% else %}
+            <i>(At least one dataset must be selected!)</i> <br>
+          {% endif %}
         </div>
       </div>
       <br>
@@ -326,6 +331,18 @@
       ShowPubDatasets.style.display = "block";
       HidePubDatasets.style.display = "none";
     });
+    
+    // Ensure other datasets are visible when some is checked
+    var otherId = "id_datasets_public_";
+    var otherSets = document.querySelectorAll(`[id^=${otherId}]`);
+    for (const otherDs of otherSets) {
+        if (otherDs.checked) {
+          console.log("checked");
+          OtherDatasets.style.display = "block";
+          ShowPubDatasets.style.display = "none";
+          HidePubDatasets.style.display = "block";
+        }
+    }
 
 
     // Collapsibility of table
