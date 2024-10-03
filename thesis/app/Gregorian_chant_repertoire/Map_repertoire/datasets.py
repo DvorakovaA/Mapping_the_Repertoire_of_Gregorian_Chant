@@ -4,12 +4,17 @@ File with
   and returns possible missing sources and error text
 * function check_sources_validity() that for given sources files checks its validity
   and for given missing sources that it completes situation
-* function integrate_chants_file() that 
+* function integrate_chants_file() that ensures new sources and given chants are 
+  uploaded into DB
+* functions that covers safe updates of geography data in DB
 """
 
 import pandas as pd
 import numpy as np
+import regex as re
+import functools
 
+from django.db.models import Q
 from .models import Sources, Datasets, Data_Chant, Feasts
 
 MANDATORY_CHANTS_FIELDS = ['cantus_id', 'source_id', 'feast_code', 'incipit']
@@ -192,7 +197,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
         row_iter = new_sources.iterrows()
         objs = []
         for index, row in row_iter:
-            if row['source_id'] not in known_sources: # First entry of pramen is authoritative
+            if row['source_id'] not in known_sources: # First entry of source is authoritative
                 objs.append(Sources(
                     title=row['title'],
                     provenance_id=row['provenance_id'],
@@ -258,7 +263,7 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
     return list(set(unknown_values)), list(set(unmatched_provenances))
 
 
-def delete_dataset(dataset_id: str):
+def delete_dataset(dataset_id : str):
     """
     Delete record from Datasets
     Delete all records from Data_Chants
@@ -268,3 +273,65 @@ def delete_dataset(dataset_id: str):
     Data_Chant.objects.filter(dataset=dataset_id).delete()
     Sources.objects.filter(dataset=dataset_id).delete()
 
+
+
+# ~ GEOGRAPHY RELATED STUFF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@functools.lru_cache(maxsize=None)
+def levenstein(a : str, b : str) -> float:
+    """
+    Calculates Levenstein distance between strings a and b 
+    while leaving out non letters
+    """
+    a = "".join(re.split("[^a-z]*", a.lower()))
+    b = "".join(re.split("[^a-z]*", b.lower()))
+    top_dists = range(len(b) + 1)
+    for ind_a, char_a in enumerate(a):
+        next_dists = [ind_a + 1]
+        for ind_b, char_b in enumerate(b):
+            next_dists.append(top_dists[ind_b] if char_a == char_b
+                              else min(top_dists[ind_b],
+                                       top_dists[ind_b + 1],
+                                       next_dists[-1]) + 1)
+        top_dists = next_dists
+    return top_dists[-1]
+
+
+
+def get_provenance_sugestions(provenance : str) -> list[str]:
+    """
+    For name of provenace returns possible variants from those already
+    present in database
+    """
+    distances = {}
+    for source in Sources.objects.filter(~Q(provenance_id='unknown')).values():
+        distances[source['provenance']] = levenstein(source['provenance'], provenance)
+    return dict(sorted(distances.items(), key=lambda x:x[1], reverse=False)).keys()
+
+
+
+def get_unknown_provenances() -> list[str]:
+    """
+    Returns list of all provenances in database that are not matched
+    with existing provenance_id
+    """
+    unknown_provenances = []
+    for source in Sources.objects.filter(provenance_id='unknown').values():
+        unknown_provenances.append(source['provenance'])
+
+    return list(set(unknown_provenances).difference({'unknown'}))
+
+
+def add_new_coordinates(provenance : str, lat : str, long : str):
+    """
+    Function upload new record to Geography 
+    (provenance, latitude and longitude are given, new provenance_id is generated)
+    Then updates Sources where there is similar porvenance for source
+    """
+    pass
+
+
+def add_matched_provenance(new_prov : str, existing_prov : str):
+    """
+    
+    """
+    pass

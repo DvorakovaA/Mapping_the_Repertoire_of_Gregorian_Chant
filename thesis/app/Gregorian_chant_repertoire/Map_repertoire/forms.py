@@ -38,10 +38,6 @@ class InputForm(forms.Form):
     datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False)
 
 
-
-
-
-
 class UploadDatasetForm(forms.Form):
     """
     Form for upload of own data sets
@@ -62,3 +58,20 @@ class DeleteDatasetForm(forms.Form):
         self.user = user
         super().__init__(*args, **kwargs)
         self.fields['dataset_select'].choices = [(f[0], f[1]) for f in zip(Datasets.objects.filter(owner=user).values_list('dataset_id', flat=True), Datasets.objects.filter(owner=user).values_list('name', flat=True))]
+
+
+
+class AddGeographyInfoForm(forms.Form):
+    """
+    Form for updates in georaphz data
+    Used for matching same provenances with different 
+    """
+    def __init__(self, suggestions, *args, **kwargs):
+        self.suggestions = suggestions
+        super().__init__(*args, **kwargs)
+        self.fields['matched_info'].choices = [ch for ch in zip(suggestions, suggestions)]
+
+    matched_info = forms.ChoiceField(widget=forms.RadioSelect, choices=None, required=False)
+    new_coords = forms.ChoiceField(widget=forms.RadioSelect, choices={'new_geo': 'Add new coordinates (Use decimal format!)'}, required=False)
+    lat = forms.CharField(max_length=15, required=False)
+    long = forms.CharField(max_length=15, required=False)

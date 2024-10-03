@@ -2,18 +2,19 @@
 Function that handle displaying of html files and data transfer between components
 """
 
-from django.shortcuts import render
-from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm
+from django.shortcuts import render, redirect
+from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.contrib.auth import login, logout
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
 from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
 
-from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset 
+from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset
+from Map_repertoire.datasets import get_provenance_sugestions, get_unknown_provenances, add_new_coordinates, add_matched_provenance
 
 
 def index(request):
@@ -126,7 +127,11 @@ def logout_view(request):
         return HttpResponseRedirect('/map_repertoire/')
     
 
-def upload_dataset(request):
+def datasets_view(request):
+    """
+    Page for upload and delete datasets -> two django forms
+    Also displays various warnings
+    """
     add_form = UploadDatasetForm(request.POST, request.FILES)
     delete_form = DeleteDatasetForm(data=request.POST, user=request.user.username)
     context = {"add_form" : add_form, "delete_form" : delete_form}
@@ -137,12 +142,15 @@ def upload_dataset(request):
             request.session['unknown_values'] = []
             return HttpResponseRedirect("")
         
-        # Unknown provenances control
+        # Unknown provenances controls
         elif 'geo_yes' in request.POST:
-            context['miss_provenance'] =  request.session['miss_provenance']
-            context['dataset_name'] = request.session['dataset_name']
+            list_last_set_missed = request.session['miss_provenance']
+            list_all_general_missed = get_unknown_provenances()
+            request.session['list_missed'] = list(set(list_all_general_missed + list_last_set_missed))
+            print(request.session['list_missed'])
             request.session['miss_provenance'] = []
-            return render(request, "map_repertoire/geography.html", context)
+            return HttpResponseRedirect("/map_repertoire/geography", request)
+            
         
         elif 'geo_no' in request.POST:
             request.session['miss_provenance'] = []
@@ -181,7 +189,50 @@ def upload_dataset(request):
 
 def geography(request):
     """
-    
+    Provides page with updates in geography data of app
+    especially geography data updating form control
     """
 
-    return render(request, "map_repertoire/geography.html")
+    context = {}
+    if request.session['list_missed'] != []:
+         context['actual_prov'] = request.session['list_missed'][0]
+         suggestions = get_provenance_sugestions(request.session['list_missed'][0])
+         prov_form = AddGeographyInfoForm(data=request.POST, suggestions=suggestions)
+         context['prov_form'] = prov_form
+         
+    else:
+        context['prov_form'] = []
+    
+    # Resolving forms
+    if request.method == 'POST':
+        if context['prov_form'] != []:
+            # 
+            if context['prov_form'].is_valid():
+                # Check what submit button was pressed
+                if 'add' in request.POST:
+                    # Check if something was selected while Add pressed
+                    if context['prov_form'].cleaned_data['matched_info'] != '' or context['prov_form'].cleaned_data['new_coords'] != '':
+                        if context['prov_form'].cleaned_data['new_coords'] == 'new_geo':
+                            lat = context['prov_form'].cleaned_data['lat']
+                            long = context['prov_form'].cleaned_data['long']
+                            try:
+                                lat = float(lat)
+                                long = float(long)
+                                add_new_coordinates(request.session['list_missed'][0], lat, long)
+                            except:
+                                context['error_message'] = 'Please, use decimal format of coordinates!'
+                                return render(request, "map_repertoire/geography.html", context)
+                        else:    
+                            add_matched_provenance(request.session['list_missed'][0], context['prov_form'].cleaned_data['matched_info'])
+                        request.session['list_missed'].pop(0)
+                    else: # empty form and Add pressed
+                        context['error_message'] = 'Please for Add option choose something.'
+                        return render(request, "map_repertoire/geography.html", context)
+                elif 'next' in request.POST:
+                    request.session['list_missed'].pop(0)
+
+                request.session.modified = True
+                return HttpResponseRedirect("", request)
+            
+
+    return render(request, "map_repertoire/geography.html", context)
