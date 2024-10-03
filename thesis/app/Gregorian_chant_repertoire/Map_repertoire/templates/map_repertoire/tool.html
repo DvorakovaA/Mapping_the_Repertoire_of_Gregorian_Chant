@@ -74,7 +74,7 @@
           </div>
           <br> 
           {% if request.session.dataset_error_message.strip %}
-            <p style="color: red;"> <b> {{ request.session.dataset_error_message }} </b> </p>
+            <p> <b> {{ request.session.dataset_error_message }} </b> </p>
           {% else %}
             <i>(At least one dataset must be selected!)</i> <br>
           {% endif %}
@@ -257,20 +257,20 @@
 
     // Dynamic changes in displaying form (to ensure that if some feast is selected, than request correct)
     // Louvein      
-    var Louvein_checked = document.getElementById('id_community_detection_algorithm_0');
-    Louvein_checked.addEventListener('click', function() {
+    var LouveinChecked = document.getElementById('id_community_detection_algorithm_0');
+    LouveinChecked.addEventListener('click', function() {
             document.getElementById('metricSelection').style.display = 'inline';
             document.getElementById('numberOfTopicsSelection').style.display = 'none';
     })
     // DBSCAN
-    var DBSCAN_checked = document.getElementById('id_community_detection_algorithm_1');
-    DBSCAN_checked.addEventListener('click', function() {
+    var DBSCANChecked = document.getElementById('id_community_detection_algorithm_1');
+    DBSCANChecked.addEventListener('click', function() {
             document.getElementById('metricSelection').style.display = 'inline';
             document.getElementById('numberOfTopicsSelection').style.display = 'none';
     })
     // Topic model
-    var Topic_checked = document.getElementById('id_community_detection_algorithm_2');
-    Topic_checked.addEventListener('click', function() { 
+    var TopicChecked = document.getElementById('id_community_detection_algorithm_2');
+    TopicChecked.addEventListener('click', function() { 
         document.getElementById('metricSelection').style.display = 'none';
         document.getElementById('numberOfTopicsSelection').style.display = 'inline';
     });
@@ -288,13 +288,13 @@
         }
 
     // Dynamic check and uncheck of office selection
-    var allChcekbox = document.getElementById('id_all_0');
-    allChcekbox.addEventListener('click', function() {
+    var AllChcekbox = document.getElementById('id_all_0');
+    AllChcekbox.addEventListener('click', function() {
       document.getElementById('id_office_0').checked = false;
       document.getElementById('id_office_1').checked = false;
       document.getElementById('id_office_2').checked = false;
       document.getElementById('id_office_3').checked = false;
-      allChcekbox.checked = true;
+      AllChcekbox.checked = true;
     });
     var VChcekbox = document.getElementById('id_office_0');
     VChcekbox.addEventListener('click', function() {
@@ -333,11 +333,10 @@
     });
     
     // Ensure other datasets are visible when some is checked
-    var otherId = "id_datasets_public_";
-    var otherSets = document.querySelectorAll(`[id^=${otherId}]`);
-    for (const otherDs of otherSets) {
+    var OtherId = "id_datasets_public_";
+    var OtherSets = document.querySelectorAll(`[id^=${OtherId}]`);
+    for (const otherDs of OtherSets) {
         if (otherDs.checked) {
-          console.log("checked");
           OtherDatasets.style.display = "block";
           ShowPubDatasets.style.display = "none";
           HidePubDatasets.style.display = "block";
@@ -347,13 +346,13 @@
 
     // Collapsibility of table
     document.addEventListener('DOMContentLoaded', function () {
-    var mainTable = document.getElementsByClassName('mainTable')[0];
+    var MainTable = document.getElementsByClassName('mainTable')[0];
     
     // Get all elements with data-collapsible-trigger attribute
-    var triggerElements = mainTable.querySelectorAll('[data-collapsible-trigger]');
+    var TriggerElements = MainTable.querySelectorAll('[data-collapsible-trigger]');
 
     // Iterate through each trigger element
-    triggerElements.forEach(function (trigger) {
+    TriggerElements.forEach(function (trigger) {
         // Add click event listener to each trigger
         trigger.addEventListener('click', function () {
             // Find the closest parent with data-collapsible-container attribute
@@ -374,7 +373,7 @@
     var expandAllTrigger = document.querySelectorAll('[data-collapsible-expand-all]');
     expandAllTrigger.forEach(function (trigger) {
         trigger.addEventListener('click', function () {
-        var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
+        var collabsibleContainers = MainTable.querySelectorAll('[data-collapsible-container]');
         collabsibleContainers.forEach(function (container) {
             var collapsibleElements = container.querySelectorAll('[data-collapsible]');
             collapsibleElements.forEach(function (collapsibleEl) {
@@ -391,7 +390,7 @@
     var collapseAllTrigger = document.querySelectorAll('[data-collapsible-collapse-all]');
     collapseAllTrigger.forEach(function (trigger) {
         trigger.addEventListener('click', function () {
-        var collabsibleContainers = mainTable.querySelectorAll('[data-collapsible-container]');
+        var collabsibleContainers = MainTable.querySelectorAll('[data-collapsible-container]');
         collabsibleContainers.forEach(function (container) {
             var collapsibleElements = container.querySelectorAll('[data-collapsible]');
             collapsibleElements.forEach(function (collapsibleEl) {

@@ -2,9 +2,9 @@
 
 {% block side_buttons %}
     <div class="container ms-4 mt-3 mr" style="float:right">
-    <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:right">Back</button> <br><br>
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:right">Back</button> <br><br>
     </div>
-    {% endblock %}
+{% endblock %}
 
 {% block content %}
     {% if request.user.is_authenticated %}
@@ -53,7 +53,7 @@
                     </p>
                     <div class="container ms-4 mt-3 mr-5">
                         {% for unknown in request.session.unknown_values %}
-                            {{ unknown }} <br>
+                            <b>{{ unknown }} </b> <br>
                         {% endfor %}
                     </div>
                     <!-- <button id="ok" type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'">OK</button> <br><br>   
@@ -70,8 +70,9 @@
                     <h5> Unmatched provenances </h5>
                     <p> These provenances were not matched with existing provenances in system. </p>
                     {% for prov in request.session.miss_provenance %}
-                        {{ prov }} <br>
+                        <b> {{ prov }} </b> <br>
                     {% endfor %}
+                    <br>
                     <p> Would you like to solve this? </p>
                     <form method="post">
                         {% csrf_token %}
