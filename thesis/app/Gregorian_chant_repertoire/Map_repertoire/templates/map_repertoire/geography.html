@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+  {% if request.user.is_authenticated %}
   <div class="container ms-4 mt-3">
     
     <h2> Unknown provenance details </h2>
@@ -62,7 +63,12 @@
       
     </div>
   </div>
-
+  {% else %}
+    <div class="container ms-4 mt-3">
+      <h5> No access for not logged in users</h5>
+        This page is for registered users to help with
+    </div>
+  {% endif %}
   <script>
 
     // Show lat and long only if needed
