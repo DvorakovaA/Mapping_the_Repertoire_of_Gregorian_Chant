@@ -309,16 +309,30 @@ def get_provenance_sugestions(provenance : str) -> list[str]:
 
 
 
-def get_unknown_provenances() -> list[str]:
+def get_reachable_sources(user : str):
+    """
+    Collects what sources content user can reach and returns such sources IDs
+    """
+    his_and_public_sets = Datasets.objects.filter(Q(owner=user) | Q(public=True)).values_list('dataset_id', flat=True)
+    his_and_public_data = Sources.objects.filter(dataset__in=his_and_public_sets).values_list('drupal_path', flat=True)
+    ci_base = Sources.objects.filter(dataset="admin_CI_base").values_list('drupal_path', flat=True)
+
+    return list(set(list(his_and_public_data) + list(ci_base)))
+
+
+
+def get_unknown_provenances(user : str) -> list[str]:
     """
     Returns list of all provenances in database that are not matched
     with existing provenance_id
     """
     unknown_provenances = []
-    for source in Sources.objects.filter(provenance_id='unknown').values():
+    reachable_sources = get_reachable_sources(user)
+    for source in Sources.objects.filter(Q(provenance_id='unknown') & Q(drupal_path__in=reachable_sources)).values():
         unknown_provenances.append(source['provenance'])
 
     return list(set(unknown_provenances).difference({'unknown'}))
+
 
 
 def add_new_coordinates(provenance : str, lat : str, long : str):
@@ -328,6 +342,7 @@ def add_new_coordinates(provenance : str, lat : str, long : str):
     Then updates Sources where there is similar porvenance for source
     """
     pass
+
 
 
 def add_matched_provenance(new_prov : str, existing_prov : str):
