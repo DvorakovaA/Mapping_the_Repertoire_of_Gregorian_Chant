@@ -144,10 +144,6 @@ def datasets_view(request):
         
         # Unknown provenances controls
         elif 'geo_yes' in request.POST:
-            list_last_set_missed = request.session['miss_provenance']
-            list_all_general_missed = get_unknown_provenances()
-            request.session['list_missed'] = list(set(list_all_general_missed + list_last_set_missed))
-            print(request.session['list_missed'])
             request.session['miss_provenance'] = []
             return HttpResponseRedirect("/map_repertoire/geography", request)
             
@@ -192,6 +188,14 @@ def geography(request):
     Provides page with updates in geography data of app
     especially geography data updating form control
     """
+    try:
+        if request.session['list_missed'] == []:
+            list_all_general_missed = get_unknown_provenances(request.user.username)
+            request.session['list_missed'] = list_all_general_missed
+    except: # request.session['list_missed'] does not exist -> create it
+        list_all_general_missed = get_unknown_provenances(request.user.username)
+        request.session['list_missed'] = list_all_general_missed
+
 
     context = {}
     if request.session['list_missed'] != []:
