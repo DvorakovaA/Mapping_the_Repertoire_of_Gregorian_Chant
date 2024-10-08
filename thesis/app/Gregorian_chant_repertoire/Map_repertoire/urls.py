@@ -9,6 +9,6 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
     path("logout/", views.logout_view, name="logout"),
-    path("datasets/", views.upload_dataset, name="datasets"),
+    path("datasets/", views.datasets_view, name="datasets"),
     path("geography/", views.geography, name="geography")
 ]
