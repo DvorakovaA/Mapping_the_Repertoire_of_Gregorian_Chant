@@ -15,7 +15,7 @@ import regex as re
 import functools
 
 from django.db.models import Q
-from .models import Sources, Datasets, Data_Chant, Feasts
+from .models import Sources, Datasets, Data_Chant, Feasts, Geography
 
 MANDATORY_CHANTS_FIELDS = ['cantus_id', 'source_id', 'feast_code', 'incipit']
 OPTIONAL_CHANTS_FIELDS = ['office_id']
@@ -175,9 +175,8 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
         new_sources['provenance_id'] = ""
         for index, row in new_sources.iterrows():
             if Sources.objects.filter(provenance=row['provenance']).exists():
-                new_sources.at[index, 'provenance_id'] = Sources.objects.filter(provenance=row['provenance']).values_list('provenance_id')[0]
+                new_sources.at[index, 'provenance_id'] = Sources.objects.filter(provenance=row['provenance']).values_list('provenance_id')[0][0]
             else:
-                print("does not exist provenance in sources")
                 new_sources.at[index, 'provenance_id'] = "unknown"
 
         # add or fill title column with siglum...
@@ -263,15 +262,17 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
     return list(set(unknown_values)), list(set(unmatched_provenances))
 
 
+
 def delete_dataset(dataset_id : str):
     """
     Delete record from Datasets
     Delete all records from Data_Chants
-    Delete all (possible) records from Sources
+    Do not delete all (possible) records from Sources,
+    because first Source record is authoritative
     """
     Datasets.objects.filter(dataset_id=dataset_id).delete()
     Data_Chant.objects.filter(dataset=dataset_id).delete()
-    Sources.objects.filter(dataset=dataset_id).delete()
+    #Sources.objects.filter(dataset=dataset_id).delete()
 
 
 
@@ -337,16 +338,29 @@ def get_unknown_provenances(user : str) -> list[str]:
 
 def add_new_coordinates(provenance : str, lat : str, long : str):
     """
-    Function upload new record to Geography 
+    Function uploads new record to Geography 
     (provenance, latitude and longitude are given, new provenance_id is generated)
-    Then updates Sources where there is similar porvenance for source
+    Then updates Sources where there is same provenance for source
     """
-    pass
+    # Create new Geography record
+    new_id = "provenance_" + str(int(sorted(list(Sources.objects.filter(~Q(provenance_id='unknown')).values_list('provenance_id', flat=True)))[-1][-3:]) + 1)
+    new_entry = Geography()
+    new_entry.provenance_id = new_id
+    new_entry.provenance = provenance
+    new_entry.longitude = long
+    new_entry.latitude = lat
+    new_entry.save()
+
+    # And update Sources as well
+    Sources.objects.filter(provenance=provenance).update(provenance_id=new_id)
 
 
 
 def add_matched_provenance(new_prov : str, existing_prov : str):
     """
-    
+    Function adds provenance_id to source with new_prov provenance
+    based on provenance_id of matched existing_prov provenance
     """
-    pass
+    provenance_id = Sources.objects.filter(provenance=existing_prov).values_list('provenance_id', flat=True)[0]
+    # Update
+    Sources.objects.filter(provenance=new_prov).update(provenance_id=provenance_id)

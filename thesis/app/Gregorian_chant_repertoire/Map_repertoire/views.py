@@ -222,10 +222,10 @@ def geography(request):
                             try:
                                 lat = float(lat)
                                 long = float(long)
-                                add_new_coordinates(request.session['list_missed'][0], lat, long)
                             except:
                                 context['error_message'] = 'Please, use decimal format of coordinates!'
                                 return render(request, "map_repertoire/geography.html", context)
+                            add_new_coordinates(request.session['list_missed'][0], lat, long)
                         else:    
                             add_matched_provenance(request.session['list_missed'][0], context['prov_form'].cleaned_data['matched_info'])
                         request.session['list_missed'].pop(0)
