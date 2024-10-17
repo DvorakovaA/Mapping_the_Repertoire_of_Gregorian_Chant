@@ -35,20 +35,20 @@
                         </div>
                     <br>
 
-                    {% if request.session.error_message %}
-                        <p style="color:red;">{{ request.session.error_message }}</p>
+                    {% if request.session.upload_error_message %}
+                        <p style="color:red;">{{ request.session.upload_error_message }}</p>
                     {% endif %}
 
-                    <input type="submit" value="Add" class="btn btn-outline-secondary", id="submit_add_form_btn">
+                    <input type="submit" value="Add" class="btn btn-outline-secondary", id="submit_add_form_btn"> <br> <br>
+                    <p style="display: block;">(Please, be reasonably careful - sources records uploaded are authoritative and can be changed only by administrator.)</p>
                 </form>
-                <br>
             </div>
             {% if request.session.unknown_values %}
                 <div class="container ms-4 mt-3 mr-1" id="unknown_values">
                     <h5 style="color:red;"> Unknown values </h5>
                     <p> 
                         There are few unknown values in your data. <br>
-                        All were given lable unknown in uploaded dataset. <br>
+                        All these unknown or missing values were given lable unknown in uploaded dataset. <br>
                         If you wnat otherwise please delete uploaded dataset and upload it again with desired corrections.
                     </p>
                     <div class="container ms-4 mt-3 mr-5">
