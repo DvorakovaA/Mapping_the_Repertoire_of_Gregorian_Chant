@@ -198,6 +198,7 @@ def geography(request):
 
 
     context = {}
+    context['map_data_all'] = get_map_of_all_data()
     if request.session['list_missed'] != []:
          context['actual_prov'] = request.session['list_missed'][0]
          suggestions = get_provenance_sugestions(request.session['list_missed'][0])
