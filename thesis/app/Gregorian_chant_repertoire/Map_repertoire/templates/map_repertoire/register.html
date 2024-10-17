@@ -23,11 +23,16 @@
                     <div class="ms-3">
                         {{ form.password2 }}
                     </div>
+                    <div style="color: red;">
+                        {% if request.session.reg_error %}
+                            {{ request.session.reg_error }}
+                        {% endif %}
+                    </div>
                     <br>
-
-                    <button class="btn btn-outline-secondary" type="submit"> Register</button>
+                    <button class="btn btn-outline-secondary" type="submit"> Register</button><br>
                 </form>
                 <br><br>
+
                 <p> Already have account? Please, <a href="/map_repertoire/login" >login</a>.</p> <br>
 
             {% else %}

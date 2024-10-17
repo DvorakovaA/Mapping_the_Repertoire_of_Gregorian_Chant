@@ -21,6 +21,8 @@ def index(request):
     """
     Function that manages intro page of the app
     """
+    request.session['upload_error_message'] = '' # clean datasets errors with page change
+
     context = {}
     context['map_data_all'] = get_map_of_all_data()
     return render(request, "map_repertoire/index.html", context)
@@ -34,6 +36,8 @@ def tool(request):
     context = {} # back-end and front-end communication variable
     form = InputForm(data=request.POST or None, initial={'feast' : '---'}, user=request.user.username)
     context = {"form" : form}
+
+    request.session['upload_error_message'] = '' # clean datasets errors with page change
 
     if form.is_valid():
         request.session['feast'] = form.cleaned_data['feast']
@@ -90,11 +94,18 @@ def register_view(request):
     """
     Function providing page with registration form (and registration) for new users
     """
-    reg_form = UserCreationForm(request.POST or None)
-    if reg_form.is_valid():
-        new_user = reg_form.save()
-        return HttpResponseRedirect('/map_repertoire/login/', request)
-    
+    reg_form = UserCreationForm(request.POST)
+
+    if request.method == 'POST':
+        if reg_form.is_valid():
+            request.session['reg_error'] = ""
+            reg_form.save()
+            return HttpResponseRedirect('/map_repertoire/login/', request)
+        else:
+            request.session['reg_error'] = ""
+            request.session['reg_error'] = reg_form.errors
+    else:
+        request.session['reg_error'] = ""
     context = {"form": reg_form}
     return render(request, 'map_repertoire/register.html', context)
 
@@ -157,7 +168,7 @@ def datasets_view(request):
         sources_file = request.FILES.get('sources_file', None)
         request.session['dataset_name'] = add_form.cleaned_data['name'].strip()
         validity, error_message = check_files_validity(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file)
-        request.session['error_message'] = error_message
+        request.session['upload_error_message'] = error_message
 
         if validity:
             possible_unknown, miss_provenance = integrate_chants_file(add_form.cleaned_data['name'], request.user.username, request.FILES['chants_file'], sources_file, add_form.cleaned_data['visibility'])
@@ -175,7 +186,7 @@ def datasets_view(request):
         for dataset in datasets:
             delete_dataset(dataset)
             
-        request.session['error_message'] = ""
+        request.session['upload_error_message'] = ""
         request.session['unknown_values'] = []
         request.session['miss_provenance'] = []
         return HttpResponseRedirect("")
