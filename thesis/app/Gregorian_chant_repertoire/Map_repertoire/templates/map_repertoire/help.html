@@ -1,10 +1,121 @@
 <!-- Help page-->
 {% extends "base.html" %}
 
+    
+    {% block side_buttons %}
+    <div class="container ms-4 mt-3 mr" style="float:right">
+      <button type="button" class="btn btn-outline-secondary me-3" style="float:right" onclick="window.history.back()">Back</button>
+    </div>
+    {% endblock %}
+
     {% block content %}
-    <button type="button" class="btn btn-outline-secondary me-3" style="float:right" onclick="window.history.back()">Back</button>
-    <div class="container ms-4 mt-3">
-      <h1>Help page</h1>
-      <h5> Here would be help page for Map_repertoire app</h5>
+      <div class="container ms-4 mt-3">
+      <h2>Help page for ChantExplorer</h2>
+
+      <div class="container mb-3 mt-3">
+        Here you can find pieces of advice for smooth usage of ChantExploler app - web application for those interested in 
+        computational research on Gregorian chant and map visualizations of sources of chant.
+      </div>
+
+      <h3>Sections</h3>
+      <div class="container mt-2 mb-5">
+        <div class="list-group">
+          <a href="#functions" class="list-group-item list-group-item-action">Functions</a>
+          <a href="#search" class="list-group-item list-group-item-action">Basic search</a>
+          <a href="#datasets" class="list-group-item list-group-item-action">Custom datasets</a>
+          <a href="#users" class="list-group-item list-group-item-action">User accounts</a>
+          <a href="#geography" class="list-group-item list-group-item-action">Geography info updates</a>
+          <a href="#problems" class="list-group-item list-group-item-action">Problems report</a>
+        </div>
+      </div>
+      {% load static %}
+      <h4 id="functions">Functions</h4>
+        <div class="container mt-1 mb-1">
+          <h5> Home page </h5>
+            <div class="container mt-1 mb-1">
+              Home page provides redirect to Search tool page as well as <a href="#users">users</a> authentification options. <br>
+              It also let you have a look on what provenances of sources are known to the tool and so what you can and cannot expect in the results of provided search.
+              <br>
+              <div class="container mt-3 mb-3">
+                <img src="{% static 'web_pictures/home_page.png' %}" width="700" height="auto">
+              </div>
+            </div>
+        
+          <h5> Searching tool</h5>
+            <div class="container mt-1 mb-1">
+              Web page refered as tool is main research playground. Given schemata should show you, how to make desired search.
+              <br>
+              Overview
+              <div class="container mt-3 mb-3">
+                <img src="{% static 'web_pictures/tool_page.png' %}" width="700" height="auto">
+              </div>
+              Form fill consists of five steps:
+              <br>
+
+
+
+              List of abbreviations:
+              <dl>
+                <dt>V, M, L, V2</dt>
+                <dd>- standard Cantus Index abbreviations for services: First Vespers, Matins, Lauds, Second Vespers</dd>
+                <dt>Basic CI dataset</dt>
+                <dd>- it is dataset consisting of antiphons and responsories that were reachable in Cantus Index database in February 2024</dd>
+              </dl> 
+            </div>
+          
+          <h5> Results of traditions search </h5>
+          <div class="container mt-1 mb-1">
+            Results of search for potential traditions in repertoire can be examine in three different ways:
+
+          </div>
+            
+          <h5> Dataset maintenance </h5>
+            <div class="container mt-1 mb-1">
+              To authenticated users (those registered and logged in) we offer possibilty to work with their own selected data. <br>
+              Named datasets are then shown to its owner user in search form. <br>
+              there is possibility of public datasets that allows users to make their datasets accesible for all other users and also use public dataasets of others. <br>
+              To start with this option please follow instruction in section <a href="#datasets"> Custom datasets</a>
+            </div>
+            <h5> </h5>
+        </div>
+      <h4 id="search">Basic search</h4>
+        <div class="container mt-1 mb-1">
+          To make basic search in Tool you need to pick feast or feasts to look at, also amount and type of offices 
+        </div>
+
+
+      <h4 id="users">User accounts</h4>
+        <div class="container mt-1 mb-1">
+          To enable some features (like custom datasets) we add 
+        </div>
+
+
+      <h4 id="datasets">Custom datasets</h4>
+        <div class="container mt-1 mb-1">
+          Your custom dataset can be taken from at most two files. <br>
+          We support files in <i>.csv</i> format (for example <i>chants.csv</i>).
+          <h5> Chants file format</h5>
+          <h5> Sources file format</h5>
+        </div>
+
+
+      <h4 id="geography">Geogrpahy info update</h4>
+        <div class="container mt-1 mb-1">
+        </div>
+
+
+      <h4 id="problems">Problems report</h4>
+        <div class="container mt-1 mb-1">
+          Something seems not working or broken? <br>
+          You uploaded wrong source info? <br>
+          Wrong provenances matched? <br>
+          <br>
+          Do not worry and tell us! The easiest way is to report your problem via 
+        </div>
+
+      <h5> You have not found answer to your question? </h5>
+      <div class="container mt-1 mb-1">
+        Do not worry! You can still ask the administrators :-D Feel free to conntact us the same way that is described in section about <a href="#problems">reporting problems</a>.
+      </div>
     </div>
     {% endblock %}
