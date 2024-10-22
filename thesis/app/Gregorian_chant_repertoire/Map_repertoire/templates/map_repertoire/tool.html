@@ -12,6 +12,16 @@
 
 
 {% block content %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 <!-- Request form window -->
 <div class="input-form">
 <div class="container ms-4 mt-3 mr-2 border border-secondary rounded">
@@ -74,7 +84,7 @@
           </div>
           <br> 
           {% if request.session.dataset_error_message.strip %}
-            <p> <b> {{ request.session.dataset_error_message }} </b> </p>
+            <p style="color: red;"> <b> {{ request.session.dataset_error_message }} </b> </p>
           {% else %}
             <i>(At least one dataset must be selected!)</i> <br>
           {% endif %}
@@ -147,7 +157,7 @@
                             {% for uncoll_chant in com_chants_dicts.uncollapsed %}
                               <tr>
                                 {{ uncoll_chant.incipit }}
-                                <a href='http://www.cantusindex.org/id/{{ uncoll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ uncoll_chant.cantus_id }}</a> {{ uncoll_chant.freq }} <br>
+                                <a href='https://cantusindex.org/id/{{ uncoll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ uncoll_chant.cantus_id }}</a> {{ uncoll_chant.freq }} <br>
                               </tr>
                             {% endfor %}
                         </table>
@@ -158,7 +168,7 @@
                                 {% for coll_chant in com_chants_dicts.collapsed %}
                                 <tr>
                                   {{ coll_chant.incipit }}
-                                  <a href='http://www.cantusindex.org/id/{{ coll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ coll_chant.cantus_id }}</a> {{ coll_chant.freq }} <br>
+                                  <a href='https://cantusindex.org/id/{{ coll_chant.cantus_id }}'  target="_blank" rel="noopener noreferrer">{{ coll_chant.cantus_id }}</a> {{ coll_chant.freq }} <br>
                                 </tr>
                               {% endfor %}
                               </table>
@@ -405,5 +415,21 @@
       });
     });
 
+
+    // Autocomplete in feasts selection
+    $(document).ready(function() {
+        $('.feasts_select').select2({
+            placeholder: "Select feast(s)", 
+            allowClear: true
+        });
+    });
+
   </script>
+
+  <!-- Custom CSS for vertical stacking of options in feast_select -->
+  <style>
+    .select2-results__option {
+        display: block;      /* Force each option to be displayed on a separate line */
+    }
+  </style>
 {% endblock %}
