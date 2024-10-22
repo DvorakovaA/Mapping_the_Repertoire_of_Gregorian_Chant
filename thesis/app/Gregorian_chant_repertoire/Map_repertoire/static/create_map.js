@@ -74,14 +74,14 @@ function getMaps(map_data) {
         var cen_layers = {}
         // Layer for all edges
         var allCen = L.layerGroup();
-        cen_layers['all'] = allCen;
-        cen_layers['all'].addTo(cen_map);
-        cenLayerControl.addOverlay(cen_layers['all'], "All edges");
+        //cen_layers['all'] = allCen;
+        //cen_layers['all'].addTo(cen_map);
+        //cenLayerControl.addOverlay(cen_layers['all'], "All edges");
         // Layer for shared edges
-        var sharedCen = L.layerGroup();
-        cen_layers['shared'] = sharedCen;
-        cen_layers['shared'].addTo(cen_map);
-        cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
+        //var sharedCen = L.layerGroup();
+        //cen_layers['shared'] = sharedCen;
+        //cen_layers['shared'].addTo(cen_map);
+        //cenLayerControl.addOverlay(cen_layers['shared'], "All shared edges");
         // Create layer for each century group and add it to layerControl
         // no edges layer needed
         for(century of map_data.used_centuries) {
@@ -128,19 +128,19 @@ function getMaps(map_data) {
                     edge1.addTo(com_layers['all']);
                 }
                 // Same century group
-                if(map_data.map_cen_info[line[0]] == map_data.map_cen_info[line[1]])
-                {
-                    var edge = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : map_data.colors[com_id], weight : weight, pane : "line"});
-                    edge.bindPopup(line_popup);
-                    edge.addTo(cen_layers['all']);
-                }
+                //if(map_data.map_cen_info[line[0]] == map_data.map_cen_info[line[1]])
+                //{
+                    //var edge = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : map_data.colors[com_id], weight : weight, pane : "line"});
+                    //edge.bindPopup(line_popup);
+                    //edge.addTo(cen_layers['all']);
+                //}
                 // Edge shared between century groups
-                else {
-                    var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : 'black', weight : weight, pane : "line"});
-                    edge1.bindPopup(line_popup);
-                    edge1.addTo(cen_layers['shared']);
-                    edge1.addTo(cen_layers['all']);
-                }
+                //else {
+                    //var edge1 = L.polyline([[lat1, long1], [lat2, long2]], {renderer: cenRenderer, color : 'black', weight : weight, pane : "line"});
+                    //edge1.bindPopup(line_popup);
+                    //edge1.addTo(cen_layers['shared']);
+                    //edge1.addTo(cen_layers['all']);
+                //}
             }
         }
 
