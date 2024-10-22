@@ -53,6 +53,7 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
     """
     Validity means:
     * different name than other datasets of such user
+    * readability via pandas (kind of suffix check)
     * all mandatory fields present
     * all present sources known by database
     """
@@ -60,7 +61,7 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
         try:
             new_chants = pd.read_csv(chants_file)
         except:
-            return (False, "Something is wrong with your chants file. Check it with instructions in Help section please.")
+            return (False, "Something is wrong with your chants file. Check it with instructions in Help section please. (Possibly wrong file ending?)")
         all_ch_columns, missing_ch = check_complete_chants_columns(new_chants)
         if all_ch_columns:
             # check if all sources are known
@@ -91,7 +92,7 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
                 error_m = "Unknown sources. Please upload source file with these sources: \n"
                 for source in unknown_sources:
                     error_m += source+"\n"
-                error_m += " Please upload both files again."
+                error_m += " . Please upload both files again."
                 return (False, error_m)
         else:
             return (False, "Mandatory column "+ missing_ch +" (or value in such column) of your dataset is missing. Check what is mandatory in Help section.")
@@ -146,9 +147,12 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
         sources_file.seek(0)
         new_sources = pd.read_csv(sources_file)
 
+        # ensure right datatype of century column
+        new_sources = new_sources.astype({'century': 'str'})
+
         # fill for empty optional values - possibly create new unknown columns
         if 'century' in new_sources.columns:
-            new_sources['century'].fillna('unknown', inplace=True)
+            new_sources['century'].replace('nan', 'unknown', inplace=True)
         else:
             new_sources.insert(1, 'century', 'unknown')
         if 'provenance' in new_sources.columns:
@@ -158,10 +162,10 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
 
         # create num_century
         numerical_century = []
-        for cent in new_sources['century'].to_numpy():
+        for cent in new_sources['century']:
             if cent[0:2].isnumeric():
                 if cent[2].isnumeric():
-                    numerical_century.append(str(int(cent[0:2])+1))
+                    numerical_century.append(int(str(cent)[0:2])+1)
                 else:
                     numerical_century.append(cent[0:2])
             else:
@@ -277,6 +281,7 @@ def delete_dataset(dataset_id : str):
 
 
 # ~ GEOGRAPHY RELATED STUFF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 @functools.lru_cache(maxsize=None)
 def levenstein(a : str, b : str) -> float:
     """
@@ -300,12 +305,13 @@ def levenstein(a : str, b : str) -> float:
 
 def get_provenance_sugestions(provenance : str) -> list[str]:
     """
-    For name of provenace returns possible variants from those already
-    present in database
+    For name of provenace returns possible matching variants 
+    from those already present in database
     """
     distances = {}
     for source in Sources.objects.filter(~Q(provenance_id='unknown')).values():
         distances[source['provenance']] = levenstein(source['provenance'], provenance)
+
     return dict(sorted(distances.items(), key=lambda x:x[1], reverse=False)).keys()
 
 
@@ -325,14 +331,14 @@ def get_reachable_sources(user : str):
 def get_unknown_provenances(user : str) -> list[str]:
     """
     Returns list of all provenances in database that are not matched
-    with existing provenance_id
+    with existing provenance_id and exclude 'unknown'
     """
     unknown_provenances = []
     reachable_sources = get_reachable_sources(user)
     for source in Sources.objects.filter(Q(provenance_id='unknown') & Q(drupal_path__in=reachable_sources)).values():
         unknown_provenances.append(source['provenance'])
 
-    return list(set(unknown_provenances).difference({'unknown'}))
+    return sorted(list(set(unknown_provenances).difference({'unknown'})))
 
 
 
@@ -340,7 +346,7 @@ def add_new_coordinates(provenance : str, lat : str, long : str):
     """
     Function uploads new record to Geography 
     (provenance, latitude and longitude are given, new provenance_id is generated)
-    Then updates Sources where there is same provenance for source
+    Then updates Sources by this provenance_id where there is the same provenance for source
     """
     # Create new Geography record
     new_id = "provenance_" + str(int(sorted(list(Sources.objects.filter(~Q(provenance_id='unknown')).values_list('provenance_id', flat=True)))[-1][-3:]) + 1)
@@ -360,6 +366,7 @@ def add_matched_provenance(new_prov : str, existing_prov : str):
     """
     Function adds provenance_id to source with new_prov provenance
     based on provenance_id of matched existing_prov provenance
+    (Reaction to user saying that some places names point to identical geographical point)
     """
     provenance_id = Sources.objects.filter(provenance=existing_prov).values_list('provenance_id', flat=True)[0]
     # Update
