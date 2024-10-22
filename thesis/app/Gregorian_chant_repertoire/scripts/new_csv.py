@@ -102,6 +102,7 @@ def run():
     last_suggested_id = max(provenance_ids['provenance_id'].to_list())
 
     print("Unknown provenances:")
+    print("(Be careful with using suggestions and first check state of app database Sources!)")
     for new in unknown_provenances:
         new_id = "provenance_" + str(int(last_suggested_id[-3:]) + 1)
         last_suggested_id = new_id

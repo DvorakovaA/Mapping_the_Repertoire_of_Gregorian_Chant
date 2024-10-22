@@ -140,7 +140,6 @@ def get_network_info(feast_codes : list[str], compare_metrics, filtering_office 
                         used_sources.append(source_id[0])
                         source_chants_dict[source_id[0]] = chants_of_source
 
-                
         else: # Not All feasts requested
             # Collect data for each feast
             chants_of_feasts = []

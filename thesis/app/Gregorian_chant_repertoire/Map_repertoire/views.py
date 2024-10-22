@@ -2,11 +2,11 @@
 Function that handle displaying of html files and data transfer between components
 """
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.http import HttpResponseRedirect, HttpRequest
+from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout
 
 from Map_repertoire.communities import get_communities
@@ -79,7 +79,7 @@ def tool(request):
 
         context['map_data'] = get_map_data(communities, edges_info)
         context['tab_data'] = get_table_data(communities, feast_codes, filtering_office, request.session['datasets'])
-
+    
     return render(request, "map_repertoire/tool.html", context)
 
 

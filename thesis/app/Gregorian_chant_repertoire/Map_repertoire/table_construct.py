@@ -30,7 +30,6 @@ def get_table_data(communities : list[set [str]], feast_codes : list[str], filte
     '''
     OFFICES = ['V','C', 'M', 'L', 'P', 'T', 'S', 'N',  'V2', 'D', 'R',  'E',  'H', 'CA', 'X', 'UNKNOWN']
     
-    print('table_construct')
 
     if communities != []:
         # Get ready the base of returned structure
@@ -135,7 +134,7 @@ def get_table_data(communities : list[set [str]], feast_codes : list[str], filte
                         tab_data['body'][office].append({'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info})
                     except:
                         tab_data['body'][office] = [{'uncollapsed': uncollapsed_chant_info, 'collapsed' : collapsed_chant_info}]
-        print(tab_data['body'])
+
         return tab_data
     
     # Nothing to be displayed
