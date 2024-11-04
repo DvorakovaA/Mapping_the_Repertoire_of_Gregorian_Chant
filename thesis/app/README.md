@@ -4,4 +4,4 @@ The `Gregorian_chant_repertoire` folder contains an application programmed in th
 
 The steps to run the application locally are given in Appendix A2. User documentation corresponds to Chapter 5, development to Chapter 6. Running the application is not dependent on the rest of this appendix.
 
-In order to run the application, Python (version 3.11.6 and higher) as well as its libraries listed in `app_requirements.txt` file must be installed.
+In order to run the application, Python (version 3.11.6) as well as its libraries listed in `app_requirements.txt` file must be installed.
