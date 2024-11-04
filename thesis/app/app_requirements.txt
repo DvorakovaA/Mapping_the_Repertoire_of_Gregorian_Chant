@@ -2,6 +2,7 @@ asgiref==3.8.1
 contourpy==1.2.1
 cycler==0.12.1
 Django==5.0.8
+django-extensions==3.2.3
 fonttools==4.53.1
 joblib==1.4.2
 kiwisolver==1.4.5
@@ -14,6 +15,7 @@ pillow==10.4.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
+regex==2024.9.11
 scikit-learn==1.4.2
 scipy==1.12.0
 six==1.16.0
