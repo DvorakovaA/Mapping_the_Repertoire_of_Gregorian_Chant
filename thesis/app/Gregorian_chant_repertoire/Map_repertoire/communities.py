@@ -380,6 +380,28 @@ def get_topic_model_communities(feast_codes : list[str], filtering_office : list
     return list(communities_dict.values()), edges_info, '---'
 
 
+# CAT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def get_cat_communities(feast_codes : list[str], filtering_office : list[str], datasets : list[str]):
+    '''
+    Function returning communities for given data request
+    found as in Cantus Analysis Tool - two sources share community if they share all cantus_ids completely
+    '''
+    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="Jaccard", get_shared=True, datasets=datasets)
+    communities = [[used_sources[0]]]
+
+    for source in used_sources[1:]:
+        added = False
+        for comms in communities:
+            if Jaccard_metric(source_chants_dict[source], source_chants_dict[comms[0]]) == 1.0:
+                comms.append(source)
+                added = True
+                break
+        if not added:
+            communities.append([source])
+    
+    return communities, edges_info, '---'
+
+
 # Common ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_communities(feast_codes : list[str], filtering_office : list[str], algorithm : str, add_info_algo : str, datasets : list[str]):
     """
@@ -393,8 +415,11 @@ def get_communities(feast_codes : list[str], filtering_office : list[str], algor
     elif algorithm == 'DBSCAN':
         communities, edges_info, sig_level = get_dbscan_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
-    else: #Topic models
+    elif algorithm == 'Topic': #Topic models
         communities, edges_info, sig_level = get_topic_model_communities(feast_codes, filtering_office, add_info_algo, datasets)
+
+    elif algorithm == 'CAT': # Cantus Analysis Tool based principle
+        communities, edges_info, sig_level = get_cat_communities(feast_codes, filtering_office, datasets)
 
     # Order communities based on their size
     communities.sort(key=len, reverse=True)
