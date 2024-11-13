@@ -1,6 +1,6 @@
 // File with two functions:
-//  Function for construction of leaflet maps given map_data
-//  Function for construction of leaflet map of all provenances given map_data_all
+//  getMaps - function for construction of leaflet maps given map_data
+//  getMapOfAllSources - function for construction of leaflet map of all provenances given map_data_all
 
 // Center of returned map (centre of Europe somewhere in Slovenia, we do not need to view Scandinavia)
 const center = [47.466667, 11.166667]

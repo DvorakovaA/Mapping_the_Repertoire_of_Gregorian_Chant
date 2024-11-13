@@ -1,8 +1,8 @@
 """
 File with 
-* function get_map_data that creates data structures com_map_data and cen_map_data
+* get_map_data - function get_map_data that creates data structures com_map_data and cen_map_data
 which are used in javascript that creates leaflet map of communities
-* function that returns all provences geographical data to create map of all places same way
+* get_map_of_all_data - function that returns all provences geographical data to create map of all places same way
 """
 
 import matplotlib.pyplot as plt

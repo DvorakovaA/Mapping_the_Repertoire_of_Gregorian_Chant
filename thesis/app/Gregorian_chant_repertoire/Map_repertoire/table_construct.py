@@ -1,11 +1,13 @@
 '''
-File providing function to construct result table of source communities 
-found by choosen principle
+File providing function to construct result table of already found source communities 
 Results table on tool page then contains info about particular chants for each community and each office
 It is constructed as dictionary of three parts
     - head - header of table - CommunityXY and number of sources in it with certain colour background
+           - list of dicts
     - body - offices as rows - chants ordered by frequnecy in particular community (column)
+           - complicated dictionary structure of rows (by office)
     - tail - drupal path and siglum of sources in community
+           - list of lists of dicts
 '''
 
 from matplotlib.colors import TwoSlopeNorm, rgb2hex

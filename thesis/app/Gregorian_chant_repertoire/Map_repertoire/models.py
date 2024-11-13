@@ -46,15 +46,15 @@ class Feasts(models.Model):
     """
     Table for data about all feasts that can possibly be searched
     """
-    feast_id = models.CharField(("feast_id"), max_length=20, primary_key=True) #PK
-    feast_code = models.CharField(("feast_code"), max_length=20)
+    feast_id = models.CharField(("feast_id"), max_length=20, primary_key=True) 
+    feast_code = models.CharField(("feast_code"), max_length=20) #PK
     name = models.CharField(("name"), max_length=500)
 
 
 class Datasets(models.Model):
     """
     Table for info about user's datasets
-    ID form: owner_name
+    ID in form: Owner_DatasetName (contcatenation of owner user name and provided dataset name)
     """
     dataset_id = models.CharField(("dataset_id"), max_length=100, null=True) #PK
     name = models.CharField(("name"), max_length=500)

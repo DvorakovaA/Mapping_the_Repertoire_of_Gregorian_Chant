@@ -25,14 +25,14 @@ SECRET_KEY = 'django-insecure-2#8dga_y+xtzc8g=%5xe@jy+fr*n$g%$3b!j^x6%-p%bu51u02
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+# ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',') - production thing
 
-CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',')
+# CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') - production thing
 
 # Application definition
 
 INSTALLED_APPS = [
-    'Map_repertoire.apps.MapRepertoireConfig',
+    'Map_repertoir e.apps.MapRepertoireConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

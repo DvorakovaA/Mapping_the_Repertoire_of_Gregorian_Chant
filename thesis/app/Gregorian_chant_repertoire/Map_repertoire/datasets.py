@@ -1,12 +1,14 @@
 """
 File with 
-* function check_chants_validity() that checks validity of users chants file 
-  and returns possible missing sources and error text
-* function check_sources_validity() that for given sources files checks its validity
-  and for given missing sources that it completes situation
-* function integrate_chants_file() that ensures new sources and given chants are 
+* check_files_validity - function that for given chants and sources files checks its validity
+  and for possibly given missing sources it checks that it solves problem of unknown sources
+* integrate_chants_file - function that ensures new sources and given chants are 
   uploaded into DB
-* functions that covers safe updates of geography data in DB
+* function for deleting chants and dataset records
+* function checking all different kinds of validity (dataset_name, columns of new files)
+* functions for adding record to Dataset model
+* few other functions that covers safe updates of geography data in DB 
+    - provenance suggestions, new coordinates addition etc
 """
 
 import pandas as pd
@@ -49,6 +51,19 @@ def check_complete_chants_columns(new_chants):
     return True, ""
 
 
+def check_complete_sources_columns(new_sources):
+    """
+    Checks if all mandatory columns of source file are present 
+    and that they contain all values
+    """
+    user_columns = set(new_sources.columns)
+    for mand_column in MANDATORY_SOURCES_FIELDS:
+        if mand_column not in user_columns or mand_column in new_sources.columns[new_sources.isna().any()].tolist():
+            return False, mand_column
+
+    return True, ""
+
+
 def check_files_validity(name : str, user : str, chants_file, sources_file) -> tuple[bool, str]:
     """
     Validity means:
@@ -78,7 +93,7 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
                 except:
                     return (False, "Something is wrong with your sources file. Check it with instructions in Help section please.")
                 
-                all_s_columns, missing_s = check_sources_validity(new_sources)
+                all_s_columns, missing_s = check_complete_sources_columns(new_sources)
                 if all_s_columns:
                     for source_id in set(new_chants['source_id'].to_list()):
                         if not Sources.objects.filter(drupal_path=source_id).exists() and not source_id in new_sources['source_id'].tolist():
@@ -99,18 +114,6 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
     else:
         return (False, "Add new dataset name. " + name + " is already present in your datasets.")
 
-
-
-def check_sources_validity(new_sources):
-    """
-    Checks if all mandatory columns are present
-    """
-    user_columns = set(new_sources.columns)
-    for mand_column in MANDATORY_SOURCES_FIELDS:
-        if mand_column not in user_columns or mand_column in new_sources.columns[new_sources.isna().any()].tolist():
-            return False, mand_column
-
-    return True, ""
 
 
 def add_dataset_record(name : str, user : str, visibility : str):

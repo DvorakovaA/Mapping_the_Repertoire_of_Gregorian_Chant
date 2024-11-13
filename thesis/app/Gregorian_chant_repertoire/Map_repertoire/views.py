@@ -1,5 +1,6 @@
 """
-Function that handle displaying of html files and data transfer between components
+Functions that handle displaying of html files as pages 
+and data transfer between backend and frontend components
 """
 
 from django.shortcuts import render
@@ -19,7 +20,7 @@ from Map_repertoire.datasets import get_provenance_sugestions, get_unknown_prove
 
 def index(request):
     """
-    Function that manages intro page of the app
+    Function that manages intro (home) page of the app
     """
     request.session['upload_error_message'] = '' # clean datasets errors with page change
 
@@ -129,7 +130,7 @@ def login_view(request):
 
 def logout_view(request):
     """
-    Function porvading logout for users (no page, just redirect action)
+    Function porvading logout for users (no page, just redirect action causing log out)
     """
     if request.user.is_authenticated:
         logout(request)

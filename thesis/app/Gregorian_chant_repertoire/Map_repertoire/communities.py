@@ -1,7 +1,7 @@
 """
 Module providing main function get_communities
 that finds communities on sources (by chants) for given feast(s) and office selection
-by given algorithm (and metric/number of topics)
+from give dataset selection and by given algorithm (and metric/number of topics)
 """
 
 import networkx as nx
@@ -19,7 +19,7 @@ from .models import Data_Chant, Sources
 from django.db.models import Q
 
 
-# Metric for measuring similarity of two sets ('chant sharingness')
+# Metrics for measuring similarity of two sets ('chant sharingness')
 def Jaccard_metric(a : list, b : list):
     '''
     Function returns value of Jaccard metrics applied on two sets
@@ -384,7 +384,8 @@ def get_topic_model_communities(feast_codes : list[str], filtering_office : list
 def get_cat_communities(feast_codes : list[str], filtering_office : list[str], datasets : list[str]):
     '''
     Function returning communities for given data request
-    found as in Cantus Analysis Tool - two sources share community if they share all cantus_ids completely
+    found almost as in Cantus Analysis Tool 
+        - two sources share community if they share all cantus_ids completely (Jaccard == 1.0)
     '''
     source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="Jaccard", get_shared=True, datasets=datasets)
     communities = [[used_sources[0]]]

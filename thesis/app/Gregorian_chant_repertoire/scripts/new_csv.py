@@ -5,7 +5,7 @@ Script that process desired changes in csvs:
 - generate new csv file with only bigger sources (over 100 chants) and 
   with these additions (sources-with-provenance-ids-and-two-centuries.csv)
 - check if there are any new uknown provenances in given data (not existing in provenance_ids.csv)
-  and tell user via console (plus suggest new unused provenance_ids)
+  and tell user via console (plus suggest new unused provenance_ids - might be problematic bs of users datasets!!!)
 - enrich antiphons and responsories with feast_code (besides feast_id)
 """
 
@@ -110,7 +110,7 @@ def run():
     
     print('Unknown provenances found:', len(unknown_provenances))
     
-    # feast_code addition
+    # Provide feast_code addition
     def get_feast_code(feast_id):
         try:
             feast_code = feasts[feasts['id'] == feast_id]['feast_code']

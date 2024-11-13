@@ -17,7 +17,7 @@ ALL_CHOICE = 0
 
 class InputForm(forms.Form):
     """ 
-    Request form on tool page
+    Request form on tool page -> collecting data for community detection
     """
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -40,7 +40,7 @@ class InputForm(forms.Form):
 
 class UploadDatasetForm(forms.Form):
     """
-    Form for upload of own data sets
+    Form for upload of own datasets
     """
     name = forms.CharField(max_length=50)
     chants_file = forms.FileField()
@@ -63,8 +63,8 @@ class DeleteDatasetForm(forms.Form):
 
 class AddGeographyInfoForm(forms.Form):
     """
-    Form for updates in georaphz data
-    Used for matching same provenances with different 
+    Form for updates in georaphy data
+    Used for matching same provenances with different or coordinates addition
     """
     def __init__(self, suggestions, *args, **kwargs):
         self.suggestions = suggestions
