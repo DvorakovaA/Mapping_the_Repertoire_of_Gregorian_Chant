@@ -26,8 +26,9 @@ class InputForm(forms.Form):
         self.fields['datasets_public'].choices = [(f[0], f[1]+" (owner: "+f[2]+")") for f in list(Datasets.objects.filter(~Q(owner=user) & Q(public=True)).values_list('dataset_id', 'name', 'owner'))]
 
 
+    number_of_feasts = len(Feasts.objects.all().values_list('name', flat=True))
     feast = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'feasts_select', 'style': 'width: 100%;'}), 
-                                    choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(f[0], f[1]) for f in zip([i for i in range(1, len(Feasts.objects.all())+1)], Feasts.objects.values_list('name', flat=True))],)
+                                    choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(f[0], f[1]) for f in zip([i for i in range(1, number_of_feasts+1)], Feasts.objects.values_list('name', flat=True))],)
     all = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices={"All": "All"}, required=False, initial=True)
     office = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=OFFICE_CHOICES, required=False)
     

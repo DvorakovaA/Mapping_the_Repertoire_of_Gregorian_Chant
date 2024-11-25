@@ -119,7 +119,6 @@ def run():
     row_iter = feasts_without_fragments.iterrows()
     objs = [
         Feasts(
-            feast_id=row['id'],
             feast_code=row['feast_code'],
             name=row['name']
         )

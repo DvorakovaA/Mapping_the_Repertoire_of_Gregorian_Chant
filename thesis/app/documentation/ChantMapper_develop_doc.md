@@ -1,6 +1,6 @@
 ## ChantMapper development documentation
 
-This project is a web application for musicologists - gregorianists developed using the Django framework. The installation process for local use is outlined in the file `installation_instructions.md` otherwise it can be reached at https://mrogc.dev.ovalek.cz. 
+This project is a web application for musicologists - gregorianists developed using the Django framework. The installation process for local use is outlined in the file `installation_instructions.md` otherwise it can be reached at https://dominant-highly-bluejay.ngrok-free.app/map_repertoire/. 
 
 The software can be divided into two fundamental units: the backend and the frontend. The specific functions and interactions of these units within the tool are illustrated in the following diagram. 
 
@@ -22,13 +22,13 @@ We have a predefined database designed for the backend. A significant drawback o
 However, since our use case is not that data flow intensive, 
 we did not find it necessary to change the default solution provided by Django.
 
-Main data source, besides data from users, are CSV data files in data directory. We distinguish between given (original CSV files from DACT scrape of Cantus Index) and generated files (derived from given files to make database load easier via scripts\new_csv.py script). From them we take specific columns to fill in app database as shown in following database schema. 
+Main data source, besides data from users, are CSV data files in data directory. We distinguish between given (original CSV files from DACT scrape of Cantus Index) and generated files (derived from given files to make database load easier via `scripts\new_csv.py` script). From them we take specific columns to fill in app database as shown in following database schema. 
 
-![app_schema](pics\db_schema.png "Schema of database")
+![db_schema](pics\db_schema.png "Schema of database")
 
 The prescriptions of the individual tables from the referenced schema are located within the models.py file. Each table is a class of the type Model and the individual columns of the table are its attributes. In addition to the individual fields and their data types, the classes also describe the behaviour to be adopted in the event of a missing value (in the case of a field that permits the input of a null value).
 
-The transfer of data from the corresponding CVS files into the database is accomplished through the execution of the scripts\load_csv.py script. This script employs the Pandas library (https://pandas.pydata.org/) to load and save the files via models into the database (db\db.sqlite3).
+The transfer of data from the corresponding CVS files into the database is accomplished through the execution of the `scripts\load_csv.py` script. This script employs the Pandas library (https://pandas.pydata.org/) to load and save the files via models into the database (`db\db.sqlite3`). We do not use all columns from source files, just those corresponding to presented schema are required.
 
 
 ### Backend

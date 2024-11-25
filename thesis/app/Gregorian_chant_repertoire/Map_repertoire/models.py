@@ -46,8 +46,7 @@ class Feasts(models.Model):
     """
     Table for data about all feasts that can possibly be searched
     """
-    feast_id = models.CharField(("feast_id"), max_length=20, primary_key=True) 
-    feast_code = models.CharField(("feast_code"), max_length=20) #PK
+    feast_code = models.CharField(("feast_code"), max_length=20, default='unknown') #PK
     name = models.CharField(("name"), max_length=500)
 
 
