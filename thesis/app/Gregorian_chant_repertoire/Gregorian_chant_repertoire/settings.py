@@ -32,7 +32,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", 'True').lower() in ('true', '1', 't')
 # Application definition
 
 INSTALLED_APPS = [
-    'Map_repertoir e.apps.MapRepertoireConfig',
+    'Map_repertoire.apps.MapRepertoireConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
