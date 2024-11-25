@@ -12,7 +12,7 @@ from django.contrib.auth import login, logout
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
-from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data
+from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data_informed, get_map_of_all_data_basic
 
 from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset
 from Map_repertoire.datasets import get_provenance_sugestions, get_unknown_provenances, add_new_coordinates, add_matched_provenance
@@ -25,7 +25,7 @@ def index(request):
     request.session['upload_error_message'] = '' # clean datasets errors with page change
 
     context = {}
-    context['map_data_all'] = get_map_of_all_data()
+    context['map_data_all_informed'] = get_map_of_all_data_informed()
     return render(request, "map_repertoire/index.html", context)
 
 
@@ -210,7 +210,7 @@ def geography(request):
 
 
     context = {}
-    context['map_data_all'] = get_map_of_all_data()
+    context['map_data_all_basic'] = get_map_of_all_data_basic()
     if request.session['list_missed'] != []:
          context['actual_prov'] = request.session['list_missed'][0]
          suggestions = get_provenance_sugestions(request.session['list_missed'][0])

@@ -35,10 +35,10 @@
         <h5>Missing some uploaded source in map? Please, help to fix that <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/geography'">here</button> .</h5>
       </div>
     <!-- pass data from djnago context to js script part for map creation -->
-      {{ map_data_all|json_script:"map_data_all" }}
+      {{ map_data_all_informed|json_script:"map_data_all_informed" }}
       <script>
-        const map_data_all = JSON.parse(document.getElementById('map_data_all').textContent);
-        var com_map = getMapOfAllSources(map_data_all);
+        const map_data_all_informed = JSON.parse(document.getElementById('map_data_all_informed').textContent);
+        var com_map = getMapOfAllInformed(map_data_all_informed);
       </script>
     
     {% endblock %}

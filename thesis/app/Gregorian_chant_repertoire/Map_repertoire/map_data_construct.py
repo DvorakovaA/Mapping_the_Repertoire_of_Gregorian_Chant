@@ -17,7 +17,7 @@ MOVES = [[0, 0.04], [0, -0.04], [-0.025, 0], [0.025, 0], [0.025, -0.04], [-0.025
          [0.05, 0.07], [-0.05, -0.07], [0.05, -0.07], [-0.05, 0.07]]
 
 
-def get_map_data(communities: list[set [str]], edges : list [tuple]):
+def get_map_data(communities: list[set [str]], edges : list [tuple]) -> dict:
     """
     Given communities of sources and info about conections beetween sources
     function constructs data structures for javascript that creates leaflet map
@@ -87,7 +87,7 @@ def get_map_data(communities: list[set [str]], edges : list [tuple]):
         return []
     
 
-def get_map_of_all_data():
+def get_map_of_all_data_basic() -> list[list]:
     '''
     Construct data structure for js script that contains 
     geographical info about all sources with known provenances
@@ -106,5 +106,26 @@ def get_map_of_all_data():
             all_map_data.append([provenance, lat, long])
         except:
             unknown += 1
+
+    return all_map_data
+
+
+def get_map_of_all_data_informed() -> dict[str, list]:
+    '''
+    Construct data structure for js script that contains 
+    info set about sources in each known provenance
+    all_map_data = {'provenance_name' : [lat, long, [[url, siglum], [url, siglum], ...]], '' : [], ...}
+    '''
+    all_map_data = {}
+
+    provenances = Geography.objects.values()
+
+    for provenance in provenances:
+        provenance_id = provenance['provenance_id']
+        lat = provenance['latitude']
+        long = provenance['longitude']
+        place_sources = Sources.objects.filter(provenance_id=provenance_id).values()
+        place_sources = [[source['drupal_path'], source['siglum']] for source in place_sources]
+        all_map_data[provenance['provenance']] = [lat, long, place_sources]
 
     return all_map_data

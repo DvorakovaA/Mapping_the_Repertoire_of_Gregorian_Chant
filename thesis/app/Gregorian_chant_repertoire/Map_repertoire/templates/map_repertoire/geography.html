@@ -111,10 +111,10 @@
           <div id="com_map"> </div>
       </div>
     <!-- pass data from djnago context to js script part for map creation -->
-      {{ map_data_all|json_script:"map_data_all" }}
+      {{ map_data_all_basic|json_script:"map_data_all_basic" }}
       <script>
-        const map_data_all = JSON.parse(document.getElementById('map_data_all').textContent);
-        var com_map = getMapOfAllSources(map_data_all);
+        const map_data_all_basic = JSON.parse(document.getElementById('map_data_all_basic').textContent);
+        var com_map = getMapOfAllBasic(map_data_all_basic);
       </script>
     
 {% endblock %}

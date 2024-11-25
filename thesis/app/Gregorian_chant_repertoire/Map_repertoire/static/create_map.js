@@ -196,7 +196,7 @@ function getMaps(map_data) {
 
 
 
-function getMapOfAllSources(map_all_data) {
+function getMapOfAllBasic(map_all_data) {
     // Get map
     var complete_map = L.map('com_map').setView(center, 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
@@ -218,4 +218,33 @@ function getMapOfAllSources(map_all_data) {
     }
 
     return complete_map;
+}
+
+
+function getMapOfAllInformed(map_all_data) {
+    // Get map
+    var complete_map = L.map('com_map').setView(center, 5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+        { 
+        attribution: '&copy; <a href="http://weww.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(complete_map);
+
+    // Data to be parsed:
+    //      all_map_data = {'provenance_name' : [lat, long, [[url, siglum], [url, siglum], ...]], '' : [], ...}
+    for (var point in map_all_data) {
+        const info = map_all_data[point];
+        var popup_info = "<b>" + point + "</b><br>";
+
+        //Collect data
+        const lat = info[0];
+        const long = info[1];
+        for (source of info[2]) {
+            popup_info += "<a href="+source[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+source[1]+ "</a><br>"
+        }
+        
+        // Create marker for source
+        var marker = L.circleMarker([lat, long], {radius : 8, color : '#2e8bc0'});
+        marker.bindPopup(popup_info);
+        marker.addTo(complete_map);
+    }
 }
