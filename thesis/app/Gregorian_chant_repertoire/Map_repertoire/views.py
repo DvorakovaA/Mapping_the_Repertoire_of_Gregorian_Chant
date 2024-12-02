@@ -56,6 +56,8 @@ def tool(request):
 
         if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
              request.session['add_info_algo'] = form.cleaned_data['metric']
+        elif request.session['algo'] == 'CAT':
+            request.session['add_info_algo'] = form.cleaned_data['office_policy']
         else:
              request.session['add_info_algo'] = form.cleaned_data['number_of_topics']
 

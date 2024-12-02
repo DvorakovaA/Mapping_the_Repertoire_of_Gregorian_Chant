@@ -18,6 +18,8 @@ from .models import Data_Chant, Sources
 
 from django.db.models import Q
 
+OFFICES = ['V','C', 'M', 'L', 'P', 'T', 'S', 'N',  'V2', 'D', 'R',  'E',  'H', 'CA', 'X', 'UNKNOWN']
+
 
 # Metrics for measuring similarity of two sets ('chant sharingness')
 def Jaccard_metric(a : list, b : list):
@@ -221,6 +223,107 @@ def get_network_info(feast_codes : list[str], compare_metrics, filtering_office 
     return source_chants_dict, edges_info, edges, used_sources
 
 
+def get_informed_network_info(feast_codes : list[str], compare_metrics, filtering_office : list[str], datasets : list[str]):
+    """
+    Function that constructs data structures that are used by preserving CAT 
+    clustering principle
+
+    """
+    drupals = Sources.objects.values_list('drupal_path')
+    office_source_chants_dict = {}
+    source_chants_dict = {}
+    used_sources = []
+
+    if feast_codes == ['All']:
+        # Construct needed data structures to construct networks from data for all feasts
+        for source_id in drupals:
+            office_source_chants_dict[source_id[0]] = {}
+            office_chants_of_source = []
+            chants_of_source = []
+            for office_id in filtering_office:
+                office_source_chants_dict[source_id[0]][office_id] = []
+                for dataset in datasets:
+                    office_chants_of_source = [chant[0] for chant in Data_Chant.objects.filter(source_id=source_id[0], office_id=office_id, dataset=dataset).values_list('cantus_id')]
+                    chants_of_source += office_chants_of_source
+                # Write it down if something was found
+                if office_chants_of_source != []:
+                    used_sources.append(source_id[0])
+                    office_source_chants_dict[source_id[0]][office_id] = office_chants_of_source
+            if chants_of_source != []:
+                source_chants_dict[source_id[0]] = chants_of_source
+        
+    else: # Not all feasts selected
+    # Collect data for each feast
+        chants_of_feasts = []
+        for feast_code in feast_codes:
+            for dataset in datasets:
+                chants_of_feasts += Data_Chant.objects.filter(dataset=dataset, feast_code=feast_code).values()
+        
+        for source_id in drupals:
+            office_source_chants_dict[source_id[0]] = {}
+            office_chants_of_source = []
+            chants_of_source = []
+            for office_id in filtering_office:
+                office_source_chants_dict[source_id[0]][office_id] = []
+                chants_of_source += [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0] and chant['office_id'] == office_id]
+                office_chants_of_source = [chant['cantus_id'] for chant in chants_of_feasts if chant['source_id'] == source_id[0] and chant['office_id'] == office_id]
+                # Write it down if something was found
+                if office_chants_of_source != []:
+                    used_sources.append(source_id[0])
+                    office_source_chants_dict[source_id[0]][office_id] = office_chants_of_source
+            if chants_of_source != []:
+                source_chants_dict[source_id[0]] = chants_of_source
+
+
+    # Complete needed columns
+    used_sources = list(set(used_sources))
+    len_s = len(used_sources)
+    s1_column = [j for i in [len_s * [s] for s in used_sources] for j in i]
+    s2_column = len_s * used_sources
+
+    shared_column = []
+    ch1_column = []
+    ch2_column = []
+
+    if compare_metrics == 'Jaccard':
+        for i in range(len(s1_column)):
+            s1_chants = source_chants_dict[s1_column[i]]
+            s2_chants = source_chants_dict[s2_column[i]]
+            ch1_column.append(len(s1_chants))
+            ch2_column.append(len(s2_chants))
+            shared_column.append(Jaccard_metric(s1_chants, s2_chants))
+        edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
+    
+    else: # Comparison distance based on topic model
+        with lzma.open('Map_repertoire/topic_models/dist_reduction.model', "rb") as model_file:
+            trans = pickle.load(model_file)
+            model = pickle.load(model_file)
+        
+        for i in range(len(s1_column)):
+            s1_chants = source_chants_dict[s1_column[i]]
+            s2_chants = source_chants_dict[s2_column[i]]
+            ch1_column.append(len(s1_chants))
+            ch2_column.append(len(s2_chants))
+            trans_data = trans.transform([' '.join(s1_chants), ' '.join(s2_chants)])
+            result = model.transform(trans_data)
+            distance = jensenshannon(result[0], result[1]) #JensenShannon_metric(result[0], result[1])
+            if np.isnan(distance):
+                shared_column.append(0)
+            else:
+                shared_column.append(distance)
+        edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
+
+    # Join obtained data into structure for graph and map
+    edges_info = [(s1, s2, ch1, ch2, {'weight': round(w, 2) }) for s1, s2, ch1, ch2, w in zip(s1_column, s2_column, ch1_column, ch2_column, shared_column) if s1 != s2 and w != 0 and (s1 in used_sources and s2 in used_sources)]
+    
+    # Join obtained data into structure for graph and map
+    edges_info = [(s1, s2, ch1, ch2, {'weight': w}) for s1, s2, ch1, ch2, w in zip(s1_column, s2_column, ch1_column, ch2_column, shared_column) if s1 != s2 and w != 0 and (s1 in used_sources and s2 in used_sources)]
+
+
+    return office_source_chants_dict, edges_info, [], used_sources
+
+
+
 # Louvein specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_graph(feast_codes : list[str], filtering_office : list[str], metric : str, datasets : list[str]):
     """
@@ -381,26 +484,55 @@ def get_topic_model_communities(feast_codes : list[str], filtering_office : list
 
 
 # CAT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_cat_communities(feast_codes : list[str], filtering_office : list[str], datasets : list[str]):
+def get_cat_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str ,datasets : list[str]):
     '''
     Function returning communities for given data request
     found almost as in Cantus Analysis Tool 
         - two sources share community if they share all cantus_ids completely (Jaccard == 1.0)
     '''
-    source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="Jaccard", get_shared=True, datasets=datasets)
-    communities = [[used_sources[0]]]
+    if filtering_office == []:
+        filtering_office = OFFICES
+        if feast_codes == ['All']:
+            return [], [], 'Too computationally demanding operation (all feasts with all data and CAT)'
 
-    for source in used_sources[1:]:
-        added = False
-        for comms in communities:
-            if Jaccard_metric(source_chants_dict[source], source_chants_dict[comms[0]]) == 1.0:
-                comms.append(source)
-                added = True
-                break
-        if not added:
-            communities.append([source])
-    
-    return communities, edges_info, '---'
+    if add_info_algo == 'ignore':
+        source_chants_dict, edges_info, _, used_sources = get_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="Jaccard", get_shared=True, datasets=datasets)
+        
+        if len(used_sources) > 0: 
+            communities = [[used_sources[0]]]
+            for source in used_sources[1:]:
+                added = False
+                for comms in communities:
+                    if Jaccard_metric(source_chants_dict[source], source_chants_dict[comms[0]]) == 1.0:
+                        comms.append(source)
+                        added = True
+                        break
+                if not added:
+                    communities.append([source])
+        else:
+            communities = []
+    else: # preserve what chant is in what office
+        office_chants_dict, edges_info, _, used_sources = get_informed_network_info(feast_codes=feast_codes, filtering_office=filtering_office, compare_metrics="Jaccard", datasets=datasets)
+        if len(used_sources) > 0:
+            communities = [[used_sources[0]]]
+            for source in used_sources[1:]:
+                added = False
+                for comms in communities:
+                    all, same = 0, 0
+                    for office in filtering_office:
+                        all += 1
+                        if Jaccard_metric(office_chants_dict[source][office], office_chants_dict[comms[0]][office]) == 1.0:
+                            same += 1
+                    if all == same:
+                        comms.append(source)
+                        added = True
+                        break
+                if not added:
+                    communities.append([source])
+        else:
+            communities = []               
+    return communities, edges_info, '1.0 (it is deterministic method)'
+
 
 
 # Common ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -420,7 +552,7 @@ def get_communities(feast_codes : list[str], filtering_office : list[str], algor
         communities, edges_info, sig_level = get_topic_model_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     elif algorithm == 'CAT': # Cantus Analysis Tool based principle
-        communities, edges_info, sig_level = get_cat_communities(feast_codes, filtering_office, datasets)
+        communities, edges_info, sig_level = get_cat_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     # Order communities based on their size
     communities.sort(key=len, reverse=True)

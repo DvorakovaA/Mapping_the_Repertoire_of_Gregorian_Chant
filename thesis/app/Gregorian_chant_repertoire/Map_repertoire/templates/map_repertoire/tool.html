@@ -67,6 +67,12 @@
           {{ form.number_of_topics }}
         </div>
       </div>
+      <div id="officePolicySelection">
+        <label for="{{ form.office_policy.id_for_label }}">How to work with membership of office:</label>
+        <div class="ms-3">
+          {{ form.office_policy }}
+        </div>
+      </div>
       <br>
       <div id="datasetSelection">
         <label for="{{ form.datasets_own.id_for_label }}">Dataset(s) to be used:</label>
@@ -271,24 +277,40 @@
     LouveinChecked.addEventListener('click', function() {
             document.getElementById('metricSelection').style.display = 'inline';
             document.getElementById('numberOfTopicsSelection').style.display = 'none';
+            document.getElementById('officePolicySelection').style.display = 'none';
     })
     // CAT
     var CATChecked = document.getElementById('id_community_detection_algorithm_1');
     CATChecked.addEventListener('click', function() {
             document.getElementById('metricSelection').style.display = 'none';
             document.getElementById('numberOfTopicsSelection').style.display = 'none';
+            document.getElementById('officePolicySelection').style.display = 'inline';
     })
     // Topic model
     var TopicChecked = document.getElementById('id_community_detection_algorithm_2');
     TopicChecked.addEventListener('click', function() { 
         document.getElementById('metricSelection').style.display = 'none';
         document.getElementById('numberOfTopicsSelection').style.display = 'inline';
+        document.getElementById('officePolicySelection').style.display = 'none';
     });
+
     // to preserve choices after Show (refresh)
     if (document.getElementById('id_community_detection_algorithm_2').checked) {
         document.getElementById('metricSelection').style.display = 'none';
-        document.getElementById('numberOfTopicsSelection').style.display = 'inline'
+        document.getElementById('numberOfTopicsSelection').style.display = 'inline';
+        document.getElementById('officePolicySelection').style.display = 'none';
     }
+    else if (document.getElementById('id_community_detection_algorithm_1').checked) {
+        document.getElementById('metricSelection').style.display = 'none';
+        document.getElementById('numberOfTopicsSelection').style.display = 'none';
+        document.getElementById('officePolicySelection').style.display = 'inline';
+    }
+    else if (document.getElementById('id_community_detection_algorithm_0').checked) {
+        document.getElementById('metricSelection').style.display = 'inline';
+        document.getElementById('numberOfTopicsSelection').style.display = 'none';
+        document.getElementById('officePolicySelection').style.display = 'none';
+    }
+    
 
     // Set All options as checked as default
     if (!document.getElementById('id_office_0').checked & !document.getElementById('id_office_1').checked
