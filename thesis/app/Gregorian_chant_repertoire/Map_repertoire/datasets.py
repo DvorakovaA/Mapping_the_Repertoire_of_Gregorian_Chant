@@ -83,7 +83,9 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
             unknown_sources = []
             if sources_file is None:
                 for source_id in set(new_chants['source_id'].to_list()):
-                    if not Sources.objects.filter(drupal_path=source_id).exists():
+                    source_id_http = re.sub(r'^(https)', r'http', source_id)
+                    print(source_id_http)
+                    if not (Sources.objects.filter(drupal_path=source_id).exists() or Sources.objects.filter(drupal_path=source_id_http).exists()):
                         unknown_sources.append(source_id)
             
             else:
@@ -96,7 +98,9 @@ def check_files_validity(name : str, user : str, chants_file, sources_file) -> t
                 all_s_columns, missing_s = check_complete_sources_columns(new_sources)
                 if all_s_columns:
                     for source_id in set(new_chants['source_id'].to_list()):
-                        if not Sources.objects.filter(drupal_path=source_id).exists() and not source_id in new_sources['source_id'].tolist():
+                        source_id_http = re.sub(r'^(https)', r'http', source_id)
+                        print(source_id_http)
+                        if not (Sources.objects.filter(drupal_path=source_id).exists() or Sources.objects.filter(drupal_path=source_id_http).exists()) and not source_id in new_sources['source_id'].tolist():
                             unknown_sources.append(source_id)
                 else:
                     return (False, "Mandatory column " + missing_s + " (or value in such column) of your sources file is missing. Check what is mandatory in Help section.")
@@ -203,7 +207,8 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
         row_iter = new_sources.iterrows()
         objs = []
         for index, row in row_iter:
-            if row['source_id'] not in known_sources: # First entry of source is authoritative
+            source_id_http = re.sub(r'^(https)', r'http', row['source_id'])
+            if (row['source_id'] not in known_sources and source_id_http not in known_sources): # First entry of source is authoritative
                 objs.append(Sources(
                     title=row['title'],
                     provenance_id=row['provenance_id'],
@@ -262,7 +267,11 @@ def integrate_chants_file(name : str, user : str, chants_file, sources_file, vis
     unmatched_provenances = []
     used_sources = list(Data_Chant.objects.filter(dataset=user+"_"+name).values_list('source_id', flat=True))
     for source_id in used_sources:
-        s_info = Sources.objects.filter(drupal_path=source_id).values()[0]
+        try:
+            s_info = Sources.objects.filter(drupal_path=source_id).values()[0]
+        except:
+            source_id_http = re.sub(r'^(https)', r'http', source_id)
+            s_info = Sources.objects.filter(drupal_path=source_id_http).values()[0]
         if s_info['provenance_id'] == 'unknown':
             unmatched_provenances.append(s_info['provenance'])
 
