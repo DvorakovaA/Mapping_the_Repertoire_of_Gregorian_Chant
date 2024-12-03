@@ -10,30 +10,61 @@
 
     {% block content %}
       <div class="container ms-4 mt-3">
-      <h2>Help page for ChantExplorer</h2>
+      <h2>Help page for ChantMapper</h2>
 
       <div class="container mb-3 mt-3">
-        Here you can find pieces of advice for smooth usage of ChantExploler app - web application for those interested in 
+        Here you can find pieces of advice for smooth usage of ChantMaper app - web application for those interested in 
         computational research on Gregorian chant and map visualizations of sources of chant.
       </div>
 
       <h3>Sections</h3>
       <div class="container mt-2 mb-5">
-        <div class="list-group">
-          <a href="#functions" class="list-group-item list-group-item-action">Functions</a>
-          <a href="#search" class="list-group-item list-group-item-action">Basic search</a>
-          <a href="#datasets" class="list-group-item list-group-item-action">Custom datasets</a>
-          <a href="#users" class="list-group-item list-group-item-action">User accounts</a>
-          <a href="#geography" class="list-group-item list-group-item-action">Geography info updates</a>
-          <a href="#problems" class="list-group-item list-group-item-action">Problems report</a>
+        
+        <div class="list-group list-group-root">
+          <a href="#pages" class="list-group-item list-group-item-action"><b>Pages</b></a>
+          <div class="list-group">
+            <a href="#home" class="list-group-item list-group-item-action">Home page</a>
+            <a href="#tool" class="list-group-item list-group-item-action">Tool page</a>
+            <div class="list-group">
+              <a href="#request" class="list-group-item list-group-item-action">Request</a>
+              <a href="#result" class="list-group-item list-group-item-action">Result</a>
+            </div>
+            <a href="#datasets" class="list-group-item list-group-item-action">Datasets page</a>
+            <a href="#geography" class="list-group-item list-group-item-action">Geography page</a>
+          </div>
+          <a href="#tutorial" class="list-group-item list-group-item-action"><b>How can I ...?</b></a>
+          <div class="list-group">
+            <a href="#search" class="list-group-item list-group-item-action">Search for ...</a>
+              <div class="list-group">
+                <a href="#oneF" class="list-group-item list-group-item-action">One feast</a>
+                <a href="#moreF" class="list-group-item list-group-item-action">More feasts</a>
+                <a href="#allF" class="list-group-item list-group-item-action">All feasts</a>
+                <a href="#onlyM" class="list-group-item list-group-item-action">Only Matins</a>
+                <a href="#allO" class="list-group-item list-group-item-action">All offices</a>
+                <a href="#myD" class="list-group-item list-group-item-action">Data from my dataset</a>
+              </div>
+
+            <a href="#userA" class="list-group-item list-group-item-action">Get user account</a>
+            <a href="#login" class="list-group-item list-group-item-action">Log into my existing user account</a>
+            <a href="#upload" class="list-group-item list-group-item-action">Upload my dataset</a>
+              <div class="list-group">
+                <a href="#chants" class="list-group-item list-group-item-action">Chants</a>
+                <a href="#sources" class="list-group-item list-group-item-action">Sources</a>
+              </div>
+            <a href="#addgeo" class="list-group-item list-group-item-action">Add geography info</a>
+            <a href="#cluster" class="list-group-item list-group-item-action">Choose proper community search principle</a>
+          </div>
+          <a href="#problems" class="list-group-item list-group-item-action"><b>Problems report contact</b></a>
         </div>
       </div>
+
       {% load static %}
-      <h4 id="functions">Functions</h4>
+
+      <h3 id="functions">Pages</h3>
         <div class="container mt-1 mb-1">
-          <h5> Home page </h5>
+          <h4 id="home"> Home page </h4>
             <div class="container mt-1 mb-1">
-              Home page provides redirect to Search tool page as well as <a href="#users">users</a> authentification options. <br>
+              Home page provides redirect to Search tool page as well as <a href="#users">users</a> authentication options. <br>
               It also let you have a look on what provenances of sources are known to the tool and so what you can and cannot expect in the results of provided search.
               <br>
               <div class="container mt-3 mb-3">
@@ -41,84 +72,310 @@
               </div>
             </div>
         
-          <h5> Searching tool</h5>
+          <h4 id="tool"> Tool page </h4>
             <div class="container mt-1 mb-1">
-              Web page refered as tool is main research playground. Given schemata should show you, how to make desired search.
+              Web page referred as tool is main research playground. 
+              Given schemata (and also tutorial bellow) should show you, how to make desired search.
               <br>
-              Overview
               <div class="container mt-3 mb-3">
-                <img src="{% static 'web_pictures/tool_page.png' %}" width="700" height="auto">
+                <img id="tool_pic" src="{% static 'web_pictures/tool_page.png' %}" width="700" height="auto">
               </div>
-              Form fill consists of five steps:
-              <br>
 
+              <h5 id="request"> Tradition search request</h5>
+                <div class="container mt-1 mb-2">
+                  Form fill consists of five steps:<br>
+                  <dl>
+                    <dd>1) Choose feast(s) <a href="#tool_pic">[1]</a></dd>
+                    <dd>2) Choose office(s) <a href="#tool_pic">[2]</a></dd>
+                    <dd>3) Choose community detection algorithm <a href="#tool_pic">[3]</a></dd>
+                    <dd>4) Set property of chosen algorithm <a href="#tool_pic">[4]</a></dd>
+                    <dd>5) Choose from what dataset the data should be taken <a href="#tool_pic">[5]</a></dd>
+                  </dl>
 
-
-              List of abbreviations:
-              <dl>
-                <dt>V, M, L, V2</dt>
-                <dd>- standard Cantus Index abbreviations for services: First Vespers, Matins, Lauds, Second Vespers</dd>
-                <dt>Basic CI dataset</dt>
-                <dd>- it is dataset consisting of antiphons and responsories that were reachable in Cantus Index database in February 2024</dd>
-              </dl> 
+                  List of abbreviations:
+                  <dl>
+                    <dt>V, M, L, V2</dt>
+                    <dd>- standard Cantus Index abbreviations for services: First Vespers, Matins, Lauds, Second Vespers</dd>
+                    <dt>Basic CI dataset</dt>
+                    <dd>- it is dataset consisting of antiphons and responsories that were reachable in Cantus Index database in February 2024</dd>
+                  </dl> 
+                </div>
+              
+              <h5 id="result"> Results of tradition search </h5>
+                <div class="container mt-1 mb-2">
+                  Results of search for potential traditions in repertoire can be examine in three different ways:
+                  <div class="container mt-1 mb-1 ml-2">
+                    <b>Table </b>
+                    <div class="container mt-1 mb-1 ml-4">
+                      <img src="{% static 'web_pictures/table.png' %}" width="750" height="auto">
+                    </div>
+                    <b>Community map</b>
+                    <div class="container mt-1 mb-1 ml-4">
+                      <img src="{% static 'web_pictures/com_map.png' %}" width="700" height="auto">
+                    </div>
+                    <b>Century map</b>
+                    <div class="container mt-1 mb-1 ml-4">
+                      <img src="{% static 'web_pictures/cen_map.png' %}" width="700" height="auto">
+                    </div>
+                  </div>
+                </div>
             </div>
-          
-          <h5> Results of traditions search </h5>
-          <div class="container mt-1 mb-1">
-            Results of search for potential traditions in repertoire can be examine in three different ways:
+
+          <h4 id="datasets"> Dataset page </h4>
+            <div class="container mt-1 mb-2">
+              To authenticated users (those registered and logged in) we offer possibility to work with their own selected data. <br>
+              Named datasets are then shown to its owner user in search form. <br>
+              There is also possibility of public datasets that allows users to make their datasets accessible for all other users. Every app visitor can see and use public datasets of others. <br>
+              To find this page please log in and then on Tool page click on Maintain your datasets button on right.
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/datasets.png' %}" width="700" height="auto">
+              </div>
+              To start with this option please follow instructions in section about <a href="#upload">upload of custom datasets</a>. 
+            </div>
+
+          <h4 id="geography">Geography page </h5>
+            <div class="container mt-1 mb-2">
+              Big feature of this app is map visualisation that is driven by geography data (what is where). <br>
+              To provide this we tried our best to find all provenances for our sources. But we did not manage to find them all 
+              as well as we cannot have all possible places listed somewhere so if you upload new source from new provenance 
+              app would be clueless about where to draw it. <br>
+              For such situation there is geography page (reachable for example from <a href="#home">home page</a>), where you can help us 
+              (as a logged in user) to identify unknown places. <br>
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/geography_page.png' %}" width="700" height="auto">
+              </div>
+              I section [1] there is space to identify same places written in different way (this can happened when someone indexing used different translation or add some punctuation etc.).<br>
+              If there is no identity in provenance in bold on top and suggestions in section [1], then
+              you can enter geographical coordinates in section [2]. Use decimal format of coordinates (e. g. [51.507222, -0.1275] is London). 
+            </div>
+        </div>
+
+      <h3 id="tutorial">How can I ... ?</h3>
+        <div class="container mt-1 mb-1">
+          <h4 id="search">Search for ...</h4>
+          <div class="container mt-1 mb-1 ml-1">
+            <h5 id="oneF"> Results for one particular feast</h5>
+            <div class="container mt-1 mb-2 ml-2">
+              To get result for only one feast search for it in section <a href="#tool_pic">[1]</a> filed and once it pops
+              out from suggestions click on it.
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/oneF.png' %}" width="400" height="auto">
+              </div>
+            </div>
+
+            <h5 id="moreF"> Results for more particular feasts</h5>
+            <div class="container mt-1 mb-2 ml-2">
+              To get result for more than one feast search one by one for all of them in  filed in section <a href="#tool_pic">[1]</a>. <br>
+              Just after each selection click again into the filed and type another search and click on right suggestion.
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/moreF.png' %}" width="400" height="auto">
+              </div>
+            </div>
+            
+            <h5 id="allF"> Results for all available feasts</h5>
+            <div class="container mt-1 mb-2 ml-2"> 
+              To use all available feasts in search choose option All in filed in section <a href="#tool_pic">[1]</a>. <br>
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/allF.png' %}" width="400" height="auto">
+              </div>
+            </div>
+
+            <h5 id="onlyM"> Results for chants only from Matins</h5>
+            <div class="container mt-1 mb-2 ml-2">
+              To use only data of particular office in your search use fileds in section <a href="#tool_pic">[2]</a>.
+              From second part of section click on grey square beside M (Matins):
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/onlyM.png' %}" width="300" height="auto">
+              </div>
+              But you can also select more offices from given options:
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/onlyMLV2.png' %}" width="300" height="auto">
+              </div>
+            </div>
+
+            <h5 id="allO"> Results for all available offices</h5>
+            <div class="container mt-1 mb-2 ml-2">
+              To use all available data (from all parts of day) you simply click 
+              on filed All in first part of section <a href="#tool_pic">[2]</a>.
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/allO.png' %}" width="300" height="auto">
+              </div>
+            </div>
+
+            <h5 id="myD"> Results using data from particular datasets</h5>
+            <div class="container mt-1 mb-2 ml-2">
+              To choose sources (datasets) of data that would be use in your search
+              use filed in section <a href="#tool_pic">[5]</a>. <br>
+              You can pick not only your uploaded datasets (that would be listed under Basic CI dataset)
+              but also from datasets uploaded by other users as public. You can list these by clicking on button Show other public datasets.
+              <div class="container mt-1 mb-1 ml-4">
+                <img src="{% static 'web_pictures/myD.png' %}" width="600" height="auto">
+              </div>
+            </div>
+          </div>
+
+
+          <h4 id="userA">Get user account</h4>
+          <div class="container mt-1 mb-3 ml-1">
+            To create your user account you have to go to home page (click on the Chantmapper sign in the top grey bar)
+            and then click on right on the button Create account:
+            <div class="container mt-1 mb-1 ml-4">
+              <img src="{% static 'web_pictures/new_user.png' %}" width="200" height="auto">
+            </div>
+            That would take you to Registration page:
+            <div class="container mt-1 mb-1 ml-4">
+              <img src="{% static 'web_pictures/reg.png' %}" width="200" height="auto">
+            </div>
+            Your username can be almost anything, with password we require a certain "strength",
+            for that follow please instructions in red that would appear in case of some problems.
+          </div>
+
+          <h4 id="login">Log into my existing user account</h4>
+          <div class="container mt-1 mb-3 ml-1">
+            You have already created your user account in ChantMapper app and now you want to log yourself in. <br>
+            To do so you have to go to home page (click on the ChantMapper sign in the top grey bar)
+            and the click on right on the button Login:
+            <div class="container mt-1 mb-1 ml-4">
+              <img src="{% static 'web_pictures/log_me.png' %}" width="240" height="auto">
+            </div>
+            That would take you to Login page:
+            <div class="container mt-1 mb-1 ml-4">
+              <img src="{% static 'web_pictures/log.png' %}" width="240" height="auto">
+            </div>
+            If you forget your password or username to existing account, then we are truly sorry for your lose and so please feel free to create new account.
 
           </div>
-            
-          <h5> Dataset maintenance </h5>
-            <div class="container mt-1 mb-1">
-              To authenticated users (those registered and logged in) we offer possibilty to work with their own selected data. <br>
-              Named datasets are then shown to its owner user in search form. <br>
-              there is possibility of public datasets that allows users to make their datasets accesible for all other users and also use public dataasets of others. <br>
-              To start with this option please follow instruction in section <a href="#datasets"> Custom datasets</a>
+
+          <h4 id="upload">Upload my dataset</h4>
+          <div class="container mb-3 ml-1">
+            For uploading your datasets you need to have own or two files in <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV format</a>. <br>
+            If your file does not contain any data from sources (liturgical books) unknown to this app, then uploading file containing chants would be enough, 
+            otherwise the app would ask you to provide also basic info about your new (to app unknown) sources. <br>
+            Here is what such files should look like.
+
+            <h5 id="chants">Chants</h5>
+            <div class="container mb-1 ml-2">
+              For usage by app we need you to upload file 
+              where each chant is on one row and where you insert info about chants into these 5 columns:
+              <br>
+              <div class="container ml-3">
+                <mark>
+                  incipit, cantus_id, feast_code, office_id, source_id
+                </mark>
+                <dl>
+                  <dt>incipit</dt>
+                  <dd>- incipit of the chant (to be listed in the table with result)</dd>
+                  <dt>cantus_id</dt>
+                  <dd>- Cantus ID of the chant (for more info refer to Cantus Index)</dd>
+                  <dt>feast_code</dt>
+                  <dd>- for what feast the chant was prescribed (e. g. for Adalberti)</dd>
+                  <dd>- to pass this info in a unified way use please codes used by Cantus Index (list can be found <a href="https://cantusdatabase.org/feasts/">here</a>)</dd>
+                  <dt>office_id</dt>
+                  <dd>- info about office for which the chant was prescribed (e. g. V for (first) Vespers)</dd>
+                  <dd>- you can find list of all possible IDs with description on <a href="https://cantusdatabase.org/services/">Cantus Database webpage</a></dd>
+                  <dt>source_id</dt>
+                  <dd>- by ID of liturgical book is meant URL of a webpage where info about source, that this chant record is from, can be found</dd>
+                  <dd>- e. g. <a href="https://cantusdatabase.org/source/123614">https://cantusdatabase.org/source/123614 </a></dd>
+                </dl> 
+              </div>
+              (Be careful for example with editors like Excel or LibreOffice Calc that allow you to view and edit CSV files but can damage fields like Cantus ID by deleting leading zeros, e. g. Cantus ID 005482 -> 5482.)
+              <br>
+              <a href="{% static 'help_sample_files/sample_chants_chantmapper.csv' %}">Here</a> is a sample CSV file you can compare your file to.
             </div>
-            <h5> </h5>
+
+            <h5 id="sources">Sources</h5>
+            <div class="container mt-1 mb-1 ml-2">
+              For usage by ChantMapper when you uploaded some sources that are new to the app database we need you to provide some basic info about these sources.
+              <br>
+              There is minimum requirement of two columns:
+              <div class="container ml-3">
+                <mark>
+                  siglum, source_id
+                </mark>
+                <dl>
+                  <dt>siglum</dt>
+                  <dd>- RISM siglum code or other similar identifier of the book (source) </dd>
+                  <dd>- e. g. CZ-Bu R 387 or CH-Fco Ms. 2</dd>
+                  <dt>source_id</dt>
+                  <dd>- URL of a webpage where info about the source can be found</dd>
+                  <dd>- e. g. <a href="https://cantusdatabase.org/source/123614">https://cantusdatabase.org/source/123614 </a></dd>
+                  <dd>- this URL has to be the same as used in your file with chants while identifying same book</dd>
+                </dl> 
+              </div>
+              But you can provide more (for better users experience as well as simply for being happy that more info was collected):
+              <div class="container ml-3">
+                <mark>
+                  century, provenance, cursus, title
+                </mark>
+                <dl>
+                  <dt>century</dt>
+                  <dd>- info about time of source origin (please use particular year or "12th century" form)</dd>
+                  <dt>provenance</dt>
+                  <dd>- place of origin (e. g. Paris) </dd>
+                  <dd>- please have a look at the map on home page and try to use same names for same places to make geography view easier</dd>
+                  <dt>cursus</dt>
+                  <dd>- info if source has Monastic or Secular origin (if unknown just leave the field blank)</dd>
+                  <dt>title</dt>
+                  <dd>- longer description of source (e. g. Köln (Cologne), Erzbischöfliche Diözesan- und Dombibliothek, 215) </dd>
+                </dl> 
+                You can leave any of these blank (please look at the sample file).
+              </div>
+              <a href="{% static 'help_sample_files/sample_sources_chantmapper.csv' %}">Here</a> is a sample CSV file you can compare your file to.
+            </div>
+
+          </div>
+          <h4 id="addgeo">Add geography info</h4>
+          <div class="container mt-1 mb-3">
+            Once you are asked to add some geography info about provenances you just uploaded in your dataset or you simply want to help us
+            with identification of places then please visit geography page that can be easily reach from home page (via clicking the button under present map). <br>
+            As is suggested in <a href="#geography">description of geography page</a> there are two ways of addition: <br>
+            <div class="container mt-1 mb-3 ml-2">
+              by matching unknown provenance with some already present in the database (preferred way)<br>
+              by adding new coordinates (in decimal format, e. g. [51.507222, -0.1275] is London).
+            </div>
+          </div>
+
+          <h4 id="cluster">Choose proper community search principle</h4>
+          <div class="container mt-1 mb-3">
+            That is difficult question. <br>
+            ChantMapper app offer one deterministic (Complete agreement principle), one nondeterministic (Louvain algorithm) and one very experimental method (Topic models). <br>
+            <b>Complete agreement principle</b> works on 
+            <b>Louvain algorithm</b> is method for community detection in networks and is used e. g. for social networks. It tries to 
+            It was used for purposes of chant by Eipert and Moss (link to their poster <a href="https://dlfm.web.ox.ac.uk/sites/default/files/dlfm/documents/media/poster2023_eipert_communities.pdf">here</a>).
+            <b>Topic modeling</b> is method borrowed from computer linguistic and NLP. We used LDA model (paper <a href=" https://proceedings.neurips.cc/paper_files/paper/2010/file/71f6278d140af599e06ad9bf1ba03cb0-Paper.pdf">here</a>).
+            LDA is a hierarchical generative model of a text-like corpus, in which
+            every document (here: source = liturgical book) is represented as a distribution over a number of topics, and every topic
+            is represented as a distribution over all possible words (here: Cantus IDs).
+            <br><br>
+            So I would suggest to think about what you are searching for... 
+            <div class="container mt-1 mb-3 ml-2">
+              Is it overview of material grouped by same chants? Or are you user used to synoptic tables from Cantus Analysis Tool? <br>
+              Go for Complete agreement principle. <br>
+              Is it possibility of new unseen connections with the risk of uncertainty? <br>
+              Go for Louvain. <br>
+              Is it interest in something completely new although it can lead to misleading results? <br>
+              Go and try Louvain and also Topic model.
+            </div>
+          </div>
         </div>
-      <h4 id="search">Basic search</h4>
-        <div class="container mt-1 mb-1">
-          To make basic search in Tool you need to pick feast or feasts to look at, also amount and type of offices 
-        </div>
 
-
-      <h4 id="users">User accounts</h4>
-        <div class="container mt-1 mb-1">
-          To enable some features (like custom datasets) we add 
-        </div>
-
-
-      <h4 id="datasets">Custom datasets</h4>
-        <div class="container mt-1 mb-1">
-          Your custom dataset can be taken from at most two files. <br>
-          We support files in <i>.csv</i> format (for example <i>chants.csv</i>). <br>
-          For partiular columns follow instruction bellow, just do not forget to chcekt that leading zeros in IDs 
-          (such as in Cantus ID: 005436 for example) are preserved in submitted file. <br>
-          All sources from sources file are added to database so please be careful what is in your file.
-          <h5> Chants file format</h5>
-          <h5> Sources file format</h5>
-        </div>
-
-
-      <h4 id="geography">Geogrpahy info update</h4>
-        <div class="container mt-1 mb-1">
-        </div>
-
-
-      <h4 id="problems">Problems report</h4>
-        <div class="container mt-1 mb-1">
+      <h3 id="problems">Problems report</h3>
+        <div class="container mt-1 mb-3">
           Something seems not working or broken? <br>
           You uploaded wrong source info? <br>
-          Wrong provenances matched? <br>
+          Wrong provenances matched? Mistake in coordinates? <br>
           <br>
-          Do not worry and tell us! The easiest way is to report your problem via 
+          Do not worry and tell us! The easiest way is to report your problem via our email address: <br>
+          <div class="container ml-2">
+            <b><a href="mailto:chantmapper@gmail.com">chantmapper@gmail.com</a></b>
+          </div>
+          This also apply to any other kind of feedback which is more than welcome.
         </div>
 
-      <h5> You have not found answer to your question? </h5>
+      <h3> You have not found answer to your question? </h3>
       <div class="container mt-1 mb-1">
-        Do not worry! You can still ask the administrators :-D Feel free to conntact us the same way that is described in section about <a href="#problems">reporting problems</a>.
+        Do not worry! You can still ask the administrators :-D 
+        <br> Feel free to contact us the same way that is described in section about <a href="#problems">reporting problems</a>.
       </div>
     </div>
     {% endblock %}
