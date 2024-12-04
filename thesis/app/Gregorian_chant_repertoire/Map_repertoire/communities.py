@@ -8,6 +8,7 @@ import networkx as nx
 import numpy as np
 import lzma
 import pickle
+import os
 import random
 import functools
 from itertools import combinations
@@ -97,23 +98,29 @@ def get_network_info(feast_codes : list[str], compare_metrics, filtering_office 
     
     # All all CI data = takes long to construct, so we load them ready
     if feast_codes == ['All'] and not DO_FILTER_OFFICE and datasets == ['admin_CI_base']:
-        with lzma.open("Map_repertoire/big_data_structures/all_source_chants_dict.txt", "rb") as file:
+        file_path = os.path.join("Map_repertoire", "big_data_structures", "all_source_chants_dict.txt")
+        with lzma.open(file_path, "rb") as file:
             source_chants_dict = pickle.load(file)
             used_sources = [source[0] for source in drupals]
         if get_shared:
             if compare_metrics == 'Jaccard':
-                with lzma.open("Map_repertoire/big_data_structures/all_jaccard_edges.txt", "rb") as file:
+                file_path = os.path.join('Map_repertoire', 'big_data_structures', 'all_jaccard_edges.txt')
+                with lzma.open(file_path, "rb") as file:
                     edges = pickle.load(file)
-                with lzma.open("Map_repertoire/big_data_structures/all_jaccard_edges_info.txt", "rb") as file:
+                file_path = os.path.join('Map_repertoire', 'big_data_structures', 'all_jaccard_edges_info.txt')
+                with lzma.open(file_path, "rb") as file:
                     edges_info = pickle.load(file)
             else: # topic modeling compare
-                with lzma.open("Map_repertoire/big_data_structures/all_top_dist_edges.txt", "rb") as file:
+                file_path = os.path.join('Map_repertoire', 'big_data_structures', 'all_top_dist_edges.txt')
+                with lzma.open(file_path, "rb") as file:
                     edges = pickle.load(file)
-                with lzma.open("Map_repertoire/big_data_structures/all_top_dist_edges_info.txt", "rb") as file:
+                file_path = os.path.join('Map_repertoire', 'big_data_structures', 'all_top_dist_edges_info.txt')
+                with lzma.open(file_path, "rb") as file:
                     edges_info = pickle.load(file)
         else: # Uses topic modeling as detection principle
             edges = []
-            with lzma.open("Map_repertoire/big_data_structures/all_topics_edges_info.txt", "rb") as file:
+            file_path = os.path.join('Map_repertoire', 'big_data_structures', 'all_topics_edges_info.txt')
+            with lzma.open(file_path, "rb") as file:
                     edges_info = pickle.load(file)
 
 
@@ -187,7 +194,8 @@ def get_network_info(feast_codes : list[str], compare_metrics, filtering_office 
                 edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
             
             else: # Comparison distance based on topic model
-                with lzma.open('Map_repertoire/topic_models/dist_reduction.model', "rb") as model_file:
+                file_path = os.path.join('Map_repertoire', 'topic_models', 'dist_reduction.model')
+                with lzma.open(file_path, "rb") as model_file:
                     trans = pickle.load(model_file)
                     model = pickle.load(model_file)
                 
@@ -295,7 +303,8 @@ def get_informed_network_info(feast_codes : list[str], compare_metrics, filterin
         edges = [(i, j, {'weight': round(w, 2) }) for i, j, w in zip(s1_column, s2_column, shared_column) if i != j and w != 0 and (i in used_sources and j in used_sources)]
     
     else: # Comparison distance based on topic model
-        with lzma.open('Map_repertoire/topic_models/dist_reduction.model', "rb") as model_file:
+        file_path = os.path.join('Map_repertoire', 'topic_models', 'dist_reduction.model')
+        with lzma.open(file_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
         
@@ -375,7 +384,8 @@ def get_distance_matrix(source_chants_dict, used_sources, metric : str):
                 distance_matrix[source_dict[s_i], source_dict[s_j]] = 1 - Jaccard_metric(source_chants_dict[s_i], source_chants_dict[s_j])
     
     else: # Comparison based on topic model
-        with lzma.open('Map_repertoire/topic_models/dist_reduction.model', "rb") as model_file:
+        file_path = os.path.join('Map_repertoire', 'topic_models', 'dist_reduction.model')
+        with lzma.open(file_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
         for s_i in used_sources:
@@ -452,19 +462,23 @@ def get_topic_model_communities(feast_codes : list[str], filtering_office : list
 
     # Get model
     if add_info_algo == '2':
-        with lzma.open('Map_repertoire/topic_models/topic_2.model', "rb") as model_file:
+        model_path = os.path.join('Map_repertoire', 'topic_models', 'topic_2.model')
+        with lzma.open(model_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
     elif add_info_algo == '5':
-        with lzma.open('Map_repertoire/topic_models/topic_5.model', "rb") as model_file:
+        model_path = os.path.join('Map_repertoire', 'topic_models', 'topic_5.model')
+        with lzma.open(model_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
     elif add_info_algo == '10':
-        with lzma.open('Map_repertoire/topic_models/topic_10.model', "rb") as model_file:
+        model_path = os.path.join('Map_repertoire', 'topic_models', 'topic_10.model')
+        with lzma.open(model_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
     else: #20
-        with lzma.open('Map_repertoire/topic_models/topic_20.model', "rb") as model_file:
+        model_path = os.path.join('Map_repertoire', 'topic_models', 'topic_20.model')
+        with lzma.open(model_path, "rb") as model_file:
             trans = pickle.load(model_file)
             model = pickle.load(model_file)
     
