@@ -75,6 +75,6 @@ class AddGeographyInfoForm(forms.Form):
         self.fields['matched_info'].choices = [ch for ch in zip(suggestions, suggestions)]
 
     matched_info = forms.ChoiceField(widget=forms.RadioSelect, choices=None, required=False)
-    new_coords = forms.ChoiceField(widget=forms.RadioSelect, choices={'new_geo': 'Add new coordinates (Use decimal format!)'}, required=False)
+    new_coords = forms.ChoiceField(widget=forms.RadioSelect, choices={'new_geo': 'Add new coordinates (Use decimal format, e. g. London is [51.507222, -0.1275].)'}, required=False)
     lat = forms.CharField(max_length=15, required=False)
     long = forms.CharField(max_length=15, required=False)
