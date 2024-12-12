@@ -70,7 +70,7 @@ The computational part of the backend consists of functions in four files:
 
 
 ### Communication of main components
-The call flow of the functions described in previous section and the subsequent communication between the backend and the frontend is written in the django `views.py` file. In it we find eight important functions, each of which serves one of the seven pages in the application: `index`, `tool`, `datasets`, `geography` and `help`, `register`, `login`.
+The call flow of the functions described in previous section and the subsequent communication between the backend and the frontend is written in the django `views.py` file. In it we find eight important functions, each of which serves one of the seven pages in the application: `index`, `tool`, `datasets`, `geography` and `help`, `register`, `login`, `contact`.
 
 Passing data from backend to frontend templates can be done via two ways - setting `request.session` variable (dictionary) passed in request redirect or render or via `context` dictionary passed in render. Both can be easily parsed in coresponding HTML files thanks to Django template language. Both ways are used in our app.
 
