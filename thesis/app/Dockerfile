@@ -17,4 +17,4 @@ WORKDIR /app/Gregorian_chant_repertoire
 
 
 EXPOSE 8000
-CMD ["python", "Gregorian_chant_repertoire/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "./manage.py", "runserver", "0.0.0.0:8000"]
