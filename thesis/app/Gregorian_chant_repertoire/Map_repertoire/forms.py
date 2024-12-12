@@ -37,7 +37,7 @@ class InputForm(forms.Form):
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
     office_policy = forms.ChoiceField(widget=forms.RadioSelect, choices=OFFICE_POLICY_CHOICES, initial="ignore")
-    datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, initial=True, required=False)
+    datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False, initial="admin_CI_base")
     datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False)
 
 
