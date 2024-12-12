@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+    
+    {% block side_buttons %}
+    <div class="container ms-4 mt-3 mr" style="float:right">
+      <button type="button" class="btn btn-outline-secondary me-3" style="float:right" onclick="window.history.back()">Back</button>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <div class="container ms-4 mt-3">
+        <h2>Contact us!</h2>
+  
+        <div class="container mb-3 mt-3">
+          Have you found a mistake? <br>
+          Have you made a mistake in sources upload? <br>
+          Do you have an idea for improvement you want to share? <br>
+          Do you have any kind of feedback? <br> <br>
+
+          <h4>Do not hesitate or worry and let us know!</h4>
+          The easiest way to do so is to use our email address: <br>
+          <div class="container ml-2 mb-2">
+            <b><a href="mailto:chantmapper@gmail.com">chantmapper@gmail.com</a></b>
+          </div>
+        </div>
+    </div>
+    {% endblock %}

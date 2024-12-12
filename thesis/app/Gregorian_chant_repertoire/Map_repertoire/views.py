@@ -54,7 +54,7 @@ def tool(request):
             request.session['dataset_error_message'] = ''
         request.session['datasets'] = data_own + data_pub
 
-        if request.session['algo'] == 'Louvein' or request.session['algo'] == 'DBSCAN':
+        if request.session['algo'] == 'Louvain' or request.session['algo'] == 'DBSCAN':
              request.session['add_info_algo'] = form.cleaned_data['metric']
         elif request.session['algo'] == 'CAT':
             request.session['add_info_algo'] = form.cleaned_data['office_policy']
@@ -91,6 +91,13 @@ def help(request):
     Function that manages displaying of help page
     """
     return render(request, "map_repertoire/help.html")
+
+
+def contact(request):
+    """
+    Function that manages displaying of page with contact info
+    """
+    return render(request, "map_repertoire/contact.html")
 
 
 def register_view(request):
