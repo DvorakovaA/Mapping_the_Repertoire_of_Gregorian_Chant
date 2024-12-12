@@ -12,5 +12,9 @@ COPY --from=builder /usr/local/lib/python3.11 /usr/local/lib/python3.11
 # copy source files - check .dockerignore for ignored files
 COPY . . 
 
+# set proper working directory
+WORKDIR /app/Gregorian_chant_repertoire
+
+
 EXPOSE 8000
 CMD ["python", "Gregorian_chant_repertoire/manage.py", "runserver", "0.0.0.0:8000"]

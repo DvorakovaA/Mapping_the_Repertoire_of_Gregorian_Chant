@@ -28,8 +28,6 @@ DEBUG = os.getenv("DJANGO_DEBUG", 'True').lower() in ('true', '1', 't')
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',') if os.getenv('DJANGO_ALLOWED_HOSTS') else []
 
 CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS').split(',') if os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS') else []
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2#8dga_y+xtzc8g=%5xe@jy+fr*n$g%$3b!j^x6%-p%bu51u02'
 
 
 # Application definition
