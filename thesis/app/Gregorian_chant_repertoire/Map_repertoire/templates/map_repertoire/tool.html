@@ -4,7 +4,7 @@
 {% block side_buttons %}
   {% if request.user.is_authenticated %}
     <div class="container ms-4 mt-3 mr" style="float:right">
-      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'" style="float:right">Maintain your datasets</button> <br><br>
+      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/datasets'" style="float:right">Manage your datasets</button> <br><br>
     </div>
   {% endif %}
 {% endblock %}
@@ -247,8 +247,13 @@
 
         <div id="cen_map" class="mb-3 mt-1"></div>
       </div>
+      
     </div>
 
+    <div class="container ml-0">
+      <h4>See a mistake? <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/contact'">Contact us</button>
+      </h4>
+    </div>
   </div>
 
   <!-- pass data from djnago context to js script part -->
