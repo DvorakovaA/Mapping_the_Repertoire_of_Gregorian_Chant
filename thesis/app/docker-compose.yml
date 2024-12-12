@@ -3,6 +3,6 @@ services:
     image: gitlab-registry.dev.ovalek.cz/ovalek/mrogc:latest
     container_name: mrogc_container
     ports:
-      - ""8000:8000""  # Map host:container port
+      - "8000:8000"  # Map host:container port
     volumes:
       - ./Gregorian_chant_repertoire/db:/app/Gregorian_chant_repertoire/db  # map local db folder
