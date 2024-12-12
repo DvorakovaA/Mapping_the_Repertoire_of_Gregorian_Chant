@@ -333,7 +333,7 @@ def get_informed_network_info(feast_codes : list[str], compare_metrics, filterin
 
 
 
-# Louvein specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Louvain specific ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def get_graph(feast_codes : list[str], filtering_office : list[str], metric : str, datasets : list[str]):
     """
     Function constructs graph from networkx library
@@ -348,16 +348,16 @@ def get_graph(feast_codes : list[str], filtering_office : list[str], metric : st
     return graph, edges_info
 
 
-def get_louvein_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
+def get_louvain_communities(feast_codes : list[str], filtering_office : list[str], add_info_algo : str, datasets : list[str]):
     '''
-    Finds communities by Louvein algorithm and returns one of them with info
+    Finds communities by Louvain algorithm and returns one of them with info
     about stability and about edges for map construction
     '''
     graph, edges_info = get_graph(feast_codes=feast_codes, filtering_office=filtering_office, metric=add_info_algo, datasets=datasets)
     
-    LOUVEIN_NUM_OF_RUNS = 10
+    LOUVAIN_NUM_OF_RUNS = 10
     community_versions = []
-    for _ in range(LOUVEIN_NUM_OF_RUNS):
+    for _ in range(LOUVAIN_NUM_OF_RUNS):
         community_versions.append(nx.community.louvain_communities(graph, weight='weight'))
     
     communities, sig_level = find_comms_stability(community_versions)
@@ -553,11 +553,12 @@ def get_cat_communities(feast_codes : list[str], filtering_office : list[str], a
 def get_communities(feast_codes : list[str], filtering_office : list[str], algorithm : str, add_info_algo : str, datasets : list[str]):
     """
     Main function of this script
-    returns communities found by Louvein algorithm, DBSCAN clustering or obtained from topic models 
+    returns communities found by Louvain algorithm, DBSCAN clustering or obtained from topic models 
     and info about edges of network to be drawn on the map as well as stability measure of clusterings
     """
-    if algorithm == 'Louvein':
-        communities, edges_info, sig_level = get_louvein_communities(feast_codes, filtering_office, add_info_algo, datasets)
+
+    if algorithm == 'Louvain':
+        communities, edges_info, sig_level = get_louvain_communities(feast_codes, filtering_office, add_info_algo, datasets)
     
     elif algorithm == 'DBSCAN':
         communities, edges_info, sig_level = get_dbscan_communities(feast_codes, filtering_office, add_info_algo, datasets)

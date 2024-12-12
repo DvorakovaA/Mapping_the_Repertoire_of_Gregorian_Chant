@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
-ALGO_CHOICES = {"Louvein": "Louvein algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)", "Topic": "Topic model"}
+ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)", "Topic": "Topic model"}
 METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model (no research results for this option)"}
 TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
 OFFICE_POLICY_CHOICES = {"ignore" : "Treat day as one whole (ignore to which office chant belongs)", "preserve" : "Include office usage into comparison"}
@@ -33,7 +33,7 @@ class InputForm(forms.Form):
     all = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices={"All": "All"}, required=False, initial=True)
     office = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=OFFICE_CHOICES, required=False)
     
-    community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvein")
+    community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvain")
     metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
     number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
     office_policy = forms.ChoiceField(widget=forms.RadioSelect, choices=OFFICE_POLICY_CHOICES, initial="ignore")
