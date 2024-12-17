@@ -3,8 +3,10 @@
 
     
     {% block side_buttons %}
-    <div class="container ms-4 mt-3 mr" style="float:right">
-      <button type="button" class="btn btn-outline-secondary me-3" style="float:right" onclick="window.history.back()">Back</button>
+    <div class="back-button">
+      <div class="container ms-4 mt-3 mr" style="float:right">
+        <button type="button" class="btn btn-outline-secondary me-3 sticky-top" style="float:right" onclick="window.history.back()">Back</button>
+      </div>
     </div>
     {% endblock %}
 

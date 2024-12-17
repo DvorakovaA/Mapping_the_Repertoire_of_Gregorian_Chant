@@ -1,7 +1,9 @@
 <!-- Home page / Landing page -->
 {% extends "base.html" %}
 
+
     {% block side_buttons %}
+    <!--
       <div class="container ms-4 mt-3 mr" style="float:right">
         {% if not request.user.is_authenticated %}
           <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/login'" style="float:right">Login</button> <br><br>
@@ -12,6 +14,7 @@
           <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/logout'" style="float:right">Logout</button> <br>
         {% endif %}
       </div>
+    -->
     {% endblock %}
 
     {% block content %}
@@ -20,7 +23,7 @@
       <p> Here we provide a tool for musicologists to help them discover 
           possible traditions in Gregorian chant repertoire as well as some hints for possible 
           transimissions of repertoire. </p>
-      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:left">Tool</button> <br> <br>
+      <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'" style="float:left">Start analyzing</button> <br> <br>
     </div>
     {% endblock %}
     

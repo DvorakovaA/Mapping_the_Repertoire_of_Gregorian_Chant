@@ -120,6 +120,10 @@
                 border: 5px solid #dad9d9;
             }
 
+            .back-button {
+                position: sticky;
+            }
+
         </style>
 
         <title>{% block title %} ChantMapper {% endblock %}</title>
@@ -137,16 +141,33 @@
                     </li>
                   </ul>
 
-
                   <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link ms-auto" href="/map_repertoire/contact">Contact</a>
-                      </li>
+                        <a class="nav-link active ms-auto" href="/map_repertoire/contact">Contact</a>
+                    </li>
 
                     <li class="nav-item">
-                      <a class="nav-link ms-auto" href="/map_repertoire/help">Help</a>
+                      <a class="nav-link active ms-auto" href="/map_repertoire/help">Help</a>
                     </li>
                     
+                    {% if not request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link ms-auto" href="/map_repertoire/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ms-auto" href="/map_repertoire/register">Register</a>
+                        </li>
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link ms-auto" href="#">| {{ request.user.username }} |</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ms-auto" href="/map_repertoire/logout">Logout</a>
+                        </li>
+                    {% endif %}
+                  
+
                   </ul>
                 </div>
               </nav>
@@ -155,6 +176,7 @@
 
         <div id="side_buttons" style="float: right;">
             <div class="container ms-4 mt-3 mr" style="float:right">
+                <!--
                 {% if request.user.is_authenticated %}
                 <li class="nav-item" id="navbar-app" style="float:right">
                     <i>user: </i>{{ request.user.username }}
@@ -162,6 +184,7 @@
                 {% else %}
                         <h6> </h6>
                 {% endif %}
+                -->
             </div>
 
             {% block side_buttons %}
