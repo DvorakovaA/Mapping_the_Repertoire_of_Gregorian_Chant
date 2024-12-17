@@ -9,6 +9,7 @@ from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout
+from django.views.decorators.cache import never_cache
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
@@ -100,40 +101,52 @@ def contact(request):
     return render(request, "map_repertoire/contact.html")
 
 
+@never_cache
 def register_view(request):
     """
     Function providing page with registration form (and registration) for new users
     """
+    request.session['happy_reg_error'] = ""
+    
     reg_form = UserCreationForm(request.POST)
-
+    
     if request.method == 'POST':
         if reg_form.is_valid():
             request.session['reg_error'] = ""
             reg_form.save()
+            request.session['log_error'] = ""
+            request.session['happy_reg_error'] = "Your registration was successful! You may now log in."
             return HttpResponseRedirect('/map_repertoire/login/', request)
         else:
             request.session['reg_error'] = ""
             request.session['reg_error'] = reg_form.errors
+            print(request.session['reg_error'])
     else:
         request.session['reg_error'] = ""
     context = {"form": reg_form}
     return render(request, 'map_repertoire/register.html', context)
 
 
+@never_cache
 def login_view(request):
     """
     Function porvading page with login form for registrated users
     """
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        request.session['happy_reg_error'] = ""
+        log_form = AuthenticationForm(request, data=request.POST)
+        if log_form.is_valid():
+            user = log_form.get_user()
             login(request, user)
-            return HttpResponseRedirect('/map_repertoire/')
+            return HttpResponseRedirect('/map_repertoire/tool')
+        else:
+            request.session['log_error'] = ""
+            request.session['log_error'] = log_form.errors
+            print(request.session['log_error'])
     else:
-        form = AuthenticationForm(request)
+        log_form = AuthenticationForm(request)
 
-    context = {"form" : form}
+    context = {"form" : log_form}
     return render(request, 'map_repertoire/login.html', context)
 
 

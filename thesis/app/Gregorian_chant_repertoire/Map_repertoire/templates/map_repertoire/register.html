@@ -23,9 +23,13 @@
                     <div class="ms-3">
                         {{ form.password2 }}
                     </div>
-                    <div style="color: red;">
+                    <div class="container mt-2" style="color: red;">
                         {% if request.session.reg_error %}
-                            {{ request.session.reg_error }}
+                            {% for error in request.session.reg_error.as_data.values %}
+                                {% for data in error.0 %}
+                                    {{ data }}
+                                {% endfor %}
+                            {% endfor %}
                         {% endif %}
                     </div>
                     <br>

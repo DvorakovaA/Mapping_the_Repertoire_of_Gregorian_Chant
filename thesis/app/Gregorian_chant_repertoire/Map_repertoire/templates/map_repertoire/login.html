@@ -3,11 +3,35 @@
 
     {% block content %}
     <!-- Add logout button to the right... -->
-    <div class="container ms-4 mt-3 mr-1">
+    <div class="container ms-4 mt-4 mr-1">
+        <h3>Login</h3><br>
+        
         {% if not request.user.is_authenticated %}
+        <div class="container mt-2 mb-3" style="color: green;">
+            {% if request.session.happy_reg_error %}
+                {{ request.session.happy_reg_error }}
+            {% endif%}
+        </div>
             <form method = POST> 
                 {% csrf_token %}
-                {{ form.as_p }}
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                <div class="ms-3">
+                    {{ form.username }}
+                </div>
+                <label for="{{ form.password.id_for_label }}">Password:</label>
+                <div class="ms-3">
+                    {{ form.password }}
+                </div>
+                <div class="container mt-2" style="color: red;">
+                    {% if request.session.log_error %}
+                        {% for error in request.session.log_error.as_data.values %}
+                            {% for data in error.0 %}
+                                {{ data }}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <br>
                 <button class="btn btn-outline-secondary" type="submit"> Login </button>
             </form>
             <br><br>
@@ -17,7 +41,7 @@
             <p> You are already logged in. </p> <br>
         {% endif %}
 
-        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'">Go to insertion form</button> <br>
+        <button type="button" class="btn btn-outline-secondary" onclick="location.href = '/map_repertoire/tool'">Start analyzing</button> <br>
     </div>
 
     {% endblock %}
