@@ -483,6 +483,8 @@ def get_topic_model_communities(feast_codes : list[str], filtering_office : list
             model = pickle.load(model_file)
     
     trans_data = trans.transform([' '.join(s) for s in source_chants_dict.values()])
+    if np.shape(trans_data)[0] == 0:
+        return [], [], 'Currently not possible to use topic models on custom datasets'
     result = model.transform(trans_data)
     labels = result.argmax(axis=1)
 
@@ -558,12 +560,16 @@ def get_communities(feast_codes : list[str], filtering_office : list[str], algor
     """
 
     if algorithm == 'Louvain':
+        if datasets != ['admin_CI_base'] and add_info_algo == "Topic model":
+            return [], [], 'Currently not possible to use topic models on custom datasets'
         communities, edges_info, sig_level = get_louvain_communities(feast_codes, filtering_office, add_info_algo, datasets)
     
     elif algorithm == 'DBSCAN':
         communities, edges_info, sig_level = get_dbscan_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     elif algorithm == 'Topic': #Topic models
+        if datasets != ['admin_CI_base']:
+            return [], [], 'Currently not possible to use topic models on custom datasets'
         communities, edges_info, sig_level = get_topic_model_communities(feast_codes, filtering_office, add_info_algo, datasets)
 
     elif algorithm == 'CAT': # Cantus Analysis Tool based principle
