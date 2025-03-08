@@ -9,8 +9,8 @@ from django.db.models import Q
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
-ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)", "Topic": "Topic model (only for built-in dataset) - EXPERIMENTAL OPOTION"}
-METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model (only for built-in dataset) - EXPERIMENTAL OPOTION"}
+ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)", "Topic": "Topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
+METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
 TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
 OFFICE_POLICY_CHOICES = {"ignore" : "Treat day as one whole (ignore to which office chant belongs)", "preserve" : "Include office usage into comparison"}
 ALL_CHOICE = 0
