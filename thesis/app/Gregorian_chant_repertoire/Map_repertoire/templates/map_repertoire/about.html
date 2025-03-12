@@ -1,0 +1,44 @@
+<!-- About page-->
+{% extends "base.html" %}
+
+    
+    {% block side_buttons %}
+    <div class="back-button">
+      <div class="container ms-4 mt-3 mr" style="float:right">
+        <button type="button" class="btn btn-outline-secondary me-3 sticky-top" style="float:right" onclick="window.history.back()">Back</button>
+      </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+      <div class="container ms-4 mt-3">
+      <h2>About ChantMapper</h2>
+      <br>
+      ChantMapper is a tool designed to assist researchers, musicologists, and enthusiasts in the analysis and comparison in Gregorian chant repertoire. 
+      <br>
+      <br>
+      The platform provides a set of features for analysis of repertoire and then traditions visualization via synoptic tables and also map, making it an invaluable resource for the study of plainchant transmission across centuries and regions.
+      <br>
+      <br>
+
+      
+      <h4>Origins</h4>
+      
+      ChantMapper started as a bachelor thesis by Anna Dvořáková. Her work, titled "Mapping the Repertoire of Gregorian Chant" (2024), laid the foundation for this platform.
+      <br>
+      <br>
+      ChantMapper is being developed under the Digital Analysis of Chant Transmission (<a href="https://dact-chant.ca/">DACT</a>). 
+      This project, funded by the Social Sciences and Humanities Research Council of Canada, aims to advance the study of chant dissemination using computational tools. 
+      <br>
+      <br>
+      Explore more about the project, its goals and contacts on our <a href="https://ufal.mff.cuni.cz/grants/dact">homepage</a>.
+      <br>
+      {% load static %}
+      <br>
+      <br>
+      <br>
+      <img class="dact_logo" src="{% static 'web_pictures/sshrcc_logo.png' %}" width="1000" height="auto">
+      <img class="dact_logo" src="{% static 'web_pictures/dact_new.png' %}" width="200" height="auto" style="float: right;">
+
+      </div>
+    {% endblock %}

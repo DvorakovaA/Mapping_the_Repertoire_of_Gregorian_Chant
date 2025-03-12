@@ -94,6 +94,13 @@ def help(request):
     return render(request, "map_repertoire/help.html")
 
 
+def about(request):
+    """
+    Function that manages displaying of about page
+    """
+    return render(request, "map_repertoire/about.html")
+
+
 def contact(request):
     """
     Function that manages displaying of page with contact info
