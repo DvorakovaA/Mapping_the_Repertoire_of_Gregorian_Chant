@@ -17,7 +17,48 @@
           Do you have any kind of feedback? <br> <br>
 
           <h4>Do not hesitate or worry and let us know!</h4>
-          The easiest way to do so is to use our email address: <br>
+          <h5>You can either use this contact form:</h5>
+          <form method="POST" action="." class="container mb-3 mt-3">
+            {% csrf_token %}
+            <div class="mb-3 mt-3">
+              <label for="{{ form.name.id_for_label }}">Your name:</label>
+              <div class="ms-3">
+                {{ form.name }}
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="{{ form.email.id_for_label }}">Your email address:</label>
+              <div class="ms-3">
+                {{ form.email }}
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="{{ form.subject.id_for_label }}">Subject:</label>
+              <div class="ms-3">
+                {{ form.subject }}
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="{{ form.message.id_for_label }}">Message:</label>
+              <div class="ms-3">
+                {{ form.message }}
+              </div>
+            </div>
+
+            {% if contact_error %}
+              <div class="container ms-4 mr-4">
+                <p style="color: red;">{{ contact_error }}</p>
+              </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-outline-secondary">Submit</button>
+          </form>
+          <br>
+
+          <h5>Or use directly our email address: </h5>
           <div class="container ml-2 mb-2">
             <b><a href="mailto:chantmapper@gmail.com">chantmapper@gmail.com</a></b>
           </div>

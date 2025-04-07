@@ -78,3 +78,12 @@ class AddGeographyInfoForm(forms.Form):
     new_coords = forms.ChoiceField(widget=forms.RadioSelect, choices={'new_geo': 'Add new coordinates (Use decimal format, e. g. London is [51.507222, -0.1275].)'}, required=False)
     lat = forms.CharField(max_length=15, required=False)
     long = forms.CharField(max_length=15, required=False)
+
+class ContactForm(forms.Form):
+    """
+    Form for contact.
+    """
+    name = forms.CharField(max_length=250)
+    email = forms.EmailField()
+    subject = forms.CharField(max_length=200)
+    message = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 50}))

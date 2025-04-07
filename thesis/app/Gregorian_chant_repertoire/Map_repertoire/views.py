@@ -4,12 +4,13 @@ and data transfer between backend and frontend components
 """
 
 from django.shortcuts import render
-from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm
+from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm, ContactForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout
 from django.views.decorators.cache import never_cache
+from django.core.mail import send_mail
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
@@ -18,6 +19,7 @@ from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data_
 from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset
 from Map_repertoire.datasets import get_provenance_sugestions, get_unknown_provenances, add_new_coordinates, add_matched_provenance
 
+CHANTMAPPER_MAIL = 'chantmapper@gmail.com'
 
 def index(request):
     """
@@ -105,7 +107,25 @@ def contact(request):
     """
     Function that manages displaying of page with contact info
     """
-    return render(request, "map_repertoire/contact.html")
+    form = ContactForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            request.session['contact_error'] = ""
+            request.session['contact_success'] = "Your message was sent successfully!"
+            subject = form.cleaned_data['subject']
+            name = form.cleaned_data['name']
+            from_email = form.cleaned_data['email']
+            message = form.cleaned_data['message']  
+            send_mail('ChantMapper contact form: '+subject+' (from '+name+')', message+'\nfrom: '+from_email, CHANTMAPPER_MAIL, [CHANTMAPPER_MAIL])
+            return HttpResponseRedirect('/map_repertoire/contact', request)
+        else:
+            request.session['contact_error'] = form.errors
+            print(request.session['contact_error'])
+            return HttpResponseRedirect("")
+
+    
+    context = {"form" : form}
+    return render(request, "map_repertoire/contact.html", context)
 
 
 @never_cache

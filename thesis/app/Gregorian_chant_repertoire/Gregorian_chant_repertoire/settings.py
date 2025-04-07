@@ -29,6 +29,13 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',') if os.getenv('DJANG
 
 CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS').split(',') if os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS') else []
 
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development purposes only
+EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'
+ANYMAIL = {
+    'SENDINBLUE_API_KEY': os.getenv('SENDINBLUE_API_KEY')
+    }
+DEFAULT_FROM_EMAIL = 'chantmapper@gmail.com'
+
 
 # Application definition
 
@@ -40,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions'
+    'django_extensions',
+    'anymail',
 ]
 
 MIDDLEWARE = [
