@@ -42,21 +42,35 @@
             </div>
 
             <div class="mb-3 mt-3">
-              <label for="{{ form.message.id_for_label }}">Message:</label>
+              <label for="{{ form.message.id_for_label }}">Message:</label> 
               <div class="ms-3">
                 {{ form.message }}
               </div>
+              <i>If reporting a mistake you made or found, please provide as much detail as possible 
+                for us, so that we would be able to solve it (e. g. your username, name of dataset you upload a mistake in, 
+                what shloud be the right coordinates, etc). </i> <br>
             </div>
 
-            {% if contact_error %}
-              <div class="container ms-4 mr-4">
-                <p style="color: red;">{{ contact_error }}</p>
+            {% if request.session.contact_error %}
+              <div class="container ms-4" style="color: red;">
+                {% for error in request.session.contact_error.as_data.values %}
+                  {% for data in error.0 %}
+                    {{ data }}
+                  {% endfor %}
+                {% endfor %}
               </div>
+              <br>
             {% endif %}
 
             <button type="submit" class="btn btn-outline-secondary">Submit</button>
           </form>
           <br>
+          {% if contact_success %}
+            <div class="container" style="color: green;">
+              <h4>Your message was sent successfully!</h4>
+            </div>
+            <br>
+          {% endif %}
 
           <h5>Or use directly our email address: </h5>
           <div class="container ml-2 mb-2">

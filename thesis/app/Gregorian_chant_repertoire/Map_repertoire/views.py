@@ -111,20 +111,22 @@ def contact(request):
     if request.method == 'POST':
         if form.is_valid():
             request.session['contact_error'] = ""
-            request.session['contact_success'] = "Your message was sent successfully!"
+            request.session['contact_success'] = True
             subject = form.cleaned_data['subject']
             name = form.cleaned_data['name']
             from_email = form.cleaned_data['email']
             message = form.cleaned_data['message']  
             send_mail('ChantMapper contact form: '+subject+' (from '+name+')', message+'\nfrom: '+from_email, CHANTMAPPER_MAIL, [CHANTMAPPER_MAIL])
-            return HttpResponseRedirect('/map_repertoire/contact', request)
+            return HttpResponseRedirect('/map_repertoire/contact/', request)
         else:
             request.session['contact_error'] = form.errors
             print(request.session['contact_error'])
-            return HttpResponseRedirect("")
+    else:
+        request.session['contact_error'] = ""
 
-    
-    context = {"form" : form}
+    success = request.session.pop('contact_success', False)
+
+    context = {"form" : form, "contact_success" : success}
     return render(request, "map_repertoire/contact.html", context)
 
 
@@ -145,11 +147,11 @@ def register_view(request):
             request.session['happy_reg_error'] = "Your registration was successful! You may now log in."
             return HttpResponseRedirect('/map_repertoire/login/', request)
         else:
-            request.session['reg_error'] = ""
             request.session['reg_error'] = reg_form.errors
             print(request.session['reg_error'])
     else:
         request.session['reg_error'] = ""
+
     context = {"form": reg_form}
     return render(request, 'map_repertoire/register.html', context)
 
@@ -167,7 +169,6 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect('/map_repertoire/tool')
         else:
-            request.session['log_error'] = ""
             request.session['log_error'] = log_form.errors
             print(request.session['log_error'])
     else:
