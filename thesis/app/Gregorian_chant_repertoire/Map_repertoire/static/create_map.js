@@ -176,7 +176,8 @@ function getMapOfAllBasic(map_all_data) {
     var complete_map = L.map('com_map').setView(center, 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
         { 
-        attribution: '&copy; <a href="http://weww.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: '&copy; <a href="http://weww.openstreetmap.org/copyright">OpenStreetMap</a>',
+        referrerPolicy: 'no-referrer-when-downgrade'
         }).addTo(complete_map);
 
 
