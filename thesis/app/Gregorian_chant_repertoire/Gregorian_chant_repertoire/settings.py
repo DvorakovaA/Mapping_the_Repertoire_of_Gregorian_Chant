@@ -30,11 +30,6 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',') if os.getenv('DJANG
 CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS').split(',') if os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS') else []
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development purposes only
-EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'
-ANYMAIL = {
-    'SENDINBLUE_API_KEY': os.getenv('SENDINBLUE_API_KEY')
-    }
-DEFAULT_FROM_EMAIL = 'chantmapper@gmail.com'
 
 
 # Application definition
@@ -59,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Gregorian_chant_repertoire.middleware.ReferrerPolicyMiddleware'
 ]
 
 ROOT_URLCONF = 'Gregorian_chant_repertoire.urls'
