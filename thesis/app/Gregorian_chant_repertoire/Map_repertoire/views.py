@@ -4,7 +4,7 @@ and data transfer between backend and frontend components
 """
 
 from django.shortcuts import render
-from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm, ContactForm
+from .forms import InputForm, UploadDatasetForm, DeleteDatasetForm, AddGeographyInfoForm, ContactForm, SelectSourcesForm
 from .models import Feasts
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.http import HttpResponseRedirect
@@ -58,7 +58,7 @@ def tool(request):
         request.session['datasets'] = data_own + data_pub
 
         if request.session['algo'] == 'Louvain' or request.session['algo'] == 'DBSCAN':
-             request.session['add_info_algo'] = form.cleaned_data['metric']
+             request.session['add_info_algo'] = "Jaccard" #form.cleaned_data['metric']
         elif request.session['algo'] == 'CAT':
             request.session['add_info_algo'] = form.cleaned_data['office_policy']
         else:
@@ -88,6 +88,16 @@ def tool(request):
     
     return render(request, "map_repertoire/tool.html", context)
 
+def sources(request):
+    """
+    Function that manages displaying of page with map of sources.
+    """
+    form = SelectSourcesForm(data=request.POST or None)
+    context = {"form" : form}
+    if form.is_valid():
+        request.session['sigla'] = form.cleaned_data['sigla']
+
+    return render(request, "map_repertoire/sources.html")
 
 def help(request):
     """

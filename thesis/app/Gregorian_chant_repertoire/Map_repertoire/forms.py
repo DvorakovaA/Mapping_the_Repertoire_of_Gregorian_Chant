@@ -4,14 +4,14 @@ Class definition of form(s) (their fields and their behaviour)
 
 from django import forms
 
-from .models import Feasts, Datasets
+from .models import Feasts, Datasets, Sources
 from django.db.models import Q
 
 
 OFFICE_CHOICES = {"V": "V", "M": "M", "L": "L", "V2": "V2"}
-ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)", "Topic": "Topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
-METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
-TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
+ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement principle (aka Cantus Analysis Tool)"} #"Topic": "Topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
+# METRIC_CHOICES = {"Jaccard": "Jaccard metric", "Topic model": "Comparison based on topic model (only for built-in dataset) - EXPERIMENTAL OPTION"}
+# TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
 OFFICE_POLICY_CHOICES = {"ignore" : "Treat day as one whole (ignore to which office chant belongs)", "preserve" : "Include office usage into comparison"}
 ALL_CHOICE = 0
 
@@ -30,12 +30,16 @@ class InputForm(forms.Form):
     number_of_feasts = len(Feasts.objects.all().values_list('name', flat=True))
     feast = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'feasts_select', 'style': 'width: 100%;'}), 
                                     choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(f[0], f[1]) for f in zip([i for i in range(1, number_of_feasts+1)], Feasts.objects.values_list('name', flat=True))],)
+    
+    number_of_sources = len(Sources.objects.all().values_list('siglum', flat=True))
+    sigla = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'sources_select', 'style': 'width: 100%;'}),
+                                    choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(s[0], s[1]) for s in zip([i for i in range(1, number_of_sources)], Sources.objects.values_list('siglum', flat=True))],)
     all = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices={"All": "All"}, required=False, initial=True)
     office = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=OFFICE_CHOICES, required=False)
     
     community_detection_algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=ALGO_CHOICES, initial="Louvain")
-    metric = forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
-    number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
+    #metric = "Jaccard" #forms.ChoiceField(widget=forms.RadioSelect, choices=METRIC_CHOICES, initial="Jaccard")
+    #number_of_topics = forms.ChoiceField(widget=forms.RadioSelect, choices=TOPIC_CHOICES, initial="5")
     office_policy = forms.ChoiceField(widget=forms.RadioSelect, choices=OFFICE_POLICY_CHOICES, initial="ignore")
     datasets_own = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False, initial="admin_CI_base")
     datasets_public = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=None, required=False)
@@ -87,3 +91,13 @@ class ContactForm(forms.Form):
     email = forms.EmailField()
     subject = forms.CharField(max_length=200)
     message = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 50}))
+
+
+class SelectSourcesForm(forms.Form):
+    """
+    Form for selection of sources to be displayed on map.
+    """
+    number_of_sources = len(Sources.objects.all().values_list('siglum', flat=True))
+    sigla = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'sigla_select', 'style': 'width: 100%;'}),
+                                      choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(s[0], s[1]) for s in zip([i for i in range(1, number_of_sources)], Sources.objects.values_list('siglum', flat=True))],)
+        
