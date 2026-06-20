@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+    
+    {% block side_buttons %}
+    <div class="back-button">
+      <div class="container ms-4 mt-3 mr" style="float:right">
+        <button type="button" class="btn btn-outline-secondary me-3 sticky-top" style="float:right" onclick="window.history.back()">Back</button>
+      </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+    <!-- Request form window -->
+    <div class="input-form">
+    <div class="container ms-4 mt-4 mr-1 border border-secondary rounded">
+        <h3>Sources selection form</h3> <br>
+        <form method="post">
+            {% csrf_token %}
+            <div id="siglaSelection">
+                <label for="{{ form.source.id_for_label }}">Sigla selection:</label>
+                <div class="ms-3">
+                {{ form.sigla }}
+                </div>
+            </div>
+            <br>
+
+
+        <input type="submit" value="Show" class="btn btn-outline-secondary">
+        <br>
+        </form>
+    </div>
+    </div>
+
+    {% endblock %}
+
+    {% block result %}
+    <div class="container ms-4">
+        {% if map_data.no_prov_sources %}
+          <div id="missing_provenance" class="mt-3 mb-3">
+            <h5> Sourses with unknown provenances: </h5>
+            <div class="ms-3">
+              {% for source in map_data.no_prov_sources_siglum %}
+                <a href='{{ source.id }}'  target="_blank" rel="noopener noreferrer">{{ source.siglum }}</a> <br>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <container class="mt-1 mb-0">
+          <p style="float: right;"> △ - secular | ▢ - monastic | 〇 - unknown </p>
+        </container>
+        
+        <div id="map" class="mb-3 mt-1"></div>
+    </div>
+
+    <!-- pass data from djnago context to js script part -->
+    {{ map_data|json_script:"map_data" }}
+    <script>
+        // Get results maps
+        const map_data = JSON.parse(document.getElementById('map_data').textContent);
+
+        // Construct map (function from static/create_maps.js)
+        var map = getSourcesMap(map_data); 
+    </script>
+    {% endblock %}

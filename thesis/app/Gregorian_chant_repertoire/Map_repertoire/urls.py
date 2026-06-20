@@ -12,5 +12,6 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("datasets/", views.datasets_view, name="datasets"),
     path("geography/", views.geography, name="geography"),
-    path("about/", views.about, name="about")
+    path("about/", views.about, name="about"),
+    path("sources/", views.sources, name="sources"),
 ]

@@ -1,13 +1,15 @@
-// File with two functions:
+// File with three functions:
 //  getMaps - function for construction of leaflet maps given map_data
 //  getMapOfAllSources - function for construction of leaflet map of all provenances given map_data_all
+// getSourcesMap - for view only sources display
+
 
 // Center of returned map (centre of Europe somewhere in Slovenia, we do not need to view Scandinavia)
 const center = [47.466667, 11.166667]
 
 function getMaps(map_data) {
     /** 
-     * Function for construction of two lefalet map objects:
+     * Function for construction of two leaflet map objects:
      * com_map as map with layer control for given communities
      * cen_map as map with layer control for centuries of origin of sources
     */
@@ -223,4 +225,33 @@ function getMapOfAllInformed(map_all_data) {
         marker.bindPopup(popup_info);
         marker.addTo(complete_map);
     }
+}
+
+function getSourcesMap(map_data) {
+    // Get basic maps with OpenStreetMap map layer
+    var map = L.map('com_map').setView(center, 5);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+        { 
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+    
+    // Data to be parsed:
+    // 
+    for (var point in map_all_data) {
+        const info = map_all_data[point];
+        var popup_info = "<b>" + point + "</b><br>";
+
+        //Collect data
+        const lat = info[0];
+        const long = info[1];
+        for (source of info[2]) {
+            popup_info += "<a href="+source[0]+" target=\"_blank'\" rel=\"noopener noreferrer\">"+source[1]+ "</a><br>"
+        }
+        
+        // Create marker for source
+        var marker = L.circleMarker([lat, long], {radius : 8, color : '#2e8bc0'});
+        marker.bindPopup(popup_info);
+        marker.addTo(complete_map);
+    }
+
 }

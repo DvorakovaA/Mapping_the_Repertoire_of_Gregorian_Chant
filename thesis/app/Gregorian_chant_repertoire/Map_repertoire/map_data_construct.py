@@ -129,3 +129,41 @@ def get_map_of_all_data_informed() -> dict[str, list]:
         all_map_data[provenance['provenance']] = [lat, long, place_sources]
 
     return all_map_data
+
+def get_map_of_sources(sources: list[str]) -> dict[str, list]:
+    '''
+    Construct data structure for js script that contains 
+    info set about given sources in each known provenance
+    
+    '''
+    map_data = {}
+    map_sources_dict = {}
+    used_centuries = []
+    map_cen_info = {}
+    no_prov_sources = [] # List of source_ids
+    no_prov_sources_siglum = [] # source_id as well as siglum for nicer show
+
+    for source in sources:
+        source_info = Sources.objects.filter(drupal_path=source).values()[0]
+        try:
+            prov_id = source_info['provenance_id']
+            place = Geography.objects.filter(provenance_id = prov_id).values()
+            lat = place[0]['latitude']
+            long = place[0]['longitude']
+            map_cen_info[source] = source_info['num_century']
+            map_sources_dict[source] = {'siglum' : source_info['siglum'], 'provenance' : source_info['provenance'], 
+                                        'title' : source_info['title'], 'century' : source_info['century'], 
+                                        'cursus' : source_info['cursus'], '' : source_info['order'], 'lat' : lat, 'long' : long }
+            used_centuries.append(source_info['num_century'])
+        except:
+            no_prov_sources_siglum.append({'id' : source, 'siglum' : source_info['siglum']})
+            no_prov_sources.append(source)
+
+    used_centuries = sorted(list(set(used_centuries)))
+    map_data['map_sources_dict'] = map_sources_dict
+    map_data['used_centuries'] = used_centuries
+    map_data['map_cen_info'] = map_cen_info
+    map_data['no_prov_sources'] = no_prov_sources
+    map_data['no_prov_sources_siglum'] = no_prov_sources_siglum
+
+    return map_data

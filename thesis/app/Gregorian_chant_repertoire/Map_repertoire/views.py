@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 
 from Map_repertoire.communities import get_communities
 from Map_repertoire.table_construct import get_table_data
-from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data_informed, get_map_of_all_data_basic
+from Map_repertoire.map_data_construct import get_map_data, get_map_of_all_data_informed, get_map_of_all_data_basic, get_map_of_sources
 
 from Map_repertoire.datasets import check_files_validity, integrate_chants_file, delete_dataset
 from Map_repertoire.datasets import get_provenance_sugestions, get_unknown_provenances, add_new_coordinates, add_matched_provenance
@@ -96,8 +96,11 @@ def sources(request):
     context = {"form" : form}
     if form.is_valid():
         request.session['sigla'] = form.cleaned_data['sigla']
+        sources = []
 
-    return render(request, "map_repertoire/sources.html")
+        context['map_data'] = get_map_of_sources(sources)
+
+    return render(request, "map_repertoire/sources.html", context)
 
 def help(request):
     """
