@@ -27,17 +27,42 @@
         <form method="post">
             {% csrf_token %}
             <div id="siglaSelection">
-                <label for="{{ form.source.id_for_label }}">Sigla selection:</label>
+                <label for="{{ form.sigla.id_for_label }}">Sigla selection:</label>
                 <div class="ms-3">
                 {{ form.sigla }}
                 </div>
+                If nothing is selected, all sigla are considered.
             </div>
             <br>
-
+            <div id="provenanceSelection">
+              <label for="{{ form.provenance.id_for_label }}">Provenance selection:</label>
+              <div class="ms-3">
+                {{ form.provenance }}
+              </div>
+              If nothing is selected, all provenances are considered.
+            </div>
+              <br>
+            <div id="centurySelection">
+              <label for="{{ form.century.id_for_label }}">Century selection:</label>
+              <div class="ms-3">
+                {{ form.century }}
+              </div>
+              If nothing is selected, all centuries are considered (if not_before & not_after).
+            </div>
+              <br>
+            <div id="cursusSelection">
+              <label for="{{ form.cursus.id_for_label }}">Cursus selection:</label>
+              <div class="ms-3">
+                {{ form.cursus }}
+              </div>
+              If nothing is selected, all kinds of cursus are considered. 
+            </div>
+              <br>
 
         <input type="submit" value="Show" class="btn btn-outline-secondary">
         <br>
         </form>
+        <br>
     </div>
     </div>
 

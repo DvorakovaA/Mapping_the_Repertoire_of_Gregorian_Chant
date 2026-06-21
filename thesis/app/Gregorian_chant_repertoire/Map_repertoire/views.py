@@ -95,7 +95,12 @@ def sources(request):
     form = SelectSourcesForm(data=request.POST or None)
     context = {"form" : form}
     if form.is_valid():
+        print(form.cleaned_data)
         request.session['sigla'] = form.cleaned_data['sigla']
+        request.session['provenance'] = form.cleaned_data['provenance']
+        request.session['century'] = form.cleaned_data['century']
+        request.session['cursus'] = form.cleaned_data['cursus']
+
         sources = []
 
         context['map_data'] = get_map_of_sources(sources)

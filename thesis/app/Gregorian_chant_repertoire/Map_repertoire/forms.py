@@ -4,7 +4,7 @@ Class definition of form(s) (their fields and their behaviour)
 
 from django import forms
 
-from .models import Feasts, Datasets, Sources
+from .models import Feasts, Datasets, Sources, Geography
 from django.db.models import Q
 
 
@@ -14,7 +14,10 @@ ALGO_CHOICES = {"Louvain": "Louvain algorithm", "CAT" : "Complete agreement prin
 # TOPIC_CHOICES = {"2": "2", "5": "5", "10": "10", "20":"20"}
 OFFICE_POLICY_CHOICES = {"ignore" : "Treat day as one whole (ignore to which office chant belongs)", "preserve" : "Include office usage into comparison"}
 ALL_CHOICE = 0
-
+CURSUS_CHOICES = {"Secular" : "Secular", "Monastic" : "Monastic", "unknown" : "Unknown"}
+ORDER_CHOICES = {"Benedictinum" : "Benedictinum"} 
+DB_CHOICES = {"CD" : "Cantus Database (CD)", "FBC" : "Fontes Cantus Bohemiae (FBC)"}
+CENTURY_CHOICES = {"9" : "9th century", "10" : "10th century", "11" : "11th century", "12" : "12th century", "13" : "13th century", "14" : "14th century", "15" : "15th century", "16" : "16th century", "unknown" : "Unknown century"}
 
 class InputForm(forms.Form):
     """ 
@@ -98,6 +101,22 @@ class SelectSourcesForm(forms.Form):
     Form for selection of sources to be displayed on map.
     """
     number_of_sources = len(Sources.objects.all().values_list('siglum', flat=True))
+    sources_sorted = sorted(Sources.objects.all().values_list('siglum', flat=True))
     sigla = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'sigla_select', 'style': 'width: 100%;'}),
-                                      choices=[(None, '---'), (ALL_CHOICE, 'All')]+[(s[0], s[1]) for s in zip([i for i in range(1, number_of_sources)], Sources.objects.values_list('siglum', flat=True))],)
-        
+                                      choices=[(None, '---')]+[(s[0], s[1]) for s in zip([i for i in range(1, number_of_sources)], sources_sorted)],)
+    number_of_provenances = len(Geography.objects.all().values_list('provenance', flat=True))
+    provenances_sorted = sorted(Geography.objects.all().values_list('provenance', flat=True))
+    provenance = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={'class': 'provenance_select', 'style': 'width: 100%;'}),
+                                           choices=[(None, '---')]+[(p[0], p[1]) for p in zip([i for i in range(1, number_of_provenances)], provenances_sorted)],)
+    # cursus
+    cursus = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CURSUS_CHOICES, required=False)
+    # order
+    order = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=ORDER_CHOICES, required=False)
+    # century
+    century = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CENTURY_CHOICES, required=False)
+    # not_before
+    not_before = forms.CharField(max_length=4, required=False)
+    # not_after
+    not_after = forms.CharField(max_length=4, required=False)
+    # source_db
+    source_db = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=DB_CHOICES, required=False)
